@@ -4,7 +4,7 @@ pandas==2.2.1
 numpy==1.26.4
 
 # ────────────── INDUSTRIAL CLOUD COGNITIVE ENGINE ──────────────
-google-genai==0.1.1
+google-genai==0.1.0
 
 # ────────────── HYBRID EDGE AI RESILIENCE LAYER ──────────────
 ollama==0.2.1
