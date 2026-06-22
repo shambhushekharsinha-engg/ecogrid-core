@@ -1,0 +1,7 @@
+[theme]
+base = "dark"
+primaryColor = "#00E5FF"            # High-visibility Electric Cyan
+backgroundColor = "#0A0F1D"         # Deep Space Navy (Replaces generic flat dark)
+secondaryBackgroundColor = "#121A30" # Mid-tone Indigo-Blue (For sidebars & containers)
+textColor = "#E6EDF2"               # Bright Crisp Silver
+font = "monospace"

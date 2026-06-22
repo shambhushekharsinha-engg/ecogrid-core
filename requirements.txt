@@ -1,0 +1,13 @@
+# ────────────── CORE WEB UI & DATA VISUALIZATION ──────────────
+streamlit==1.32.0
+pandas==2.2.1
+numpy==1.26.4
+
+# ────────────── INDUSTRIAL CLOUD COGNITIVE ENGINE ──────────────
+google-genai==0.1.1
+
+# ────────────── HYBRID EDGE AI RESILIENCE LAYER ──────────────
+ollama==0.2.1
+
+# ────────────── STATEFUL ENTERPRISE DATABASE CONNECTOR ──────────────
+psycopg2-binary==2.9.9

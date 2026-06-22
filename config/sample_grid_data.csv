@@ -1,0 +1,7 @@
+timestamp,node_name,demand_kw,grid_freq_hz
+2026-06-21 12:00:00,Node_Alpha_Residential,210,50.02
+2026-06-21 12:00:00,Node_Beta_Industrial,750,49.91
+2026-06-21 12:00:00,Node_Gamma_Medical,290,50.00
+2026-06-21 13:00:00,Node_Alpha_Residential,245,49.42
+2026-06-21 13:00:00,Node_Beta_Industrial,820,50.12
+2026-06-21 13:00:00,Node_Gamma_Medical,310,49.98

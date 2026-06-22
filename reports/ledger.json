@@ -1,0 +1,1450 @@
+[
+  {
+    "index": 1,
+    "timestamp": "2026-06-21 20:36:02",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Alpha_Residential",
+      "source": "Main_Grid",
+      "cost_inr": 3402
+    },
+    "previous_hash": "00000000000000000000000000000000",
+    "current_hash": "0b40d0143b1b3f86950aeae6cc873727c7d8c67ed4c98b411b8c13f15818a0c0"
+  },
+  {
+    "index": 1,
+    "timestamp": "2026-06-21 20:36:02",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Alpha_Residential",
+      "source": "Main_Grid",
+      "cost_inr": 3402
+    },
+    "previous_hash": "00000000000000000000000000000000",
+    "current_hash": "0b40d0143b1b3f86950aeae6cc873727c7d8c67ed4c98b411b8c13f15818a0c0"
+  },
+  {
+    "index": 3,
+    "timestamp": "2026-06-21 20:36:02",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Beta_Industrial",
+      "source": "Main_Grid",
+      "cost_inr": 3402
+    },
+    "previous_hash": "0b40d0143b1b3f86950aeae6cc873727c7d8c67ed4c98b411b8c13f15818a0c0",
+    "current_hash": "c69fffcd89b86575372501d02b6c074c08efa2874fbba4a6f56c49a5d3273e3e"
+  },
+  {
+    "index": 3,
+    "timestamp": "2026-06-21 20:36:02",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Beta_Industrial",
+      "source": "Main_Grid",
+      "cost_inr": 3402
+    },
+    "previous_hash": "0b40d0143b1b3f86950aeae6cc873727c7d8c67ed4c98b411b8c13f15818a0c0",
+    "current_hash": "c69fffcd89b86575372501d02b6c074c08efa2874fbba4a6f56c49a5d3273e3e"
+  },
+  {
+    "index": 5,
+    "timestamp": "2026-06-21 20:36:02",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Gamma_Medical",
+      "source": "Main_Grid",
+      "cost_inr": 3402
+    },
+    "previous_hash": "c69fffcd89b86575372501d02b6c074c08efa2874fbba4a6f56c49a5d3273e3e",
+    "current_hash": "d3cc4e8557a6842ba1f596545fae4d4922a4eee8f1e51981fe7e669602e081dd"
+  },
+  {
+    "index": 5,
+    "timestamp": "2026-06-21 20:36:02",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Gamma_Medical",
+      "source": "Main_Grid",
+      "cost_inr": 3402
+    },
+    "previous_hash": "c69fffcd89b86575372501d02b6c074c08efa2874fbba4a6f56c49a5d3273e3e",
+    "current_hash": "d3cc4e8557a6842ba1f596545fae4d4922a4eee8f1e51981fe7e669602e081dd"
+  },
+  {
+    "index": 7,
+    "timestamp": "2026-06-21 20:36:04",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Alpha_Residential",
+      "source": "Main_Grid",
+      "cost_inr": 2651
+    },
+    "previous_hash": "d3cc4e8557a6842ba1f596545fae4d4922a4eee8f1e51981fe7e669602e081dd",
+    "current_hash": "d0d7629eefd387f59f58940179e0a4110f6a165b16d9c81559b458c0951aaf30"
+  },
+  {
+    "index": 7,
+    "timestamp": "2026-06-21 20:36:04",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Alpha_Residential",
+      "source": "Main_Grid",
+      "cost_inr": 2651
+    },
+    "previous_hash": "d3cc4e8557a6842ba1f596545fae4d4922a4eee8f1e51981fe7e669602e081dd",
+    "current_hash": "d0d7629eefd387f59f58940179e0a4110f6a165b16d9c81559b458c0951aaf30"
+  },
+  {
+    "index": 9,
+    "timestamp": "2026-06-21 20:36:04",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Beta_Industrial",
+      "source": "Main_Grid",
+      "cost_inr": 2651
+    },
+    "previous_hash": "d0d7629eefd387f59f58940179e0a4110f6a165b16d9c81559b458c0951aaf30",
+    "current_hash": "fd81653b061610c4f2cf920acb69eb1abbfb3e42dba72de55d45cd5857acb7b0"
+  },
+  {
+    "index": 9,
+    "timestamp": "2026-06-21 20:36:04",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Beta_Industrial",
+      "source": "Main_Grid",
+      "cost_inr": 2651
+    },
+    "previous_hash": "d0d7629eefd387f59f58940179e0a4110f6a165b16d9c81559b458c0951aaf30",
+    "current_hash": "fd81653b061610c4f2cf920acb69eb1abbfb3e42dba72de55d45cd5857acb7b0"
+  },
+  {
+    "index": 11,
+    "timestamp": "2026-06-21 20:36:04",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Gamma_Medical",
+      "source": "Main_Grid",
+      "cost_inr": 2651
+    },
+    "previous_hash": "fd81653b061610c4f2cf920acb69eb1abbfb3e42dba72de55d45cd5857acb7b0",
+    "current_hash": "4318c980ff9a45fe54f3ab8c2ab7cd829795bd6db70c76a8927e25e86172a8df"
+  },
+  {
+    "index": 11,
+    "timestamp": "2026-06-21 20:36:04",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Gamma_Medical",
+      "source": "Main_Grid",
+      "cost_inr": 2651
+    },
+    "previous_hash": "fd81653b061610c4f2cf920acb69eb1abbfb3e42dba72de55d45cd5857acb7b0",
+    "current_hash": "4318c980ff9a45fe54f3ab8c2ab7cd829795bd6db70c76a8927e25e86172a8df"
+  },
+  {
+    "index": 13,
+    "timestamp": "2026-06-21 20:36:06",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Alpha_Residential",
+      "source": "Battery_Bank",
+      "allocated_kw": 109,
+      "remaining_soc": 84.45
+    },
+    "previous_hash": "4318c980ff9a45fe54f3ab8c2ab7cd829795bd6db70c76a8927e25e86172a8df",
+    "current_hash": "b2c2f2c889074e37e5e067f670730f0651306754be8939df2dcf1bcad14cb3bb"
+  },
+  {
+    "index": 13,
+    "timestamp": "2026-06-21 20:36:06",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Alpha_Residential",
+      "source": "Battery_Bank",
+      "allocated_kw": 109,
+      "remaining_soc": 84.45
+    },
+    "previous_hash": "4318c980ff9a45fe54f3ab8c2ab7cd829795bd6db70c76a8927e25e86172a8df",
+    "current_hash": "b2c2f2c889074e37e5e067f670730f0651306754be8939df2dcf1bcad14cb3bb"
+  },
+  {
+    "index": 15,
+    "timestamp": "2026-06-21 20:36:06",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Beta_Industrial",
+      "source": "Battery_Bank",
+      "allocated_kw": 695,
+      "remaining_soc": 80.98
+    },
+    "previous_hash": "b2c2f2c889074e37e5e067f670730f0651306754be8939df2dcf1bcad14cb3bb",
+    "current_hash": "771dff53da538d60be3d64c12a7c60fef3efbd64740cd3b87287099795b4c3ba"
+  },
+  {
+    "index": 15,
+    "timestamp": "2026-06-21 20:36:06",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Beta_Industrial",
+      "source": "Battery_Bank",
+      "allocated_kw": 695,
+      "remaining_soc": 80.98
+    },
+    "previous_hash": "b2c2f2c889074e37e5e067f670730f0651306754be8939df2dcf1bcad14cb3bb",
+    "current_hash": "771dff53da538d60be3d64c12a7c60fef3efbd64740cd3b87287099795b4c3ba"
+  },
+  {
+    "index": 17,
+    "timestamp": "2026-06-21 20:36:06",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Gamma_Medical",
+      "source": "Battery_Bank",
+      "allocated_kw": 282,
+      "remaining_soc": 79.57
+    },
+    "previous_hash": "771dff53da538d60be3d64c12a7c60fef3efbd64740cd3b87287099795b4c3ba",
+    "current_hash": "f4063f6a2475ec08666b7d353bf9771f23eaabfe883cf02a8b2bac2ff66e4a0c"
+  },
+  {
+    "index": 17,
+    "timestamp": "2026-06-21 20:36:06",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Gamma_Medical",
+      "source": "Battery_Bank",
+      "allocated_kw": 282,
+      "remaining_soc": 79.57
+    },
+    "previous_hash": "771dff53da538d60be3d64c12a7c60fef3efbd64740cd3b87287099795b4c3ba",
+    "current_hash": "f4063f6a2475ec08666b7d353bf9771f23eaabfe883cf02a8b2bac2ff66e4a0c"
+  },
+  {
+    "index": 19,
+    "timestamp": "2026-06-21 20:38:56",
+    "agent": "SECURITY_IDS_KERNEL",
+    "action": "CYBER_ATTACK_CONTAINMENT",
+    "details": {
+      "targeted_node": "Node_Alpha_Residential",
+      "vector": "Adversarial Frequency Spoofing (Man-in-the-Middle)",
+      "mitigation": "SECTOR_ISOLATION"
+    },
+    "previous_hash": "f4063f6a2475ec08666b7d353bf9771f23eaabfe883cf02a8b2bac2ff66e4a0c",
+    "current_hash": "4752ba5143b3761aae5da0cc303d6f2f9034e7e2afdb2dea68ff93d4ff8a2abf"
+  },
+  {
+    "index": 19,
+    "timestamp": "2026-06-21 20:38:56",
+    "agent": "SECURITY_IDS_KERNEL",
+    "action": "CYBER_ATTACK_CONTAINMENT",
+    "details": {
+      "targeted_node": "Node_Alpha_Residential",
+      "vector": "Adversarial Frequency Spoofing (Man-in-the-Middle)",
+      "mitigation": "SECTOR_ISOLATION"
+    },
+    "previous_hash": "f4063f6a2475ec08666b7d353bf9771f23eaabfe883cf02a8b2bac2ff66e4a0c",
+    "current_hash": "4752ba5143b3761aae5da0cc303d6f2f9034e7e2afdb2dea68ff93d4ff8a2abf"
+  },
+  {
+    "index": 21,
+    "timestamp": "2026-06-21 20:38:56",
+    "agent": "SECURITY_IDS_KERNEL",
+    "action": "CYBER_ATTACK_CONTAINMENT",
+    "details": {
+      "targeted_node": "Node_Beta_Industrial",
+      "vector": "Malicious Phantom Load Inflation (DDoS Mock)",
+      "mitigation": "SECTOR_ISOLATION"
+    },
+    "previous_hash": "4752ba5143b3761aae5da0cc303d6f2f9034e7e2afdb2dea68ff93d4ff8a2abf",
+    "current_hash": "c23f9e26bde2b48666f3bd56e08307fdde10289aaff0492879a4ce0169310139"
+  },
+  {
+    "index": 21,
+    "timestamp": "2026-06-21 20:38:56",
+    "agent": "SECURITY_IDS_KERNEL",
+    "action": "CYBER_ATTACK_CONTAINMENT",
+    "details": {
+      "targeted_node": "Node_Beta_Industrial",
+      "vector": "Malicious Phantom Load Inflation (DDoS Mock)",
+      "mitigation": "SECTOR_ISOLATION"
+    },
+    "previous_hash": "4752ba5143b3761aae5da0cc303d6f2f9034e7e2afdb2dea68ff93d4ff8a2abf",
+    "current_hash": "c23f9e26bde2b48666f3bd56e08307fdde10289aaff0492879a4ce0169310139"
+  },
+  {
+    "index": 23,
+    "timestamp": "2026-06-21 20:38:56",
+    "agent": "SECURITY_IDS_KERNEL",
+    "action": "CYBER_ATTACK_CONTAINMENT",
+    "details": {
+      "targeted_node": "Node_Gamma_Medical",
+      "vector": "Adversarial Frequency Spoofing (Man-in-the-Middle)",
+      "mitigation": "SECTOR_ISOLATION"
+    },
+    "previous_hash": "c23f9e26bde2b48666f3bd56e08307fdde10289aaff0492879a4ce0169310139",
+    "current_hash": "ad51e03302b9df76570c6d9eae462c31e7763a389d3ed7b0b74b8502ad2dbe5e"
+  },
+  {
+    "index": 23,
+    "timestamp": "2026-06-21 20:38:56",
+    "agent": "SECURITY_IDS_KERNEL",
+    "action": "CYBER_ATTACK_CONTAINMENT",
+    "details": {
+      "targeted_node": "Node_Gamma_Medical",
+      "vector": "Adversarial Frequency Spoofing (Man-in-the-Middle)",
+      "mitigation": "SECTOR_ISOLATION"
+    },
+    "previous_hash": "c23f9e26bde2b48666f3bd56e08307fdde10289aaff0492879a4ce0169310139",
+    "current_hash": "ad51e03302b9df76570c6d9eae462c31e7763a389d3ed7b0b74b8502ad2dbe5e"
+  },
+  {
+    "index": 25,
+    "timestamp": "2026-06-21 20:41:23",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Alpha_Residential",
+      "remaining_soc": 84.06
+    },
+    "previous_hash": "ad51e03302b9df76570c6d9eae462c31e7763a389d3ed7b0b74b8502ad2dbe5e",
+    "current_hash": "032706245d9612830762a525794a666236232424dcc0fb9b905fb4c017fe22dd"
+  },
+  {
+    "index": 25,
+    "timestamp": "2026-06-21 20:41:23",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Alpha_Residential",
+      "remaining_soc": 84.06
+    },
+    "previous_hash": "ad51e03302b9df76570c6d9eae462c31e7763a389d3ed7b0b74b8502ad2dbe5e",
+    "current_hash": "032706245d9612830762a525794a666236232424dcc0fb9b905fb4c017fe22dd"
+  },
+  {
+    "index": 27,
+    "timestamp": "2026-06-21 20:41:23",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Beta_Industrial",
+      "remaining_soc": 81.32
+    },
+    "previous_hash": "032706245d9612830762a525794a666236232424dcc0fb9b905fb4c017fe22dd",
+    "current_hash": "a63ad7019d071c44add2b3217796b088b049fa4fefe2d5596747a41032cb988b"
+  },
+  {
+    "index": 27,
+    "timestamp": "2026-06-21 20:41:23",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Beta_Industrial",
+      "remaining_soc": 81.32
+    },
+    "previous_hash": "032706245d9612830762a525794a666236232424dcc0fb9b905fb4c017fe22dd",
+    "current_hash": "a63ad7019d071c44add2b3217796b088b049fa4fefe2d5596747a41032cb988b"
+  },
+  {
+    "index": 29,
+    "timestamp": "2026-06-21 20:41:23",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Gamma_Medical",
+      "remaining_soc": 79.65
+    },
+    "previous_hash": "a63ad7019d071c44add2b3217796b088b049fa4fefe2d5596747a41032cb988b",
+    "current_hash": "ec932154b408dd41b3401bb85c346e7eff7ca7e839aed48c6fc8f5cea087652a"
+  },
+  {
+    "index": 29,
+    "timestamp": "2026-06-21 20:41:23",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Gamma_Medical",
+      "remaining_soc": 79.65
+    },
+    "previous_hash": "a63ad7019d071c44add2b3217796b088b049fa4fefe2d5596747a41032cb988b",
+    "current_hash": "ec932154b408dd41b3401bb85c346e7eff7ca7e839aed48c6fc8f5cea087652a"
+  },
+  {
+    "index": 31,
+    "timestamp": "2026-06-21 20:41:27",
+    "agent": "SECURITY_IDS_KERNEL",
+    "action": "CYBER_ATTACK_CONTAINMENT",
+    "details": {
+      "targeted_node": "Node_Alpha_Residential",
+      "vector": "Adversarial Frequency Spoofing (Man-in-the-Middle)"
+    },
+    "previous_hash": "ec932154b408dd41b3401bb85c346e7eff7ca7e839aed48c6fc8f5cea087652a",
+    "current_hash": "ba7e6ab3c0f676b9d36a6049bb7e26d0274f68b3194a97646b040bf2affea097"
+  },
+  {
+    "index": 31,
+    "timestamp": "2026-06-21 20:41:27",
+    "agent": "SECURITY_IDS_KERNEL",
+    "action": "CYBER_ATTACK_CONTAINMENT",
+    "details": {
+      "targeted_node": "Node_Alpha_Residential",
+      "vector": "Adversarial Frequency Spoofing (Man-in-the-Middle)"
+    },
+    "previous_hash": "ec932154b408dd41b3401bb85c346e7eff7ca7e839aed48c6fc8f5cea087652a",
+    "current_hash": "ba7e6ab3c0f676b9d36a6049bb7e26d0274f68b3194a97646b040bf2affea097"
+  },
+  {
+    "index": 33,
+    "timestamp": "2026-06-21 20:41:27",
+    "agent": "SECURITY_IDS_KERNEL",
+    "action": "CYBER_ATTACK_CONTAINMENT",
+    "details": {
+      "targeted_node": "Node_Beta_Industrial",
+      "vector": "Adversarial Frequency Spoofing (Man-in-the-Middle)"
+    },
+    "previous_hash": "ba7e6ab3c0f676b9d36a6049bb7e26d0274f68b3194a97646b040bf2affea097",
+    "current_hash": "379ffbe7be82d374bd1a83f534e48a27511d17a3f8316137031bf7adc5b9edb9"
+  },
+  {
+    "index": 33,
+    "timestamp": "2026-06-21 20:41:27",
+    "agent": "SECURITY_IDS_KERNEL",
+    "action": "CYBER_ATTACK_CONTAINMENT",
+    "details": {
+      "targeted_node": "Node_Beta_Industrial",
+      "vector": "Adversarial Frequency Spoofing (Man-in-the-Middle)"
+    },
+    "previous_hash": "ba7e6ab3c0f676b9d36a6049bb7e26d0274f68b3194a97646b040bf2affea097",
+    "current_hash": "379ffbe7be82d374bd1a83f534e48a27511d17a3f8316137031bf7adc5b9edb9"
+  },
+  {
+    "index": 35,
+    "timestamp": "2026-06-21 20:41:27",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Gamma_Medical"
+    },
+    "previous_hash": "379ffbe7be82d374bd1a83f534e48a27511d17a3f8316137031bf7adc5b9edb9",
+    "current_hash": "86b352e7c58e4f1214eef62f4149d659ace33378a06ec0366d09f2c59c696122"
+  },
+  {
+    "index": 35,
+    "timestamp": "2026-06-21 20:41:27",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Gamma_Medical"
+    },
+    "previous_hash": "379ffbe7be82d374bd1a83f534e48a27511d17a3f8316137031bf7adc5b9edb9",
+    "current_hash": "86b352e7c58e4f1214eef62f4149d659ace33378a06ec0366d09f2c59c696122"
+  },
+  {
+    "index": 37,
+    "timestamp": "2026-06-21 20:41:30",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Alpha_Residential"
+    },
+    "previous_hash": "86b352e7c58e4f1214eef62f4149d659ace33378a06ec0366d09f2c59c696122",
+    "current_hash": "f91834d2a6724363f6a42a2e22b14356c8fd913c632a3e5c29c977627907a448"
+  },
+  {
+    "index": 37,
+    "timestamp": "2026-06-21 20:41:30",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Alpha_Residential"
+    },
+    "previous_hash": "86b352e7c58e4f1214eef62f4149d659ace33378a06ec0366d09f2c59c696122",
+    "current_hash": "f91834d2a6724363f6a42a2e22b14356c8fd913c632a3e5c29c977627907a448"
+  },
+  {
+    "index": 39,
+    "timestamp": "2026-06-21 20:41:30",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Beta_Industrial"
+    },
+    "previous_hash": "f91834d2a6724363f6a42a2e22b14356c8fd913c632a3e5c29c977627907a448",
+    "current_hash": "deae32efa2f733df9e145ac33407aebc253cc3e598a28f7ff95977add4f2978e"
+  },
+  {
+    "index": 39,
+    "timestamp": "2026-06-21 20:41:30",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Beta_Industrial"
+    },
+    "previous_hash": "f91834d2a6724363f6a42a2e22b14356c8fd913c632a3e5c29c977627907a448",
+    "current_hash": "deae32efa2f733df9e145ac33407aebc253cc3e598a28f7ff95977add4f2978e"
+  },
+  {
+    "index": 41,
+    "timestamp": "2026-06-21 20:41:30",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Gamma_Medical"
+    },
+    "previous_hash": "deae32efa2f733df9e145ac33407aebc253cc3e598a28f7ff95977add4f2978e",
+    "current_hash": "92fc7a768f962031b59ce4c8a7cfb4e70b79d1af1ee5402f071084c972f10d3b"
+  },
+  {
+    "index": 41,
+    "timestamp": "2026-06-21 20:41:30",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Gamma_Medical"
+    },
+    "previous_hash": "deae32efa2f733df9e145ac33407aebc253cc3e598a28f7ff95977add4f2978e",
+    "current_hash": "92fc7a768f962031b59ce4c8a7cfb4e70b79d1af1ee5402f071084c972f10d3b"
+  },
+  {
+    "index": 43,
+    "timestamp": "2026-06-21 20:41:34",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Alpha_Residential"
+    },
+    "previous_hash": "92fc7a768f962031b59ce4c8a7cfb4e70b79d1af1ee5402f071084c972f10d3b",
+    "current_hash": "7230ce820b8d1e486b170729ba1d726b6b7cacf145103c054466dd11ff8ba9c2"
+  },
+  {
+    "index": 43,
+    "timestamp": "2026-06-21 20:41:34",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Alpha_Residential"
+    },
+    "previous_hash": "92fc7a768f962031b59ce4c8a7cfb4e70b79d1af1ee5402f071084c972f10d3b",
+    "current_hash": "7230ce820b8d1e486b170729ba1d726b6b7cacf145103c054466dd11ff8ba9c2"
+  },
+  {
+    "index": 45,
+    "timestamp": "2026-06-21 20:41:34",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Beta_Industrial"
+    },
+    "previous_hash": "7230ce820b8d1e486b170729ba1d726b6b7cacf145103c054466dd11ff8ba9c2",
+    "current_hash": "0b10e39684dcfff88ea8d1198070fe1c93b38368b85be6b641d86941a53ec184"
+  },
+  {
+    "index": 45,
+    "timestamp": "2026-06-21 20:41:34",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Beta_Industrial"
+    },
+    "previous_hash": "7230ce820b8d1e486b170729ba1d726b6b7cacf145103c054466dd11ff8ba9c2",
+    "current_hash": "0b10e39684dcfff88ea8d1198070fe1c93b38368b85be6b641d86941a53ec184"
+  },
+  {
+    "index": 47,
+    "timestamp": "2026-06-21 20:41:34",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Gamma_Medical"
+    },
+    "previous_hash": "0b10e39684dcfff88ea8d1198070fe1c93b38368b85be6b641d86941a53ec184",
+    "current_hash": "3bde0c37df2d98daac906e6b54f8c39e07532a750677672fc7bb14080c45b584"
+  },
+  {
+    "index": 47,
+    "timestamp": "2026-06-21 20:41:34",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Gamma_Medical"
+    },
+    "previous_hash": "0b10e39684dcfff88ea8d1198070fe1c93b38368b85be6b641d86941a53ec184",
+    "current_hash": "3bde0c37df2d98daac906e6b54f8c39e07532a750677672fc7bb14080c45b584"
+  },
+  {
+    "index": 49,
+    "timestamp": "2026-06-21 20:41:38",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Alpha_Residential"
+    },
+    "previous_hash": "3bde0c37df2d98daac906e6b54f8c39e07532a750677672fc7bb14080c45b584",
+    "current_hash": "568089f66cf567207b9ae39c92ed5af263b7f8cf3ca32e8b029b6f280f22575b"
+  },
+  {
+    "index": 49,
+    "timestamp": "2026-06-21 20:41:38",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Alpha_Residential"
+    },
+    "previous_hash": "3bde0c37df2d98daac906e6b54f8c39e07532a750677672fc7bb14080c45b584",
+    "current_hash": "568089f66cf567207b9ae39c92ed5af263b7f8cf3ca32e8b029b6f280f22575b"
+  },
+  {
+    "index": 51,
+    "timestamp": "2026-06-21 20:41:38",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Beta_Industrial"
+    },
+    "previous_hash": "568089f66cf567207b9ae39c92ed5af263b7f8cf3ca32e8b029b6f280f22575b",
+    "current_hash": "7ebff8c30e5593519b59ca03520a021c66ae8c5896e99538e60055e90a4ed7dc"
+  },
+  {
+    "index": 51,
+    "timestamp": "2026-06-21 20:41:38",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Beta_Industrial"
+    },
+    "previous_hash": "568089f66cf567207b9ae39c92ed5af263b7f8cf3ca32e8b029b6f280f22575b",
+    "current_hash": "7ebff8c30e5593519b59ca03520a021c66ae8c5896e99538e60055e90a4ed7dc"
+  },
+  {
+    "index": 53,
+    "timestamp": "2026-06-21 20:41:38",
+    "agent": "SECURITY_IDS_KERNEL",
+    "action": "CYBER_ATTACK_CONTAINMENT",
+    "details": {
+      "targeted_node": "Node_Gamma_Medical",
+      "vector": "Adversarial Frequency Spoofing (Man-in-the-Middle)"
+    },
+    "previous_hash": "7ebff8c30e5593519b59ca03520a021c66ae8c5896e99538e60055e90a4ed7dc",
+    "current_hash": "1a6ea5faa35f98db0eaf71575e33c66c6208cf50558023f0fdaf6682371613b4"
+  },
+  {
+    "index": 53,
+    "timestamp": "2026-06-21 20:41:38",
+    "agent": "SECURITY_IDS_KERNEL",
+    "action": "CYBER_ATTACK_CONTAINMENT",
+    "details": {
+      "targeted_node": "Node_Gamma_Medical",
+      "vector": "Adversarial Frequency Spoofing (Man-in-the-Middle)"
+    },
+    "previous_hash": "7ebff8c30e5593519b59ca03520a021c66ae8c5896e99538e60055e90a4ed7dc",
+    "current_hash": "1a6ea5faa35f98db0eaf71575e33c66c6208cf50558023f0fdaf6682371613b4"
+  },
+  {
+    "index": 55,
+    "timestamp": "2026-06-21 20:47:05",
+    "agent": "SECURITY_IDS_KERNEL",
+    "action": "CYBER_ATTACK_CONTAINMENT",
+    "details": {
+      "targeted_node": "Node_Alpha_Residential",
+      "vector": "Malicious Phantom Load Inflation (DDoS Mock)"
+    },
+    "previous_hash": "1a6ea5faa35f98db0eaf71575e33c66c6208cf50558023f0fdaf6682371613b4",
+    "current_hash": "3b5d6a62538770bf56b2d4adca50bd3e6e20b36f4c0be2a5b3a0bddb654ce23c"
+  },
+  {
+    "index": 55,
+    "timestamp": "2026-06-21 20:47:05",
+    "agent": "SECURITY_IDS_KERNEL",
+    "action": "CYBER_ATTACK_CONTAINMENT",
+    "details": {
+      "targeted_node": "Node_Alpha_Residential",
+      "vector": "Malicious Phantom Load Inflation (DDoS Mock)"
+    },
+    "previous_hash": "1a6ea5faa35f98db0eaf71575e33c66c6208cf50558023f0fdaf6682371613b4",
+    "current_hash": "3b5d6a62538770bf56b2d4adca50bd3e6e20b36f4c0be2a5b3a0bddb654ce23c"
+  },
+  {
+    "index": 57,
+    "timestamp": "2026-06-21 20:47:05",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Beta_Industrial",
+      "remaining_soc": 82.58
+    },
+    "previous_hash": "3b5d6a62538770bf56b2d4adca50bd3e6e20b36f4c0be2a5b3a0bddb654ce23c",
+    "current_hash": "f0fa1645332e8ec911e5c52b72b8c9c542cca117a0e0cb5f47a5d55e4ad66f3e"
+  },
+  {
+    "index": 57,
+    "timestamp": "2026-06-21 20:47:05",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Beta_Industrial",
+      "remaining_soc": 82.58
+    },
+    "previous_hash": "3b5d6a62538770bf56b2d4adca50bd3e6e20b36f4c0be2a5b3a0bddb654ce23c",
+    "current_hash": "f0fa1645332e8ec911e5c52b72b8c9c542cca117a0e0cb5f47a5d55e4ad66f3e"
+  },
+  {
+    "index": 59,
+    "timestamp": "2026-06-21 20:47:05",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Gamma_Medical",
+      "remaining_soc": 81.47
+    },
+    "previous_hash": "f0fa1645332e8ec911e5c52b72b8c9c542cca117a0e0cb5f47a5d55e4ad66f3e",
+    "current_hash": "03f07e66f7aaff008e69db45629e13eaf9b9dca64c6fbb6dfc77d7e0e39e64a2"
+  },
+  {
+    "index": 59,
+    "timestamp": "2026-06-21 20:47:05",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Gamma_Medical",
+      "remaining_soc": 81.47
+    },
+    "previous_hash": "f0fa1645332e8ec911e5c52b72b8c9c542cca117a0e0cb5f47a5d55e4ad66f3e",
+    "current_hash": "03f07e66f7aaff008e69db45629e13eaf9b9dca64c6fbb6dfc77d7e0e39e64a2"
+  },
+  {
+    "index": 61,
+    "timestamp": "2026-06-21 20:47:11",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Alpha_Residential"
+    },
+    "previous_hash": "03f07e66f7aaff008e69db45629e13eaf9b9dca64c6fbb6dfc77d7e0e39e64a2",
+    "current_hash": "3c7015a7ceb26aa733434006bfd6771d107f4a886b2278744fb204f6e6acd622"
+  },
+  {
+    "index": 61,
+    "timestamp": "2026-06-21 20:47:11",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Alpha_Residential"
+    },
+    "previous_hash": "03f07e66f7aaff008e69db45629e13eaf9b9dca64c6fbb6dfc77d7e0e39e64a2",
+    "current_hash": "3c7015a7ceb26aa733434006bfd6771d107f4a886b2278744fb204f6e6acd622"
+  },
+  {
+    "index": 63,
+    "timestamp": "2026-06-21 20:47:11",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Beta_Industrial"
+    },
+    "previous_hash": "3c7015a7ceb26aa733434006bfd6771d107f4a886b2278744fb204f6e6acd622",
+    "current_hash": "45a41cf7b34943856f2eafa8cfb72a22ae6c8ff58ccfbed9222316b6fc45af5a"
+  },
+  {
+    "index": 63,
+    "timestamp": "2026-06-21 20:47:11",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Beta_Industrial"
+    },
+    "previous_hash": "3c7015a7ceb26aa733434006bfd6771d107f4a886b2278744fb204f6e6acd622",
+    "current_hash": "45a41cf7b34943856f2eafa8cfb72a22ae6c8ff58ccfbed9222316b6fc45af5a"
+  },
+  {
+    "index": 65,
+    "timestamp": "2026-06-21 20:47:11",
+    "agent": "SECURITY_IDS_KERNEL",
+    "action": "CYBER_ATTACK_CONTAINMENT",
+    "details": {
+      "targeted_node": "Node_Gamma_Medical",
+      "vector": "Forced Frequency Spoofing Intrusion"
+    },
+    "previous_hash": "45a41cf7b34943856f2eafa8cfb72a22ae6c8ff58ccfbed9222316b6fc45af5a",
+    "current_hash": "f08ef6a3afda5bd1e4fc5a3ae3681d4bfcb221c959aeee86cb3cc82e6acec1a9"
+  },
+  {
+    "index": 65,
+    "timestamp": "2026-06-21 20:47:11",
+    "agent": "SECURITY_IDS_KERNEL",
+    "action": "CYBER_ATTACK_CONTAINMENT",
+    "details": {
+      "targeted_node": "Node_Gamma_Medical",
+      "vector": "Forced Frequency Spoofing Intrusion"
+    },
+    "previous_hash": "45a41cf7b34943856f2eafa8cfb72a22ae6c8ff58ccfbed9222316b6fc45af5a",
+    "current_hash": "f08ef6a3afda5bd1e4fc5a3ae3681d4bfcb221c959aeee86cb3cc82e6acec1a9"
+  },
+  {
+    "index": 67,
+    "timestamp": "2026-06-21 20:54:08",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Alpha_Residential",
+      "remaining_soc": 84.06
+    },
+    "previous_hash": "f08ef6a3afda5bd1e4fc5a3ae3681d4bfcb221c959aeee86cb3cc82e6acec1a9",
+    "current_hash": "8292bf46c920dfeb98fc9e01451776b7b807816c2e527e97ad99fcdbef00e6ba"
+  },
+  {
+    "index": 67,
+    "timestamp": "2026-06-21 20:54:08",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Alpha_Residential",
+      "remaining_soc": 84.06
+    },
+    "previous_hash": "f08ef6a3afda5bd1e4fc5a3ae3681d4bfcb221c959aeee86cb3cc82e6acec1a9",
+    "current_hash": "8292bf46c920dfeb98fc9e01451776b7b807816c2e527e97ad99fcdbef00e6ba"
+  },
+  {
+    "index": 69,
+    "timestamp": "2026-06-21 20:54:08",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Beta_Industrial",
+      "remaining_soc": 80.82
+    },
+    "previous_hash": "8292bf46c920dfeb98fc9e01451776b7b807816c2e527e97ad99fcdbef00e6ba",
+    "current_hash": "2df758cbb57feec4a1aaf81acf51d8bc1da34b83b12716cfd11a17bf68f06424"
+  },
+  {
+    "index": 69,
+    "timestamp": "2026-06-21 20:54:08",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Beta_Industrial",
+      "remaining_soc": 80.82
+    },
+    "previous_hash": "8292bf46c920dfeb98fc9e01451776b7b807816c2e527e97ad99fcdbef00e6ba",
+    "current_hash": "2df758cbb57feec4a1aaf81acf51d8bc1da34b83b12716cfd11a17bf68f06424"
+  },
+  {
+    "index": 71,
+    "timestamp": "2026-06-21 20:54:08",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Gamma_Medical",
+      "remaining_soc": 79.38
+    },
+    "previous_hash": "2df758cbb57feec4a1aaf81acf51d8bc1da34b83b12716cfd11a17bf68f06424",
+    "current_hash": "d8af4eba01987f7c2378b0286ef87bf7b11cc4a929365ffdaa8ee1e44e95afa9"
+  },
+  {
+    "index": 71,
+    "timestamp": "2026-06-21 20:54:08",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Gamma_Medical",
+      "remaining_soc": 79.38
+    },
+    "previous_hash": "2df758cbb57feec4a1aaf81acf51d8bc1da34b83b12716cfd11a17bf68f06424",
+    "current_hash": "d8af4eba01987f7c2378b0286ef87bf7b11cc4a929365ffdaa8ee1e44e95afa9"
+  },
+  {
+    "index": 73,
+    "timestamp": "2026-06-21 21:06:02",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Alpha_Residential"
+    },
+    "previous_hash": "d8af4eba01987f7c2378b0286ef87bf7b11cc4a929365ffdaa8ee1e44e95afa9",
+    "current_hash": "ab8852f0f73f8d548b8994950086faa5af785acbe69ce1b8b5a34a7f2027fe92"
+  },
+  {
+    "index": 73,
+    "timestamp": "2026-06-21 21:06:02",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Alpha_Residential"
+    },
+    "previous_hash": "d8af4eba01987f7c2378b0286ef87bf7b11cc4a929365ffdaa8ee1e44e95afa9",
+    "current_hash": "ab8852f0f73f8d548b8994950086faa5af785acbe69ce1b8b5a34a7f2027fe92"
+  },
+  {
+    "index": 75,
+    "timestamp": "2026-06-21 21:06:02",
+    "agent": "SECURITY_IDS_KERNEL",
+    "action": "CYBER_ATTACK_CONTAINMENT",
+    "details": {
+      "targeted_node": "Node_Beta_Industrial",
+      "vector": "Forced Injection Infiltration Attack"
+    },
+    "previous_hash": "ab8852f0f73f8d548b8994950086faa5af785acbe69ce1b8b5a34a7f2027fe92",
+    "current_hash": "153f58deeaeeb203b93c308e26f5688d4e0c0efafaa37b5b655950f9e6ee31ab"
+  },
+  {
+    "index": 75,
+    "timestamp": "2026-06-21 21:06:02",
+    "agent": "SECURITY_IDS_KERNEL",
+    "action": "CYBER_ATTACK_CONTAINMENT",
+    "details": {
+      "targeted_node": "Node_Beta_Industrial",
+      "vector": "Forced Injection Infiltration Attack"
+    },
+    "previous_hash": "ab8852f0f73f8d548b8994950086faa5af785acbe69ce1b8b5a34a7f2027fe92",
+    "current_hash": "153f58deeaeeb203b93c308e26f5688d4e0c0efafaa37b5b655950f9e6ee31ab"
+  },
+  {
+    "index": 77,
+    "timestamp": "2026-06-21 21:06:02",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Gamma_Medical"
+    },
+    "previous_hash": "153f58deeaeeb203b93c308e26f5688d4e0c0efafaa37b5b655950f9e6ee31ab",
+    "current_hash": "0fb564d4296f962e5a427e5636d33c83071bb2c0df4f708a8d11f4045002e072"
+  },
+  {
+    "index": 77,
+    "timestamp": "2026-06-21 21:06:02",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Gamma_Medical"
+    },
+    "previous_hash": "153f58deeaeeb203b93c308e26f5688d4e0c0efafaa37b5b655950f9e6ee31ab",
+    "current_hash": "0fb564d4296f962e5a427e5636d33c83071bb2c0df4f708a8d11f4045002e072"
+  },
+  {
+    "index": 79,
+    "timestamp": "2026-06-21 21:11:12",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Alpha_Residential"
+    },
+    "previous_hash": "0fb564d4296f962e5a427e5636d33c83071bb2c0df4f708a8d11f4045002e072",
+    "current_hash": "deffbc1402dba282f9023d930eed06cebb87e3ca1485e08ed1381c4d0ab0efbc"
+  },
+  {
+    "index": 79,
+    "timestamp": "2026-06-21 21:11:12",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Alpha_Residential"
+    },
+    "previous_hash": "0fb564d4296f962e5a427e5636d33c83071bb2c0df4f708a8d11f4045002e072",
+    "current_hash": "deffbc1402dba282f9023d930eed06cebb87e3ca1485e08ed1381c4d0ab0efbc"
+  },
+  {
+    "index": 81,
+    "timestamp": "2026-06-21 21:11:12",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Beta_Industrial"
+    },
+    "previous_hash": "deffbc1402dba282f9023d930eed06cebb87e3ca1485e08ed1381c4d0ab0efbc",
+    "current_hash": "6f0b0c45ce9333189a6dc1c3a1850867444c8c7ad74d31b3b1c5cdc973ce3f98"
+  },
+  {
+    "index": 81,
+    "timestamp": "2026-06-21 21:11:12",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Beta_Industrial"
+    },
+    "previous_hash": "deffbc1402dba282f9023d930eed06cebb87e3ca1485e08ed1381c4d0ab0efbc",
+    "current_hash": "6f0b0c45ce9333189a6dc1c3a1850867444c8c7ad74d31b3b1c5cdc973ce3f98"
+  },
+  {
+    "index": 83,
+    "timestamp": "2026-06-21 21:11:12",
+    "agent": "SECURITY_IDS_KERNEL",
+    "action": "CYBER_ATTACK_CONTAINMENT",
+    "details": {
+      "targeted_node": "Node_Gamma_Medical",
+      "vector": "Forced Frequency Infiltration Spike"
+    },
+    "previous_hash": "6f0b0c45ce9333189a6dc1c3a1850867444c8c7ad74d31b3b1c5cdc973ce3f98",
+    "current_hash": "a49fda81818666f7d03ab5da58114a53f74a0843defbef617d2c15fea3aa398b"
+  },
+  {
+    "index": 83,
+    "timestamp": "2026-06-21 21:11:12",
+    "agent": "SECURITY_IDS_KERNEL",
+    "action": "CYBER_ATTACK_CONTAINMENT",
+    "details": {
+      "targeted_node": "Node_Gamma_Medical",
+      "vector": "Forced Frequency Infiltration Spike"
+    },
+    "previous_hash": "6f0b0c45ce9333189a6dc1c3a1850867444c8c7ad74d31b3b1c5cdc973ce3f98",
+    "current_hash": "a49fda81818666f7d03ab5da58114a53f74a0843defbef617d2c15fea3aa398b"
+  },
+  {
+    "index": 85,
+    "timestamp": "2026-06-21 21:20:01",
+    "agent": "SECURITY_IDS_KERNEL",
+    "action": "CYBER_ATTACK_CONTAINMENT",
+    "details": {
+      "targeted_node": "Node_Alpha_Residential",
+      "frequency": 52.95
+    },
+    "previous_hash": "a49fda81818666f7d03ab5da58114a53f74a0843defbef617d2c15fea3aa398b",
+    "current_hash": "df72769a34b1ad9f41da07819f67fd3896458132a135287b81c865717a8b6aba"
+  },
+  {
+    "index": 85,
+    "timestamp": "2026-06-21 21:20:01",
+    "agent": "SECURITY_IDS_KERNEL",
+    "action": "CYBER_ATTACK_CONTAINMENT",
+    "details": {
+      "targeted_node": "Node_Alpha_Residential",
+      "frequency": 52.95
+    },
+    "previous_hash": "a49fda81818666f7d03ab5da58114a53f74a0843defbef617d2c15fea3aa398b",
+    "current_hash": "df72769a34b1ad9f41da07819f67fd3896458132a135287b81c865717a8b6aba"
+  },
+  {
+    "index": 87,
+    "timestamp": "2026-06-21 21:20:01",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Beta_Industrial"
+    },
+    "previous_hash": "df72769a34b1ad9f41da07819f67fd3896458132a135287b81c865717a8b6aba",
+    "current_hash": "d266de42280b9e7b4ff6ffc7d21e792e8b260006374ba3e5bce8310c81633bcd"
+  },
+  {
+    "index": 87,
+    "timestamp": "2026-06-21 21:20:01",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Beta_Industrial"
+    },
+    "previous_hash": "df72769a34b1ad9f41da07819f67fd3896458132a135287b81c865717a8b6aba",
+    "current_hash": "d266de42280b9e7b4ff6ffc7d21e792e8b260006374ba3e5bce8310c81633bcd"
+  },
+  {
+    "index": 89,
+    "timestamp": "2026-06-21 21:20:01",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Gamma_Medical"
+    },
+    "previous_hash": "d266de42280b9e7b4ff6ffc7d21e792e8b260006374ba3e5bce8310c81633bcd",
+    "current_hash": "5947602b16d10e668733f86c8cdb89eb333df50cc0702d6b711f8240b7782ecf"
+  },
+  {
+    "index": 89,
+    "timestamp": "2026-06-21 21:20:01",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Gamma_Medical"
+    },
+    "previous_hash": "d266de42280b9e7b4ff6ffc7d21e792e8b260006374ba3e5bce8310c81633bcd",
+    "current_hash": "5947602b16d10e668733f86c8cdb89eb333df50cc0702d6b711f8240b7782ecf"
+  },
+  {
+    "index": 91,
+    "timestamp": "2026-06-21 21:38:08",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Alpha_Residential"
+    },
+    "previous_hash": "5947602b16d10e668733f86c8cdb89eb333df50cc0702d6b711f8240b7782ecf",
+    "current_hash": "9186f958d7b076c97150c388642345b95af28c226059d69efcc38590994425e0"
+  },
+  {
+    "index": 91,
+    "timestamp": "2026-06-21 21:38:08",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Alpha_Residential"
+    },
+    "previous_hash": "5947602b16d10e668733f86c8cdb89eb333df50cc0702d6b711f8240b7782ecf",
+    "current_hash": "9186f958d7b076c97150c388642345b95af28c226059d69efcc38590994425e0"
+  },
+  {
+    "index": 93,
+    "timestamp": "2026-06-21 21:38:08",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Beta_Industrial"
+    },
+    "previous_hash": "9186f958d7b076c97150c388642345b95af28c226059d69efcc38590994425e0",
+    "current_hash": "7f384ad12efadbb74f452046407d07e472a520675f4fa5eba7375bd339a36a37"
+  },
+  {
+    "index": 93,
+    "timestamp": "2026-06-21 21:38:08",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Beta_Industrial"
+    },
+    "previous_hash": "9186f958d7b076c97150c388642345b95af28c226059d69efcc38590994425e0",
+    "current_hash": "7f384ad12efadbb74f452046407d07e472a520675f4fa5eba7375bd339a36a37"
+  },
+  {
+    "index": 95,
+    "timestamp": "2026-06-21 21:38:08",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Gamma_Medical"
+    },
+    "previous_hash": "7f384ad12efadbb74f452046407d07e472a520675f4fa5eba7375bd339a36a37",
+    "current_hash": "a2ebf18886baf0a39bad466c66fd01ce3eb08ab2a2185c37c67bfe348b1a4f6d"
+  },
+  {
+    "index": 95,
+    "timestamp": "2026-06-21 21:38:08",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Gamma_Medical"
+    },
+    "previous_hash": "7f384ad12efadbb74f452046407d07e472a520675f4fa5eba7375bd339a36a37",
+    "current_hash": "a2ebf18886baf0a39bad466c66fd01ce3eb08ab2a2185c37c67bfe348b1a4f6d"
+  },
+  {
+    "index": 97,
+    "timestamp": "2026-06-21 21:41:22",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Alpha_Residential"
+    },
+    "previous_hash": "a2ebf18886baf0a39bad466c66fd01ce3eb08ab2a2185c37c67bfe348b1a4f6d",
+    "current_hash": "86704a50d38c5e7dc81cc254f38704e140b4e0d7159b901162ea2ef9895bf774"
+  },
+  {
+    "index": 97,
+    "timestamp": "2026-06-21 21:41:22",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Alpha_Residential"
+    },
+    "previous_hash": "a2ebf18886baf0a39bad466c66fd01ce3eb08ab2a2185c37c67bfe348b1a4f6d",
+    "current_hash": "86704a50d38c5e7dc81cc254f38704e140b4e0d7159b901162ea2ef9895bf774"
+  },
+  {
+    "index": 99,
+    "timestamp": "2026-06-21 21:41:22",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Beta_Industrial"
+    },
+    "previous_hash": "86704a50d38c5e7dc81cc254f38704e140b4e0d7159b901162ea2ef9895bf774",
+    "current_hash": "095605b322680000f2a38e271a6e9627877f327cf5e797b6dc4268e369eafaf4"
+  },
+  {
+    "index": 99,
+    "timestamp": "2026-06-21 21:41:22",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Beta_Industrial"
+    },
+    "previous_hash": "86704a50d38c5e7dc81cc254f38704e140b4e0d7159b901162ea2ef9895bf774",
+    "current_hash": "095605b322680000f2a38e271a6e9627877f327cf5e797b6dc4268e369eafaf4"
+  },
+  {
+    "index": 101,
+    "timestamp": "2026-06-21 21:41:22",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Gamma_Medical"
+    },
+    "previous_hash": "095605b322680000f2a38e271a6e9627877f327cf5e797b6dc4268e369eafaf4",
+    "current_hash": "9b41e996abcb3449ffea015fe714320e564deb088155146baea0f5ffeca20b61"
+  },
+  {
+    "index": 101,
+    "timestamp": "2026-06-21 21:41:22",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Gamma_Medical"
+    },
+    "previous_hash": "095605b322680000f2a38e271a6e9627877f327cf5e797b6dc4268e369eafaf4",
+    "current_hash": "9b41e996abcb3449ffea015fe714320e564deb088155146baea0f5ffeca20b61"
+  },
+  {
+    "index": 103,
+    "timestamp": "2026-06-21 21:44:04",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Alpha_Residential",
+      "soc": 84.29
+    },
+    "previous_hash": "9b41e996abcb3449ffea015fe714320e564deb088155146baea0f5ffeca20b61",
+    "current_hash": "6663131657bd95a678011673e208cafe95ccdc82ee6c3546f683b36020f648f6"
+  },
+  {
+    "index": 103,
+    "timestamp": "2026-06-21 21:44:04",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Alpha_Residential",
+      "soc": 84.29
+    },
+    "previous_hash": "9b41e996abcb3449ffea015fe714320e564deb088155146baea0f5ffeca20b61",
+    "current_hash": "6663131657bd95a678011673e208cafe95ccdc82ee6c3546f683b36020f648f6"
+  },
+  {
+    "index": 105,
+    "timestamp": "2026-06-21 21:44:04",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Beta_Industrial",
+      "soc": 81.91
+    },
+    "previous_hash": "6663131657bd95a678011673e208cafe95ccdc82ee6c3546f683b36020f648f6",
+    "current_hash": "d82825a460c3a75ad5acc64b72eba85c4689c7e71651fb480d78f09f44389974"
+  },
+  {
+    "index": 105,
+    "timestamp": "2026-06-21 21:44:04",
+    "agent": "Grid_Arbitrageur",
+    "action": "BATTERY_ROUTING_PIVOT",
+    "details": {
+      "node": "Node_Beta_Industrial",
+      "soc": 81.91
+    },
+    "previous_hash": "6663131657bd95a678011673e208cafe95ccdc82ee6c3546f683b36020f648f6",
+    "current_hash": "d82825a460c3a75ad5acc64b72eba85c4689c7e71651fb480d78f09f44389974"
+  },
+  {
+    "index": 107,
+    "timestamp": "2026-06-21 21:44:04",
+    "agent": "SECURITY_IDS_KERNEL",
+    "action": "CYBER_ATTACK_CONTAINMENT",
+    "details": {
+      "targeted_node": "Node_Gamma_Medical",
+      "frequency_hz": 52.95
+    },
+    "previous_hash": "d82825a460c3a75ad5acc64b72eba85c4689c7e71651fb480d78f09f44389974",
+    "current_hash": "ce91ff4baf40d04e80cd3d88ba37ffc348be76b31b0c6b93fdaa0f627c9509a7"
+  },
+  {
+    "index": 107,
+    "timestamp": "2026-06-21 21:44:04",
+    "agent": "SECURITY_IDS_KERNEL",
+    "action": "CYBER_ATTACK_CONTAINMENT",
+    "details": {
+      "targeted_node": "Node_Gamma_Medical",
+      "frequency_hz": 52.95
+    },
+    "previous_hash": "d82825a460c3a75ad5acc64b72eba85c4689c7e71651fb480d78f09f44389974",
+    "current_hash": "ce91ff4baf40d04e80cd3d88ba37ffc348be76b31b0c6b93fdaa0f627c9509a7"
+  },
+  {
+    "index": 109,
+    "timestamp": "2026-06-22 18:22:03",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Alpha_Residential"
+    },
+    "previous_hash": "ce91ff4baf40d04e80cd3d88ba37ffc348be76b31b0c6b93fdaa0f627c9509a7",
+    "current_hash": "325b8a217f59bdcad5c3336a68b3fe7102f2b70aa6603833e164c883bab58e59"
+  },
+  {
+    "index": 110,
+    "timestamp": "2026-06-22 18:22:03",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Beta_Industrial"
+    },
+    "previous_hash": "325b8a217f59bdcad5c3336a68b3fe7102f2b70aa6603833e164c883bab58e59",
+    "current_hash": "c4198a531b7e2b59aab5cc365bda0ba8b443b1b80a9f5f533e137ec34d96c859"
+  },
+  {
+    "index": 111,
+    "timestamp": "2026-06-22 18:22:03",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Gamma_Medical"
+    },
+    "previous_hash": "c4198a531b7e2b59aab5cc365bda0ba8b443b1b80a9f5f533e137ec34d96c859",
+    "current_hash": "b27c337eb8e353afd4f1c024543e05c9e835151f00454aa2509e0d2624785da2"
+  },
+  {
+    "index": 112,
+    "timestamp": "2026-06-22 18:25:17",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Alpha_Residential"
+    },
+    "previous_hash": "b27c337eb8e353afd4f1c024543e05c9e835151f00454aa2509e0d2624785da2",
+    "current_hash": "af6f3f824a50b9522fec5dd9ebd447ee6b96971c6466162eeee84db8a0c42426"
+  },
+  {
+    "index": 113,
+    "timestamp": "2026-06-22 18:25:17",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Beta_Industrial"
+    },
+    "previous_hash": "af6f3f824a50b9522fec5dd9ebd447ee6b96971c6466162eeee84db8a0c42426",
+    "current_hash": "695a292e60602bdb2ed6fd3880d8853ee2a02e62f745da7eb2624e17b1cb8780"
+  },
+  {
+    "index": 114,
+    "timestamp": "2026-06-22 18:25:17",
+    "agent": "SECURITY_IDS_KERNEL",
+    "action": "CYBER_ATTACK_CONTAINMENT",
+    "details": {
+      "targeted_node": "Node_Gamma_Medical",
+      "frequency_hz": 52.95
+    },
+    "previous_hash": "695a292e60602bdb2ed6fd3880d8853ee2a02e62f745da7eb2624e17b1cb8780",
+    "current_hash": "36222c1fd58a093039a59ece77da7bd068d49e66a4e598bc25a0e8a2b9679ca6"
+  },
+  {
+    "index": 115,
+    "timestamp": "2026-06-22 18:36:58",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Alpha_Residential"
+    },
+    "previous_hash": "36222c1fd58a093039a59ece77da7bd068d49e66a4e598bc25a0e8a2b9679ca6",
+    "current_hash": "4310851dad2149ba9c2a545f169f9acbdafe12021617acec04f88a1b18b8a86b"
+  },
+  {
+    "index": 116,
+    "timestamp": "2026-06-22 18:36:58",
+    "agent": "SECURITY_IDS_KERNEL",
+    "action": "CYBER_ATTACK_CONTAINMENT",
+    "details": {
+      "targeted_node": "Node_Beta_Industrial",
+      "vector": "FREQUENCY_SPOOF",
+      "frequency_hz": 52.95
+    },
+    "previous_hash": "4310851dad2149ba9c2a545f169f9acbdafe12021617acec04f88a1b18b8a86b",
+    "current_hash": "fef86097cde356657678531e610d78119045e5f1b3b6a476adba6fb06dd5efb9"
+  },
+  {
+    "index": 117,
+    "timestamp": "2026-06-22 18:36:58",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Gamma_Medical"
+    },
+    "previous_hash": "fef86097cde356657678531e610d78119045e5f1b3b6a476adba6fb06dd5efb9",
+    "current_hash": "1101ebcf0c1fa4e1bb79ca3ee68c4b9428fce169627f29d193c3e24f09b656fb"
+  },
+  {
+    "index": 118,
+    "timestamp": "2026-06-22 18:51:00",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Alpha_Residential"
+    },
+    "previous_hash": "1101ebcf0c1fa4e1bb79ca3ee68c4b9428fce169627f29d193c3e24f09b656fb",
+    "current_hash": "f4ff4c6ffb243c388fee0e7ba76252c3f81fe17f4f92e1d1be6de2e082b819d3"
+  },
+  {
+    "index": 119,
+    "timestamp": "2026-06-22 18:51:00",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Beta_Industrial"
+    },
+    "previous_hash": "f4ff4c6ffb243c388fee0e7ba76252c3f81fe17f4f92e1d1be6de2e082b819d3",
+    "current_hash": "98daf89a5a115f349e029884261675ced680731c63a9ee8e844298abe25f2b97"
+  },
+  {
+    "index": 120,
+    "timestamp": "2026-06-22 18:51:00",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Gamma_Medical"
+    },
+    "previous_hash": "98daf89a5a115f349e029884261675ced680731c63a9ee8e844298abe25f2b97",
+    "current_hash": "976fa943676db5feb405617b31926a363e4f939ca4cbffeb161c303d74484c6b"
+  },
+  {
+    "index": 121,
+    "timestamp": "2026-06-22 18:59:42",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Alpha_Residential"
+    },
+    "previous_hash": "976fa943676db5feb405617b31926a363e4f939ca4cbffeb161c303d74484c6b",
+    "current_hash": "1b88e3fe0bf433b44e5b7b07fd4bf7d020e2b7ece6d0f9e794383be6bcada2f4"
+  },
+  {
+    "index": 122,
+    "timestamp": "2026-06-22 18:59:42",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Beta_Industrial"
+    },
+    "previous_hash": "1b88e3fe0bf433b44e5b7b07fd4bf7d020e2b7ece6d0f9e794383be6bcada2f4",
+    "current_hash": "6505b5218d979c62d784cf00b1190a92e51ffd3474b4835b3dc618a781198d79"
+  },
+  {
+    "index": 123,
+    "timestamp": "2026-06-22 18:59:42",
+    "agent": "Grid_Arbitrageur",
+    "action": "GRID_CLEARANCE_APPROVAL",
+    "details": {
+      "node": "Node_Gamma_Medical"
+    },
+    "previous_hash": "6505b5218d979c62d784cf00b1190a92e51ffd3474b4835b3dc618a781198d79",
+    "current_hash": "0ec54d60fd41f296dcc837b1e8069a8300bc2d8945090e5f326ac229ee891ed3"
+  }
+]
