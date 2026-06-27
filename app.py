@@ -58,7 +58,8 @@ if "Standard Crisis" in data_source_mode:
     try:
         # Secure File IO Parsing Pass targeting the 20-part scenario configuration matrix
         with open("config/scenarios.json", "r") as f:
-            scenarios = json.load(f)
+            data = json.load(f)
+            scenarios = data["simulation_scenarios"]
         sc_names = [s["scenario_name"] for s in scenarios]
         selected_sc = st.sidebar.selectbox("Choose Target Scenario Template (1-20)", sc_names)
         active_sc = next(s for s in scenarios if s["scenario_name"] == selected_sc)

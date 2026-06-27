@@ -3,11 +3,13 @@ import time
 import random
 import os
 from mcp_server import WeatherMcpServer
-from battery_system import BatteryBank
-from crypto_ledger import CryptographicLedger
-from chaos_monkey import ChaosMonkey
 from dashboard_ui import TerminalDashboard
-from mitigation_engine import GroundLevelMitigation
+
+# Explicitly pointing to files inside your subfolders
+from core.battery_system import BatteryBank
+from core.mitigation_engine import GroundLevelMitigation
+from security.crypto_ledger import CryptographicLedger
+from security.chaos_monkey import ChaosMonkey
 
 def load_json_file(filepath):
     with open(filepath, 'r') as file:

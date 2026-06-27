@@ -25,3 +25,19 @@ class GroundLevelMitigation:
                 "1. [FIELD ACTION] Perform general physical sweep of localized sub-array junctions.",
                 "2. [SYSTEM] Force manual hard-reset of telemetry ingestion kernel."
             ]
+        
+    @staticmethod
+    def calculate_regional_mitigation(saved_kwh, region_code="IN"):
+        """Calculates dynamic operational mitigation costs across international grid parameters."""
+        # Real-world currency symbols paired with average country tariff metrics
+        matrix = {
+            "US": ("$", 0.18), "EU": ("€", 0.24), "IN": ("₹", 7.50), 
+            "UK": ("£", 0.35), "JP": ("¥", 31.00), "AU": ("$", 0.36), 
+            "BR": ("R$", 0.75), "CA": ("$", 0.16), "UAE": ("AED ", 0.30), 
+            "ZA": ("R ", 3.20)
+        }
+        
+        symbol, rate = matrix.get(region_code.upper(), ("₹", 7.50))
+        total_estimated_cost = saved_kwh * rate
+        
+        return f"{symbol}{total_estimated_cost:,.2f}"
