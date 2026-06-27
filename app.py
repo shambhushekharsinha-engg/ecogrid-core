@@ -55,20 +55,38 @@ vector_color = "#00FF66" # Default system baseline functional tint
 if "Standard Crisis" in data_source_mode:
     data_origin_string = "config/scenarios.json"
     vector_color = "#FF9900" # Amber indicator for file configuration playback
+    
+    # 1. Initialize default fallback variables to prevent reportUndefinedVariable errors downstream
+    base_price = 4500
+    base_sky = "CLEAR"
+    base_attack_node = "NONE"
+    base_attack_type = "NONE"
+    selected_country = "IN"
+    
     try:
-        # Secure File IO Parsing Pass targeting the 20-part scenario configuration matrix
+        # Secure File IO Parsing Pass targeting the global scenario matrix
         with open("config/scenarios.json", "r", encoding="utf-8") as f:
             data = json.load(f)
-            scenarios = data["simulation_scenarios"]
+            scenarios = data.get("simulation_scenarios", [])
+            pricing_matrix = data.get("regional_pricing_matrix", {})
+        
+        # 2. Stress-Test Template Selector (1-20)
         sc_names = [s["scenario_name"] for s in scenarios]
         selected_sc = st.sidebar.selectbox("Choose Target Scenario Template (1-20)", sc_names)
         active_sc = next(s for s in scenarios if s["scenario_name"] == selected_sc)
         
-        # Pull baseline default state metrics from targeted scenario dictionary
+        # 3. Global Node Country Selector (1-10)
+        available_countries = list(pricing_matrix.keys()) if pricing_matrix else ["IN", "US"]
+        selected_country = st.sidebar.selectbox("🌐 Select Active Global Country Node", available_countries, index=0)
+        
+        # 4. Extract active metrics from targeted scenario dictionary
         base_price = active_sc["market_price_inr"]
         base_sky = active_sc["weather_condition"]
         base_attack_node = active_sc["forced_attack_node"]
         base_attack_type = active_sc.get("attack_type", "NONE")
+        
+    except Exception as e:
+        st.sidebar.error(f"Failed to parse global config keys: {str(e)}")
         
         # JUDGES' PLAYGROUND OVERRIDES: Dynamically un-prefix variables to allow granular real-time tuning
         st.sidebar.markdown("---")
