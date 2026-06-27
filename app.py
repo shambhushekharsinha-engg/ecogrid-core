@@ -56,12 +56,17 @@ if "Standard Crisis" in data_source_mode:
     data_origin_string = "config/scenarios.json"
     vector_color = "#FF9900" # Amber indicator for file configuration playback
     
-    # 1. Initialize default fallback variables to prevent reportUndefinedVariable errors downstream
+    # 1. Initialize ALL default fallback variables to guarantee global scope
     base_price = 4500
     base_sky = "CLEAR"
     base_attack_node = "NONE"
     base_attack_type = "NONE"
     selected_country = "IN"
+    currency_symbol = "₹"
+    currency_code = "INR"
+    base_rate = 7.50
+    custom_saved_kwh = 150.0
+    localized_mitigation_cost = 1125.0
     
     try:
         # Secure File IO Parsing Pass targeting the global scenario matrix
@@ -84,6 +89,26 @@ if "Standard Crisis" in data_source_mode:
         base_sky = active_sc["weather_condition"]
         base_attack_node = active_sc["forced_attack_node"]
         base_attack_type = active_sc.get("attack_type", "NONE")
+
+        # 5. Extract country specific metadata for dynamic currency scaling
+        country_meta = pricing_matrix.get(selected_country, {"currency": "INR", "symbol": "₹", "base_rate_per_kwh": 7.50})
+        currency_symbol = country_meta.get("symbol", "₹")
+        currency_code = country_meta.get("currency", "INR")
+        base_rate = country_meta.get("base_rate_per_kwh", 7.50)
+
+        # 6. Interactive Range Slider added to the sidebar panel
+        st.sidebar.markdown("---")
+        st.sidebar.markdown("### 📊 MITIGATION METRIC SCALE")
+        custom_saved_kwh = st.sidebar.slider(
+            "Set Mitigated Energy Range (kWh):",
+            min_value=0.0,
+            max_value=10000.0,
+            value=150.0,
+            step=10.0
+        )
+
+        # 7. Compute dynamic localized pricing math up to any slider value
+        localized_mitigation_cost = custom_saved_kwh * base_rate
         
     except Exception as e:
         st.sidebar.error(f"Failed to parse global config keys: {str(e)}")
