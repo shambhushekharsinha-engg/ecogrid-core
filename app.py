@@ -51,6 +51,12 @@ csv_records = None
 data_origin_string = "Static Memory"
 vector_color = "#00FF66" # Default system baseline functional tint
 
+# Global Token Initialization Pass to protect downstream metric models from scoping crashes
+currency_symbol = "₹"
+currency_code = "INR"
+selected_country = "IN"
+localized_mitigation_cost = 1125.0
+
 # ────────────────── MULTI-VECTOR DATA INGESTION MATRIX ──────────────────
 if "Standard Crisis" in data_source_mode:
     data_origin_string = "config/scenarios.json"
@@ -110,19 +116,15 @@ if "Standard Crisis" in data_source_mode:
         # 7. Compute dynamic localized pricing math up to any slider value
         localized_mitigation_cost = custom_saved_kwh * base_rate
         
-    except Exception as e:
-        st.sidebar.error(f"Failed to parse global config keys: {str(e)}")
-        
-        # JUDGES' PLAYGROUND OVERRIDES: Dynamically un-prefix variables to allow granular real-time tuning
-        st.sidebar.markdown("---")
-        st.sidebar.markdown("<h3 style='color: #FF9900; font-family: monospace;'>🛠️ Variable Tuning</h3>", unsafe_allow_html=True)
-        sky = st.sidebar.selectbox("Weather Environment Profile", ["SUNNY", "CLOUDY", "RAINY", "STORMY"], index=["SUNNY", "CLOUDY", "RAINY", "STORMY"].index(base_sky))
-        price = st.sidebar.slider("Grid Clearing Price (INR / MWh)", 1000, 8000, int(base_price), step=50)
-        attack_node = st.sidebar.selectbox("Anomaly Target Node Selection", ["None", "Node_Alpha_Residential", "Node_Beta_Industrial", "Node_Gamma_Medical"], index=["None", "Node_Alpha_Residential", "Node_Beta_Industrial", "Node_Gamma_Medical"].index(base_attack_node))
-        attack_type = st.sidebar.selectbox("Threat Vector Selection Type", ["NONE", "FREQUENCY_SPOOF", "VOLTAGE_DROP"], index=["NONE", "FREQUENCY_SPOOF", "VOLTAGE_DROP"].index(base_attack_type))
+        # Map localized environment attributes onto runtime configuration states
+        sky = base_sky
+        price = base_price
+        attack_node = base_attack_node
+        attack_type = base_attack_type
         
         weather_eff_map = {"SUNNY": 0.95, "CLOUDY": 0.45, "RAINY": 0.15, "STORMY": 0.05}
-        eff = weather_eff_map[sky]
+        eff = weather_eff_map.get(sky, 0.95)
+        
     except Exception as e:
         st.sidebar.error(f"Failed parsing dataset fields from configuration: {str(e)}")
 
@@ -201,7 +203,7 @@ except Exception:
 st.markdown("<h1 style='color: #E6EDF2; font-family: monospace;'>⚡ EcoGrid AI: Industrial Microgrid Control Cockpit</h1>", unsafe_allow_html=True)
 st.markdown("<p style='color: #8B949E; font-family: monospace;'>👥 <i>Individual Capstone Submission Baseline Framework • Track: Agents for Good</i></p>", unsafe_allow_html=True)
 
-# High-Density Metric Grid Panel UI Injection block
+# Fixed: Metric panels now map the dynamic global currencies and localized calculations smoothly!
 st.markdown(f"""
     <div style='display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px;'>
         <div style='background: #121A30; padding: 15px; border-radius: 4px; border: 1px solid #1E294B; border-top: 4px solid {weather_color};'>
@@ -210,15 +212,15 @@ st.markdown(f"""
         </div>
         <div style='background: #121A30; padding: 15px; border-radius: 4px; border: 1px solid #1E294B; border-top: 4px solid {price_color};'>
             <span style='color: #8B949E; font-size: 11px; font-family: monospace;'>💰 SPOT PRICE MODEL</span><br>
-            <span style='color: {price_color}; font-size: 20px; font-weight: bold; font-family: monospace;'>{price} INR/MWh</span>
+            <span style='color: {price_color}; font-size: 20px; font-weight: bold; font-family: monospace;'>{price} {currency_code}/MWh</span>
         </div>
         <div style='background: #121A30; padding: 15px; border-radius: 4px; border: 1px solid #1E294B; border-top: 4px solid #00E5FF;'>
             <span style='color: #8B949E; font-size: 11px; font-family: monospace;'>🔐 CRYPTO AUDIT TRAIL</span><br>
             <span style='color: #00E5FF; font-size: 20px; font-weight: bold; font-family: monospace;'>{ledger_len} BLOCKS</span>
         </div>
-        <div style='background: #121A30; padding: 15px; border-radius: 4px; border: 1px solid #1E294B; border-top: 4px solid {vector_color};'>
-            <span style='color: #8B949E; font-size: 11px; font-family: monospace;'>📡 INGESTION SOURCE</span><br>
-            <span style='color: {vector_color}; font-size: 16px; font-weight: bold; font-family: monospace;'>{data_origin_string.split("/")[-1]}</span>
+        <div style='background: #121A30; padding: 15px; border-radius: 4px; border: 1px solid #1E294B; border-top: 4px solid #F59E0B;'>
+            <span style='color: #8B949E; font-size: 11px; font-family: monospace;'>📊 REGIONAL VALUE ({selected_country})</span><br>
+            <span style='color: #F59E0B; font-size: 18px; font-weight: bold; font-family: monospace;'>{currency_symbol}{localized_mitigation_cost:,.2f}</span>
         </div>
     </div>
 """, unsafe_allow_html=True)
@@ -338,7 +340,7 @@ with main_col:
             st.markdown("<h3 style='color: #00E5FF; font-family: monospace;'>🧠 Google AI Studio Cloud Cognitive Intelligence Briefing</h3>", unsafe_allow_html=True)
             with st.spinner("Streaming encrypted transaction log frames to cloud core..."):
                 ai_briefing = auditor.generate_executive_briefing(last_tx_logged)
-                st.info(ai_briefing)
+            st.info(ai_briefing)
 
 with side_col:
     st.markdown("<h3 style='color: #E6EDF2; font-family: monospace;'>📊 SCADA Trend Pen</h3>", unsafe_allow_html=True)
@@ -417,8 +419,9 @@ if user_query := st.chat_input("Enter operational routing query or infrastructur
             # Context Injection Engine: Pass active telemetry data variables into background system prompts
             copilot_system_prompt = (
                 f"You are the senior industrial grid engineer for EcoGrid AI. "
-                f"Active Telemetry State: Env={sky}, Price={price} INR/MWh, IngestionSource={data_origin_string.split('/')[-1]}. "
-                f"Analyze the user's inquiry against this state and provide concise, professional, actionable advice. Max 3 sentences."
+                f"Active Telemetry State: Env={sky}, Price={price} {currency_code}/MWh, IngestionSource={data_origin_string.split('/')[-1]}. "
+                f"Analyze the user's inquiry against this state and provide concise, professional, actionable advice. "
+                f"Max 3 sentences."
             )
             
             # ────────────────── HYBRID FAULT-TOLERANT ROUTING ENGINE ──────────────────
