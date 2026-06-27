@@ -131,4 +131,5 @@ python main.py
   ## 👤 Developer Profile 
   ### Developed with passion by Shambhu Shekhar Sinha, a Computer Science and Engineering student specializing in Artificial Intelligence and Machine Learning.
   
-  ## 📄 LicenseThis project is licensed under the MIT License - see the LICENSE file for complete open-source governance parameters.
+  ### 📄 License:
+         This project is licensed under the MIT License - see the LICENSE file for complete open-source governance parameters.
