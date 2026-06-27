@@ -1,4 +1,4 @@
-### ⚡ EcoGrid: Multi-Agent SCADA Infrastructure
+# ⚡ EcoGrid: Multi-Agent SCADA Infrastructure
 
 █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀██    ECOGRID AI INFRASTRUCTURE SYSTEMS MANAGEMENT PANEL v5.5-UI   ██▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
 <p align="center">
@@ -78,10 +78,13 @@ ecogrid-core/
 ├── README.md                   # Technical onboarding documentation
 └── requirements.txt            # Python dependency matrix
 ```
+### ⚙️ Core Protocol & Verification Workflow 
+The ecosystem ensures complete transparency and resilience during operational cycles via a strict 4-step pipeline:
+```
+[ Telemetry Capture ] ──> [ Consensus Verification ] ──> [ Cryptographic Locking ] ──> [ Edge Failover Router ]
+```
 
-# ⚙️ Core Protocol & Verification WorkflowThe ecosystem ensures complete transparency and resilience during operational cycles via a strict 4-step pipeline:[ Telemetry Capture ] ──> [ Consensus Verification ] ──> [ Cryptographic Locking ] ──> [ Edge Failover Router ]
-
-#  (Node anomaly check)       (3/3 BFT Bounded Vote)         (SHA-256 Ledger Block)       (Heartbeat Status Sync)
+###  (Node anomaly check)       (3/3 BFT Bounded Vote)         (SHA-256 Ledger Block)       (Heartbeat Status Sync)
 
 Telemetry Capture: Node sensors track voltage, capacity, and current frequencies, instantly broadcasting telemetry state packets to neighboring agents.Consensus Verification: Peer nodes cross-verify incoming streams against their internal validation engines. If parameters match acceptable structural safety limits, agents sign off on the proposed state change.Cryptographic Locking: Upon crossing a unanimous 3/3 matching threshold, the transaction is declared immutable. The block computes a unique SHA-256 hash string, chaining it directly to the preceding audit ledger history.
 
@@ -104,28 +107,28 @@ Initialize the orchestrator application:
 python main.py
 ```
 ## Operational Modes
-# Upon launching main.py,
+### Upon launching main.py,
  the interactive terminal cockpit initializes and prompts for execution paths:
 
-# Mode 1: Pre-configured Scenarios:
+### Mode 1: Pre-configured Scenarios:
  Sequentially loops through 20 severe historical and adversarial microgrid stress-tests (e.g., Peak Summer Heatwave, Monsoon Flash Flood, or Ransomware Frequency Injection).
 
-# Mode 2: Quick-Tap Menu:
+### Mode 2: Quick-Tap Menu:
  Provides full development flexibility, allowing users to manually select spot market pricing scales, atmospheric sky profiles, and inject targeted cyber-threats on individual nodes on the fly.
 
 ## 🧪 Simulated Stress-Testing Scenarios
  To prove structural resilience, the system natively tests and documents specific grid disruptions: 
 
-# Byzantine Threat Vector :
+### Byzantine Threat Vector :
   Attempts to inject fraudulent load readings into a specific node. The consensus core detects the outlier signature, blocks block-chaining, and generates an emergency containment log.
   
-# Islanding Drill:
+### Islanding Drill:
   Simulates an abrupt cloud network failure. Edge monitors drop cloud polling speeds under 2.5 seconds and safely enforce local mitigation protocols until restoration occurs.
   
-# Ledger Security Test:
+### Ledger Security Test:
   Attempts to retroactively manipulate logging blocks trigger an immediate hash-mismatch warning, neutralizing tamper trends before they penetrate adjacent system boundaries.
   
   ## 👤 Developer Profile 
-  # Developed with passion by Shambhu Shekhar Sinha, a Computer Science and Engineering student specializing in Artificial Intelligence and Machine Learning.
+  ### Developed with passion by Shambhu Shekhar Sinha, a Computer Science and Engineering student specializing in Artificial Intelligence and Machine Learning.
   
-  # 📄 LicenseThis project is licensed under the MIT License - see the LICENSE file for complete open-source governance parameters.
+  ## 📄 LicenseThis project is licensed under the MIT License - see the LICENSE file for complete open-source governance parameters.
