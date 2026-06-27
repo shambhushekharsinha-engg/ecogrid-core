@@ -57,7 +57,7 @@ if "Standard Crisis" in data_source_mode:
     vector_color = "#FF9900" # Amber indicator for file configuration playback
     try:
         # Secure File IO Parsing Pass targeting the 20-part scenario configuration matrix
-        with open("config/scenarios.json", "r") as f:
+        with open("config/scenarios.json", "r", encoding="utf-8") as f:
             data = json.load(f)
             scenarios = data["simulation_scenarios"]
         sc_names = [s["scenario_name"] for s in scenarios]
