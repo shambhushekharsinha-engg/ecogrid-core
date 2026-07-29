@@ -1,14 +1,13 @@
 """
-EcoGrid Core Master Production Startup Orchestrator
-Pre-trains Kaggle ML models, launches internal Streamlit SCADA instance on 127.0.0.1:8501,
-and launches public FastAPI Gateway server on 0.0.0.0:${PORT:-8000}.
+EcoGrid Core Production Startup Orchestrator
+Pre-trains Kaggle ML models, launches FastAPI REST service on port 8000,
+and runs Streamlit SCADA Command Cockpit directly on public $PORT.
 """
 
 import os
 import sys
 import time
 import subprocess
-import uvicorn
 
 # Ensure project root is present in sys.path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -16,7 +15,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from ml_engine.train_models import train_all_models
 
 def main():
-    print("🚀 [ECOGRID CORE] Starting Production Gateway Master Orchestrator...")
+    print("🚀 [ECOGRID CORE] Initializing Native Production Web Server...")
 
     # 1. Pre-train ML models if not already present
     model_path = os.path.join("models", "traffic_congestion_model.joblib")
@@ -24,36 +23,37 @@ def main():
         print("🤖 [ECOGRID ML] Pre-training Kaggle Machine Learning models...")
         train_all_models()
 
-    # 2. Launch Internal Streamlit Server on 127.0.0.1:8501
-    print("⚡ [STREAMLIT] Launching internal Streamlit SCADA Cockpit on 127.0.0.1:8501...")
+    # 2. Launch FastAPI REST Microservice on background port 8000
+    print("📡 [FASTAPI REST API] Starting background microservice on port 8000...")
+    api_cmd = [
+        sys.executable, "-m", "uvicorn", "api.server:app",
+        "--host", "0.0.0.0",
+        "--port", "8000"
+    ]
+    try:
+        subprocess.Popen(
+            api_cmd,
+            env=dict(os.environ, PYTHONPATH=os.path.dirname(os.path.abspath(__file__)))
+        )
+    except Exception as e:
+        print(f"⚠️ FastAPI background note: {e}")
+
+    # 3. Determine public web port assigned by Render ($PORT or default 10000 / 8501)
+    port = os.environ.get("PORT", "10000")
+    print(f"⚡ [STREAMLIT WEB COCKPIT] Launching primary web interface on 0.0.0.0:{port}...")
+
+    # 4. Run Streamlit natively on public $PORT
     streamlit_cmd = [
         sys.executable, "-m", "streamlit", "run", "app.py",
-        "--server.port", "8501",
-        "--server.address", "127.0.0.1",
+        "--server.port", str(port),
+        "--server.address", "0.0.0.0",
         "--server.headless", "true",
         "--server.enableCORS", "false",
         "--server.enableXsrfProtection", "false"
     ]
-    
-    streamlit_process = subprocess.Popen(
-        streamlit_cmd,
-        env=dict(os.environ, PYTHONPATH=os.path.dirname(os.path.abspath(__file__)))
-    )
 
-    # 3. Brief pause to allow Streamlit internal server initialization
-    time.sleep(3.5)
-
-    # 4. Launch Public FastAPI Gateway Server on 0.0.0.0:${PORT:-8000}
-    port = int(os.environ.get("PORT", 8000))
-    print(f"🌐 [FASTAPI GATEWAY] Starting public web gateway on 0.0.0.0:{port}...")
-
-    try:
-        uvicorn.run("api.server:app", host="0.0.0.0", port=port, log_level="info")
-    except Exception as e:
-        print(f"⚠️ Uvicorn process note: {e}")
-    finally:
-        print("🛑 Shutting down internal Streamlit process...")
-        streamlit_process.terminate()
+    env = dict(os.environ, PYTHONPATH=os.path.dirname(os.path.abspath(__file__)))
+    subprocess.run(streamlit_cmd, env=env)
 
 if __name__ == "__main__":
     main()

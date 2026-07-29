@@ -2,15 +2,11 @@
 Production FastAPI REST Microservice Server for EcoGrid Core Infrastructure
 Exposes RESTful endpoints for Authentication, ML Predictions, Smart City Traffic & EV Load,
 AI Copilot Q&A, Multi-Currency Conversion, BFT Consensus, Cryptographic Ledger, and Retraining.
-Also serves as a Web Gateway reverse-proxying Streamlit SCADA UI to localhost:8501.
 """
 
 import os
 import sys
-import asyncio
-import httpx
-import websockets
-from fastapi import FastAPI, HTTPException, Request, Response, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
@@ -41,9 +37,6 @@ app.add_middleware(
 )
 
 ledger = CryptographicLedger()
-
-STREAMLIT_INTERNAL_HTTP = "http://127.0.0.1:8501"
-STREAMLIT_INTERNAL_WS = "ws://127.0.0.1:8501"
 
 # ────────────── REQUEST & RESPONSE SCHEMAS ──────────────
 class RegisterRequest(BaseModel):
@@ -95,7 +88,8 @@ class CurrencyConvertRequest(BaseModel):
     price_inr: float = Field(..., json_schema_extra={"example": 3500.0})
     target_country_code: str = Field("US", json_schema_extra={"example": "US"})
 
-# ────────────── NATIVE FASTAPI REST ENDPOINTS ──────────────
+# ────────────── ENDPOINTS ──────────────
+@app.get("/")
 @app.get("/health")
 def health_check():
     return {
@@ -202,88 +196,6 @@ def retrain_models():
     predictor.load_models()
     ledger.record_transaction("ML_Pipeline_Kernel", "KAGGLE_MODELS_RETRAINED", results)
     return {"success": True, "message": "All 4 Kaggle ML models retrained successfully!", "results": results}
-
-# ────────────── STREAMLIT WEBSOCKET & REVERSE PROXY ──────────────
-@app.websocket("/_stcore/stream")
-@app.websocket("/_stcore/stream/{ws_path:path}")
-async def websocket_proxy(websocket: WebSocket, ws_path: str = ""):
-    await websocket.accept()
-    target_url = f"{STREAMLIT_INTERNAL_WS}/_stcore/stream"
-    if ws_path:
-        target_url += f"/{ws_path}"
-
-    try:
-        async with websockets.connect(target_url, max_size=None) as target_ws:
-            async def forward_to_streamlit():
-                try:
-                    while True:
-                        data = await websocket.receive()
-                        if "bytes" in data and data["bytes"]:
-                            await target_ws.send(data["bytes"])
-                        elif "text" in data and data["text"]:
-                            await target_ws.send(data["text"])
-                        elif data.get("type") == "websocket.disconnect":
-                            break
-                except Exception:
-                    pass
-
-            async def forward_to_client():
-                try:
-                    while True:
-                        msg = await target_ws.recv()
-                        if isinstance(msg, bytes):
-                            await websocket.send_bytes(msg)
-                        elif isinstance(msg, str):
-                            await websocket.send_text(msg)
-                except Exception:
-                    pass
-
-            await asyncio.gather(forward_to_streamlit(), forward_to_client())
-    except Exception as e:
-        print(f"⚠️ Streamlit WebSocket relay note: {e}")
-    finally:
-        try:
-            await websocket.close()
-        except Exception:
-            pass
-
-@app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"])
-async def reverse_proxy_streamlit(request: Request, path: str):
-    if path.startswith("api/") or path.startswith("docs") or path.startswith("openapi.json") or path == "health":
-        raise HTTPException(status_code=404, detail="API endpoint not found")
-
-    url = f"{STREAMLIT_INTERNAL_HTTP}/{path}"
-    if request.query_params:
-        url += f"?{request.query_params}"
-
-    headers = dict(request.headers)
-    headers.pop("host", None)
-    headers.pop("accept-encoding", None)
-
-    try:
-        async with httpx.AsyncClient(timeout=30.0, follow_redirects=True) as client:
-            content = await request.body()
-            resp = await client.request(
-                method=request.method,
-                url=url,
-                headers=headers,
-                content=content
-            )
-
-            excluded_headers = ["content-encoding", "content-length", "transfer-encoding", "connection"]
-            resp_headers = {k: v for k, v in resp.headers.items() if k.lower() not in excluded_headers}
-
-            return Response(
-                content=resp.content,
-                status_code=resp.status_code,
-                headers=resp_headers
-            )
-    except Exception as e:
-        return Response(
-            content="<html><head><meta http-equiv='refresh' content='2'></head><body style='background:#0A0F1D;color:#00E5FF;font-family:sans-serif;text-align:center;padding-top:20%'><h2>⚡ EcoGrid Core Initializing...</h2><p>Connecting to Streamlit SCADA interface...</p></body></html>",
-            status_code=200,
-            media_type="text/html"
-        )
 
 if __name__ == "__main__":
     import uvicorn
