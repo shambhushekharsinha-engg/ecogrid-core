@@ -35,15 +35,12 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-RENDER_DEPLOYMENT_URL = "https://ecogrid-ai-cockpit.onrender.com/"
-
 # Custom Cyberpunk Industrial CSS Theme
 st.markdown("""
 <style>
     .stApp { background-color: #0A0F1D; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     .main-header { font-size: 2.2rem; color: #00E5FF; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; }
     .sub-header { color: #8F9CAE; font-size: 1rem; margin-bottom: 20px; }
-    .deploy-badge { background: #00E5FF22; border: 1px solid #00E5FF; color: #00E5FF; border-radius: 20px; padding: 6px 14px; font-weight: bold; display: inline-block; }
     .metric-card { background: #121A30; border: 1px solid #1E294B; border-radius: 8px; padding: 16px; margin: 5px 0; }
     .summary-box { background: #0E1628; border-left: 4px solid #00E5FF; padding: 15px; border-radius: 4px; margin: 10px 0; }
     div[data-testid="stMetricValue"] { font-family: monospace; color: #00FF66 !important; }
@@ -67,7 +64,7 @@ chaos = ChaosMonkey()
 # ────────────────────────────────────────────────────────────────────────
 if not st.session_state.authenticated:
     st.markdown("<h1 class='main-header' style='text-align: center;'>⚡ ECOGRID CORE AI INFRASTRUCTURE</h1>", unsafe_allow_html=True)
-    st.markdown(f"<p class='sub-header' style='text-align: center;'>Enterprise Multi-Agent SCADA & Smart Grid Infrastructure Platform<br><a href='{RENDER_DEPLOYMENT_URL}' target='_blank' style='color:#00E5FF;'>🌐 Live Production Deployment: ecogrid-ai-cockpit.onrender.com</a></p>", unsafe_allow_html=True)
+    st.markdown("<p class='sub-header' style='text-align: center;'>Enterprise Multi-Agent SCADA & Smart Grid Infrastructure Platform</p>", unsafe_allow_html=True)
     st.markdown("---")
 
     col1, col2, col3 = st.columns([1, 2, 1])
@@ -86,12 +83,16 @@ if not st.session_state.authenticated:
                         st.session_state.authenticated = True
                         st.session_state.user_info = res
                         st.rerun()
+                    else:
+                        st.error(f"Login failed: {res}")
                 if st.button("⚡ Grid Chief Engineer", use_container_width=True):
                     ok, res = auth_manager.authenticate_user("grid_eng", "Grid@123")
                     if ok:
                         st.session_state.authenticated = True
                         st.session_state.user_info = res
                         st.rerun()
+                    else:
+                        st.error(f"Login failed: {res}")
             with c_b:
                 if st.button("🚦 Traffic Operations Chief", use_container_width=True):
                     ok, res = auth_manager.authenticate_user("traffic_op", "Traffic@123")
@@ -99,26 +100,33 @@ if not st.session_state.authenticated:
                         st.session_state.authenticated = True
                         st.session_state.user_info = res
                         st.rerun()
+                    else:
+                        st.error(f"Login failed: {res}")
                 if st.button("👁️ Guest Auditor", use_container_width=True):
                     ok, res = auth_manager.authenticate_user("guest", "Guest@123")
                     if ok:
                         st.session_state.authenticated = True
                         st.session_state.user_info = res
                         st.rerun()
+                    else:
+                        st.error(f"Login failed: {res}")
 
         with auth_tab2:
             login_user = st.text_input("Username", key="l_user")
             login_pwd = st.text_input("Password", type="password", key="l_pwd")
             if st.button("Login", use_container_width=True, type="primary"):
-                ok, res = auth_manager.authenticate_user(login_user, login_pwd)
-                if ok:
-                    st.session_state.authenticated = True
-                    st.session_state.user_info = res
-                    st.success("Login successful! Redirecting...")
-                    time.sleep(0.5)
-                    st.rerun()
+                if not login_user.strip() or not login_pwd.strip():
+                    st.warning("Please enter both username and password.")
                 else:
-                    st.error(res)
+                    ok, res = auth_manager.authenticate_user(login_user, login_pwd)
+                    if ok:
+                        st.session_state.authenticated = True
+                        st.session_state.user_info = res
+                        st.success("Login successful! Redirecting...")
+                        time.sleep(0.3)
+                        st.rerun()
+                    else:
+                        st.error(res)
 
         with auth_tab3:
             reg_user = st.text_input("Desired Username", key="r_user")
@@ -136,6 +144,13 @@ if not st.session_state.authenticated:
                 ok, msg = auth_manager.register_user(reg_user, reg_pwd, reg_role)
                 if ok:
                     st.success(msg)
+                    # Automatically log in new registered user
+                    auth_ok, auth_res = auth_manager.authenticate_user(reg_user, reg_pwd)
+                    if auth_ok:
+                        st.session_state.authenticated = True
+                        st.session_state.user_info = auth_res
+                        time.sleep(0.5)
+                        st.rerun()
                 else:
                     st.error(msg)
     st.stop()
@@ -150,7 +165,6 @@ st.sidebar.markdown(f"""
     <div style='color:#00E5FF; font-weight:bold; font-size:12px;'>🟢 SESSION ACTIVE</div>
     <div style='color:#FFFFFF; font-size:14px; font-weight:bold;'>👤 {user_data['username']}</div>
     <div style='color:#8F9CAE; font-size:11px;'>{user_data['role']}</div>
-    <a href='{RENDER_DEPLOYMENT_URL}' target='_blank' style='color:#00FF66; font-size:10px; text-decoration:none;'>🌐 Render Live Production</a>
 </div>
 """, unsafe_allow_html=True)
 
@@ -197,7 +211,7 @@ nav_tab = st.sidebar.radio(
 # ────────────────────────────────────────────────────────────────────────
 if "EcoGrid SCADA" in nav_tab:
     st.markdown("<h2 class='main-header'>⚡ ECOGRID MULTI-AGENT SCADA CONTROL</h2>", unsafe_allow_html=True)
-    st.markdown(f"<p class='sub-header'>Byzantine Fault Tolerant Microgrid Telemetry & Real-Time Sine Wave Simulation | <a href='{RENDER_DEPLOYMENT_URL}' target='_blank' style='color:#00E5FF;'>🌐 Live Render Production Node</a></p>", unsafe_allow_html=True)
+    st.markdown("<p class='sub-header'>Byzantine Fault Tolerant Microgrid Telemetry & Real-Time Sine Wave Simulation</p>", unsafe_allow_html=True)
 
     col1, col2 = st.columns([1, 2])
     with col1:
@@ -221,12 +235,8 @@ if "EcoGrid SCADA" in nav_tab:
         st.markdown("### 🕸️ Digital Twin Real-Time Grid Node Topology")
         
         # Interactive Node Network Diagram using Plotly
-        edge_x = [0, 1, 1, 2, 0, 2]
-        edge_y = [0, 1, 1, 0, 0, 0]
-        
         fig_topo = go.Figure()
         
-        # Add Connections
         fig_topo.add_trace(go.Scatter(
             x=[0, 1, 1, 2, 0, 2], y=[0, 1, 1, 0, 0, 0],
             line=dict(width=2, color='#00E5FF'),
@@ -234,7 +244,6 @@ if "EcoGrid SCADA" in nav_tab:
             mode='lines'
         ))
         
-        # Add Nodes
         node_x = [0, 1, 2]
         node_y = [0, 1, 0]
         node_text = ["Node Alpha (Residential)<br>Load: 240 kW | Freq: 50.01 Hz", 
@@ -428,7 +437,7 @@ elif "AI Infrastructure Copilot" in nav_tab:
         st.markdown("### ⚡ AI System Diagnostic Status")
         st.info("📡 Cloud Channel: Gemini 2.5 Flash Ready")
         st.success("🤖 Local Edge AI Engine: Active")
-        st.markdown(f"[🌐 Live Render Node]({RENDER_DEPLOYMENT_URL})")
+        st.caption("EcoGrid AI Copilot synthesizes grid telemetry, BFT consensus votes, and Kaggle ML model predictions.")
 
 # ────────────────────────────────────────────────────────────────────────
 # TAB 5: KAGGLE AI & ML HUB
@@ -565,7 +574,6 @@ elif "Incident Reports" in nav_tab:
 **Target Sector Node:** {t_node}  
 **Observed Metric:** {val_metric}  
 **Sector Country Node:** {st.session_state.selected_country}  
-**Production Node:** {RENDER_DEPLOYMENT_URL}  
 
 ## 🔬 Executive Summary
 An anomaly event ({reason}) was flagged on {t_node}. The 3/3 BFT consensus core isolated the vector and logged transaction to the SHA-256 ledger.
@@ -591,7 +599,7 @@ An anomaly event ({reason}) was flagged on {t_node}. The 3/3 BFT consensus core 
 # ────────────────────────────────────────────────────────────────────────
 elif "REST API" in nav_tab:
     st.markdown("<h2 class='main-header'>🌐 REST API & SYSTEM DEPLOYMENT TELEMETRY</h2>", unsafe_allow_html=True)
-    st.markdown(f"<p class='sub-header'>OpenAPI Swagger Endpoints & Containerized Service Status | <a href='{RENDER_DEPLOYMENT_URL}' target='_blank' style='color:#00E5FF;'>🌐 Live Render Production Deployment</a></p>", unsafe_allow_html=True)
+    st.markdown("<p class='sub-header'>OpenAPI Swagger Endpoints & Containerized Service Status</p>", unsafe_allow_html=True)
 
     c1, c2, c3 = st.columns(3)
     c1.metric("REST API Engine", "FastAPI v6.5.0-PROD")
