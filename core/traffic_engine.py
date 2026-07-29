@@ -1,13 +1,13 @@
 """
-Aegis Traffic Engine: Intelligent Urban Traffic & Intersection Control Infrastructure
-Handles Signal Phase Duration Optimization, Emergency Corridor Overrides,
-Intersection Congestion Index (ICI), and EV Charging Queue Load Balancing.
+EcoGrid Core: Smart City Traffic & EV Grid Load Management Engine
+Handles Signal Phase Duration Optimization, Emergency Green Corridor Overrides,
+Intersection Congestion Index (ICI), and EV Charging Queue Load Balancing for EcoGrid SCADA.
 """
 
 from ml_engine.predictor import predictor
 
-class AegisTrafficEngine:
-    """Core domain engine for Aegis AI Intelligent Urban Traffic Control."""
+class EcoGridTrafficEngine:
+    """Smart city traffic and EV grid load management engine for EcoGrid Core."""
 
     @staticmethod
     def calculate_intersection_metrics(vehicle_count: int, avg_speed_kmh: float, weather: str = "SUNNY", hour: int = 14) -> dict:
@@ -59,7 +59,7 @@ class AegisTrafficEngine:
         cycle_length_sec = 120 if vehicle_count > 800 else 90
 
         main_green = int(max(20, min(90, round(cycle_length_sec * ratio))))
-        cross_green = cycle_length_sec - main_green - 6  # 6s yellow/red clearance
+        cross_green = cycle_length_sec - main_green - 6
 
         return {
             "intersection_id": intersection_id,
@@ -77,13 +77,13 @@ class AegisTrafficEngine:
         available_margin_kw = max(0.0, max_capacity_kw - grid_load_kw)
 
         if available_margin_kw < 200.0:
-            power_per_plug_kw = 15.0  # Eco slow charge mode
+            power_per_plug_kw = 15.0
             mode = "SHEDDING_PROTECTION"
         elif available_margin_kw < 600.0:
-            power_per_plug_kw = 50.0  # Standard fast charge
+            power_per_plug_kw = 50.0
             mode = "BALANCED_LOAD"
         else:
-            power_per_plug_kw = 150.0 # Ultra-fast charge
+            power_per_plug_kw = 150.0
             mode = "MAXIMUM_DISPATCH"
 
         total_station_draw_kw = min(available_margin_kw, power_per_plug_kw * queued_evs)

@@ -1,6 +1,6 @@
 """
-Production FastAPI REST Microservice Server for Aegis Traffic & EcoGrid Core
-Exposes RESTful endpoints for Authentication, ML Predictions, Traffic Control,
+Production FastAPI REST Microservice Server for EcoGrid Core Infrastructure
+Exposes RESTful endpoints for Authentication, ML Predictions, Smart City Traffic & EV Load,
 AI Copilot Q&A, Multi-Currency Conversion, BFT Consensus, Cryptographic Ledger, and Retraining.
 """
 
@@ -11,15 +11,15 @@ from pydantic import BaseModel, Field
 from security.auth import auth_manager
 from ml_engine.predictor import predictor
 from ml_engine.train_models import train_all_models
-from core.traffic_engine import AegisTrafficEngine
+from core.traffic_engine import EcoGridTrafficEngine
 from core.consensus_engine import BFTConsensusEngine
 from core.mitigation_engine import GroundLevelMitigation
 from security.crypto_ledger import CryptographicLedger
 from cloud_auditor import auditor
 
 app = FastAPI(
-    title="Aegis Traffic & EcoGrid SCADA Enterprise API",
-    description="RESTful Microservice API powering Intelligent Traffic Signal Optimization, Microgrid SCADA, 3/3 BFT Consensus, AI Copilot, and Kaggle AI Predictors.",
+    title="EcoGrid Core Enterprise REST API",
+    description="RESTful Microservice API powering Microgrid SCADA, Smart City Traffic & EV Load Optimization, 3/3 BFT Consensus, AI Copilot, and Kaggle AI Predictors.",
     version="6.5.0-PROD"
 )
 
@@ -35,9 +35,9 @@ ledger = CryptographicLedger()
 
 # ────────────── REQUEST & RESPONSE SCHEMAS ──────────────
 class RegisterRequest(BaseModel):
-    username: str = Field(..., min_length=3, json_schema_extra={"example": "traffic_admin"})
+    username: str = Field(..., min_length=3, json_schema_extra={"example": "ecogrid_operator"})
     password: str = Field(..., min_length=8, json_schema_extra={"example": "StrongPass@123"})
-    role: str = Field("Operator", json_schema_extra={"example": "Traffic Operations Chief"})
+    role: str = Field("Operator", json_schema_extra={"example": "Microgrid Chief Engineer"})
 
 class LoginRequest(BaseModel):
     username: str = Field(..., json_schema_extra={"example": "admin"})
@@ -76,7 +76,7 @@ class BFTConsensusRequest(BaseModel):
     grid_freq_hz: float = Field(50.0, json_schema_extra={"example": 50.0})
 
 class AICopilotRequest(BaseModel):
-    user_query: str = Field(..., json_schema_extra={"example": "How does Aegis Traffic optimize signal timing during peak hours?"})
+    user_query: str = Field(..., json_schema_extra={"example": "How does EcoGrid Core optimize signal timing during peak hours?"})
     context_data: dict = Field({}, json_schema_extra={"example": {"active_intersection": "INT_ALPHA_CBD"}})
 
 class CurrencyConvertRequest(BaseModel):
@@ -89,7 +89,7 @@ class CurrencyConvertRequest(BaseModel):
 def health_check():
     return {
         "status": "ONLINE",
-        "service": "Aegis Traffic & EcoGrid Core REST API",
+        "service": "EcoGrid Core Enterprise REST API",
         "version": "6.5.0-PROD",
         "loaded_ml_models": list(predictor.models.keys()),
         "supported_countries": list(GroundLevelMitigation.COUNTRY_MATRIX.keys()),
@@ -122,25 +122,25 @@ def demo_login(req: DemoLoginRequest):
         raise HTTPException(status_code=500, detail="Demo login failed.")
     return {"success": True, "user": result}
 
-# ──── AEGIS TRAFFIC ENDPOINTS ────
+# ──── ECOGRID TRAFFIC & EV GRID ENDPOINTS ────
 @app.post("/api/v1/predict/traffic")
 def predict_traffic(req: TrafficPredictionRequest):
-    metrics = AegisTrafficEngine.calculate_intersection_metrics(
+    metrics = EcoGridTrafficEngine.calculate_intersection_metrics(
         req.vehicle_count, req.avg_speed_kmh, req.weather, req.hour
     )
     return {"success": True, "data": metrics}
 
 @app.post("/api/v1/traffic/optimize-signal")
 def optimize_signal(req: SignalOptimizeRequest):
-    plan = AegisTrafficEngine.optimize_signal_timing(
+    plan = EcoGridTrafficEngine.optimize_signal_timing(
         req.intersection_id, req.vehicle_count, req.cross_street_count, req.emergency_flag
     )
-    ledger.record_transaction("Aegis_Traffic_Orchestrator", "SIGNAL_PHASE_OPTIMIZE", plan)
+    ledger.record_transaction("EcoGrid_Traffic_Orchestrator", "SIGNAL_PHASE_OPTIMIZE", plan)
     return {"success": True, "signal_plan": plan}
 
 @app.post("/api/v1/traffic/ev-balance")
 def balance_ev_charging(req: EVBalanceRequest):
-    res = AegisTrafficEngine.balance_ev_charging_queue(
+    res = EcoGridTrafficEngine.balance_ev_charging_queue(
         req.grid_load_kw, req.max_capacity_kw, req.queued_evs
     )
     return {"success": True, "data": res}

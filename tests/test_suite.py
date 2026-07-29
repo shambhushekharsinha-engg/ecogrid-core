@@ -1,6 +1,6 @@
 """
-Automated Test Suite for Aegis Traffic & EcoGrid Core Platform
-Tests Authentication, Traffic Engine, Kaggle ML Models, BFT Consensus,
+Automated Test Suite for EcoGrid Core Platform
+Tests Authentication, Smart City Traffic & EV Engine, Kaggle ML Models, BFT Consensus,
 Multi-Currency Switcher, AI Copilot Q&A, Crypto Ledger Chaining, and REST Endpoints.
 """
 
@@ -9,7 +9,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from security.auth import auth_manager
-from core.traffic_engine import AegisTrafficEngine
+from core.traffic_engine import EcoGridTrafficEngine
 from core.consensus_engine import BFTConsensusEngine
 from core.mitigation_engine import GroundLevelMitigation
 from security.crypto_ledger import CryptographicLedger
@@ -44,25 +44,25 @@ def test_demo_login_presets():
         assert ok
         assert "username" in res
 
-# ────────────── 2. AEGIS TRAFFIC ENGINE TESTS ──────────────
+# ────────────── 2. ECOGRID TRAFFIC & EV GRID TESTS ──────────────
 def test_intersection_congestion_index():
-    metrics = AegisTrafficEngine.calculate_intersection_metrics(950, 22.5, "SUNNY")
+    metrics = EcoGridTrafficEngine.calculate_intersection_metrics(950, 22.5, "SUNNY")
     assert 0.0 <= metrics["congestion_index"] <= 1.0
     assert metrics["traffic_status_level"] in ["OPTIMAL_FLOW", "MODERATE_TRAFFIC", "CRITICAL_CONGESTION"]
 
 def test_adaptive_signal_timing_optimization():
-    plan = AegisTrafficEngine.optimize_signal_timing("INT_ALPHA_CBD", 950, 300, emergency_flag=False)
+    plan = EcoGridTrafficEngine.optimize_signal_timing("INT_ALPHA_CBD", 950, 300, emergency_flag=False)
     assert plan["mode"] == "ADAPTIVE_ML_OPTIMIZED"
     assert plan["main_street_green_sec"] > 0
     assert plan["cross_street_green_sec"] > 0
 
 def test_emergency_green_corridor_override():
-    em_plan = AegisTrafficEngine.optimize_signal_timing("INT_ALPHA_CBD", 950, 300, emergency_flag=True)
+    em_plan = EcoGridTrafficEngine.optimize_signal_timing("INT_ALPHA_CBD", 950, 300, emergency_flag=True)
     assert em_plan["mode"] == "EMERGENCY_GREEN_CORRIDOR"
     assert em_plan["main_street_green_sec"] == 120
 
 def test_ev_charging_queue_balancing():
-    res = AegisTrafficEngine.balance_ev_charging_queue(1850.0, 2000.0, 15)
+    res = EcoGridTrafficEngine.balance_ev_charging_queue(1850.0, 2000.0, 15)
     assert res["charging_mode"] == "SHEDDING_PROTECTION"
     assert res["power_per_plug_kw"] == 15.0
 
@@ -78,7 +78,7 @@ def test_multi_country_currency_switcher():
     assert mit["currency_symbol"] == "$"
 
 def test_ai_copilot_answers_and_summary():
-    res = auditor.answer_user_query("How does Aegis Traffic optimize signal timing during peak hours?")
+    res = auditor.answer_user_query("How does EcoGrid Core optimize signal timing during peak hours?")
     assert "summary" in res
     assert "full_response" in res
     assert len(res["summary"]) > 0
@@ -118,6 +118,7 @@ def test_health_endpoint():
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json()["status"] == "ONLINE"
+    assert "EcoGrid Core" in response.json()["service"]
 
 def test_api_traffic_prediction_endpoint():
     response = client.post("/api/v1/predict/traffic", json={
@@ -131,7 +132,7 @@ def test_api_traffic_prediction_endpoint():
 
 def test_api_ai_copilot_endpoint():
     response = client.post("/api/v1/ai/copilot", json={
-        "user_query": "Explain frequency spoofing containment.",
+        "user_query": "Explain frequency spoofing containment in EcoGrid.",
         "context_data": {}
     })
     assert response.status_code == 200

@@ -1,4 +1,4 @@
-# 🚦 Aegis Traffic & ⚡ EcoGrid Core Infrastructure
+# ⚡ EcoGrid Core: Multi-Agent SCADA & Smart Grid Infrastructure
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
@@ -15,9 +15,9 @@
 
 ## 🔬 System Overview
 
-**Aegis Traffic & EcoGrid Core** is an enterprise-grade, containerized urban infrastructure intelligence platform combining **Aegis AI Intelligent Traffic Signal Optimization** with **EcoGrid Multi-Agent Microgrid SCADA Management**. 
+**EcoGrid Core** is a next-generation, containerized microgrid & smart city infrastructure platform designed to resolve single-point vulnerabilities in modern power networks.
 
-Equipped with an **AI Infrastructure Copilot** (powered by Google Gemini 2.5 Flash & Edge AI), an **Instant Multi-Country Currency Switcher** across 10 international sectors, Kaggle time-series dataset Machine Learning models, 3/3 Byzantine Fault Tolerance (BFT) consensus, and a tamper-evident SHA-256 cryptographic audit ledger.
+Equipped with an **EcoGrid AI Infrastructure Copilot** (powered by Google Gemini 2.5 Flash & Edge AI), an **Instant Multi-Country Currency Switcher** across 10 international sectors, Machine Learning models trained on Kaggle time-series datasets, 3/3 Byzantine Fault Tolerance (BFT) consensus, and a tamper-evident SHA-256 cryptographic audit ledger.
 
 ---
 
@@ -25,10 +25,10 @@ Equipped with an **AI Infrastructure Copilot** (powered by Google Gemini 2.5 Fla
 
 The Streamlit Web Cockpit (`app.py`) features 8 dedicated domain tabs:
 
-1. 🚦 **Aegis Traffic Operations:** Intersection Congestion Index (ICI), adaptive green light timing optimization, emergency green wave corridor override, and EV charging queue load shedding.
-2. ⚡ **EcoGrid SCADA & Energy Grid:** Multi-agent microgrid load balancing, battery state-of-charge health tracking, live sine-wave frequency stream monitors, and dynamic regional tariff savings.
+1. ⚡ **EcoGrid SCADA & Microgrid:** Multi-agent microgrid load balancing, battery state-of-charge health tracking, live sine-wave frequency stream monitors, and dynamic regional tariff savings.
+2. 🚦 **Smart City Traffic & EV Grid:** Intersection Congestion Index (ICI), adaptive green light timing optimization, emergency green wave corridor override, and EV charging queue load shedding.
 3. 🌐 **Multi-Country Currency Center:** Instant currency conversion and tariff comparison matrix across 10 international grid sectors (INR ₹, USD $, EUR €, GBP £, JPY ¥, AUD $, BRL R$, CAD $, UAE AED, ZAR R).
-4. 🧠 **AI Infrastructure Copilot:** AI Q&A Assistant providing detailed technical analyses, Executive Summaries, and bulleted engineering action plans.
+4. 🧠 **AI SCADA Infrastructure Copilot:** AI Q&A Assistant providing detailed technical analyses, Executive Summaries, and bulleted engineering action plans.
 5. 🤖 **Kaggle AI & ML Model Hub:** Scikit-Learn model predictors, live prediction sandboxes, Kaggle dataset data explorer, and 1-click CSV dataset exporter.
 6. 🛡️ **Cybersecurity & 3/3 BFT Ledger:** Chaos Monkey threat injector, 3/3 BFT unanimous signature consensus evaluator, SHA-256 ledger explorer, and audit CSV exporter.
 7. 📑 **Incident Reports & Prescriptions:** Automated ground-level engineering prescriptions for on-site technicians and downloadable Markdown forensic incident reports.
@@ -60,8 +60,8 @@ Switching the active country node in the sidebar instantly updates spot market p
 | Role Preset | Username | Password | Access Level |
 | :--- | :--- | :--- | :--- |
 | **System Administrator** | `admin` | `Admin@123` | Full Administrative Access |
-| **Traffic Operations Chief** | `traffic_op` | `Traffic@123` | Aegis Traffic Signal Control & Emergency Routing |
 | **Microgrid Chief Engineer** | `grid_eng` | `Grid@123` | SCADA Energy Dispatch & Battery Storage |
+| **Traffic Operations Chief** | `traffic_op` | `Traffic@123` | Smart City Traffic & EV Queue Control |
 | **Guest Auditor** | `guest` | `Guest@123` | Read-only Ledger Verification |
 
 ---
@@ -117,7 +117,7 @@ OpenAPI Swagger documentation is accessible at `http://localhost:8000/docs`.
      uvicorn api.server:app --reload --port 8000
      ```
 
-### Option 2: Docker Containerization
+### Option 2: Containerized Docker Deployment
 
 ```bash
 docker-compose up --build

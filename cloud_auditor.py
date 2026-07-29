@@ -1,6 +1,6 @@
 """
-AI Infrastructure Copilot & Cognitive Cloud Auditor Engine
-Powered by Google GenAI (Gemini) and Edge AI with domain-specific diagnostic logic.
+EcoGrid AI Infrastructure Copilot & Cognitive Cloud Auditor Engine
+Powered by Google GenAI (Gemini) and Edge AI with domain-specific SCADA diagnostic logic.
 Provides detailed AI Q&A answers with Executive Summaries, Incident Reports, and Engineering Prescriptions.
 """
 
@@ -8,7 +8,7 @@ import os
 import json
 
 class CloudCognitiveAuditor:
-    """Enterprise AI Copilot providing Q&A analytics, root-cause analysis, and executive summaries."""
+    """Enterprise AI Copilot providing Q&A analytics, root-cause analysis, and executive summaries for EcoGrid Core."""
 
     def __init__(self):
         self.api_key = os.environ.get("GEMINI_API_KEY")
@@ -25,7 +25,7 @@ class CloudCognitiveAuditor:
         ctx_str = json.dumps(context_data or {}, indent=2)
 
         prompt = f"""
-        You are Aegis AI Copilot, the lead Senior Infrastructure & Traffic AI Engineer for Aegis Traffic & EcoGrid SCADA.
+        You are EcoGrid AI Copilot, the Chief SCADA Infrastructure and Smart Grid AI Specialist for EcoGrid Core.
         User Query: "{user_query}"
         
         System Context:
@@ -33,8 +33,8 @@ class CloudCognitiveAuditor:
         
         Please format your response into 3 structured sections:
         1. 📋 EXECUTIVE SUMMARY: A concise 2-3 sentence overview answering the user's core question.
-        2. 🔬 DETAILED TECHNICAL ANALYSIS: In-depth technical breakdown explaining grid/traffic physics, ML predictions, BFT consensus status, or operational mechanics.
-        3. 🛠️ RECOMMENDED ACTION PLAN: Bulleted step-by-step engineering recommendations for operators.
+        2. 🔬 DETAILED TECHNICAL ANALYSIS: In-depth technical breakdown explaining microgrid physics, ML predictions, BFT consensus status, or operational mechanics.
+        3. 🛠️ RECOMMENDED ACTION PLAN: Bulleted step-by-step engineering recommendations for grid operators.
         """
 
         if self.client:
@@ -52,12 +52,12 @@ class CloudCognitiveAuditor:
             except Exception as e:
                 print(f"⚠️ Gemini Cloud call note: {e}")
 
-        # Intelligent Fallback Cognitive Engine (Offline / Local Mode)
+        # Intelligent Fallback Cognitive Engine (Offline / Local Edge Mode)
         query_lower = user_query.lower()
-        if "traffic" in query_lower or "signal" in query_lower or "congestion" in query_lower:
-            summary = "Aegis Traffic Engine utilizes Machine Learning models trained on Kaggle traffic flow datasets to dynamically adjust signal green phases (15s to 90s), preventing urban gridlock while prioritizing emergency vehicle corridors."
+        if "traffic" in query_lower or "signal" in query_lower or "congestion" in query_lower or "ev" in query_lower:
+            summary = "EcoGrid Core utilizes Kaggle-trained Machine Learning models to dynamically manage urban intersection signals and EV charging station queues, safeguarding local grid transformer stability."
             detailed = (
-                "### 🚦 Aegis Traffic Control Dynamics\n\n"
+                "### 🚦 EcoGrid Smart City Traffic & EV Management Dynamics\n\n"
                 "The Intersection Congestion Index (ICI) evaluates real-time vehicle flow rate (veh/hr), average speed (km/h), and atmospheric conditions.\n"
                 "- **Optimal Flow (ICI < 0.60)**: Maintains standard 90s signal cycles with balanced split.\n"
                 "- **Moderate Congestion (0.60 <= ICI < 0.85)**: Dynamically extends main-artery green phases up to 75s.\n"
@@ -70,9 +70,9 @@ class CloudCognitiveAuditor:
                 "Ensure emergency corridor priority routing has 3/3 BFT consensus pre-approval."
             ]
         elif "security" in query_lower or "attack" in query_lower or "ledger" in query_lower or "bft" in query_lower:
-            summary = "The 3/3 Byzantine Fault Tolerance (BFT) consensus engine requires unanimous cryptographic signatures across all cluster nodes before committing telemetry state changes to the tamper-evident SHA-256 ledger."
+            summary = "EcoGrid's 3/3 Byzantine Fault Tolerance (BFT) consensus engine requires unanimous cryptographic signatures across all cluster nodes before committing state changes to the tamper-evident SHA-256 ledger."
             detailed = (
-                "### 🛡️ Cryptographic Security & BFT Governance\n\n"
+                "### 🛡️ EcoGrid Cryptographic Security & BFT Governance\n\n"
                 "When malicious telemetry spoofing occurs (e.g. frequency injected > 50.8 Hz):\n"
                 "- **BFT Consensus Engine**: Peer nodes detect outlier grid signatures and reject consensus (0/3 votes).\n"
                 "- **Crypto Ledger**: Generates SHA-256 block hash linked to preceding block hash, creating a tamper-evident audit record in both SQLite/PostgreSQL and local JSON ledgers.\n"
@@ -84,9 +84,9 @@ class CloudCognitiveAuditor:
                 "Rotate cryptographic node signature keys every 30 days."
             ]
         else:
-            summary = "Aegis Traffic & EcoGrid SCADA integrates distributed multi-agent SCADA control with Kaggle AI predictive models, multi-currency localization, and 3/3 BFT consensus for deployable microgrid & urban traffic infrastructure."
+            summary = "EcoGrid Core integrates distributed multi-agent SCADA control with Kaggle AI predictive models, multi-currency localization, and 3/3 BFT consensus for deployable microgrid & urban energy infrastructure."
             detailed = (
-                "### ⚡ System Operational Architecture\n\n"
+                "### ⚡ EcoGrid SCADA Operational Architecture\n\n"
                 "EcoGrid multi-agent SCADA coordinates load demand, solar generation efficiency, and battery state-of-charge (SOC).\n"
                 "- **Multi-Country Currency Switching**: Supports instant localization across 10 international grid sectors (INR ₹, USD $, EUR €, GBP £, JPY ¥, AUD $, BRL R$, CAD $, UAE AED, ZAR R).\n"
                 "- **Production REST API**: FastAPI backend provides endpoints for ML predictions, traffic signal optimization, BFT consensus voting, and automated retraining."
@@ -99,7 +99,7 @@ class CloudCognitiveAuditor:
 
         full_resp = f"### 📋 EXECUTIVE SUMMARY\n{summary}\n\n{detailed}\n\n### 🛠️ RECOMMENDED ACTION PLAN\n" + "\n".join([f"- {r}" for r in recommendations])
         return {
-            "provider": "Aegis Intelligent Cognitive Engine (Local Edge)",
+            "provider": "EcoGrid Intelligent Cognitive Engine (Local Edge)",
             "full_response": full_resp,
             "summary": summary
         }

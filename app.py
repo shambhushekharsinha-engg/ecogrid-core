@@ -1,7 +1,7 @@
 """
-Aegis Traffic & EcoGrid SCADA Enterprise Command Cockpit UI
-Integrated User Authentication, Aegis Traffic Control, Multi-Agent SCADA,
-Multi-Country Currency Switcher, AI Infrastructure Copilot with Summaries,
+EcoGrid Core: Multi-Agent SCADA Infrastructure Command Cockpit UI
+Integrated User Authentication, Smart City Traffic & EV Grid Control, Multi-Agent SCADA,
+Multi-Country Currency Switcher, AI SCADA Infrastructure Copilot with Summaries,
 Kaggle ML Hub, 3/3 BFT Ledger, Incident Reports, and REST API Telemetry.
 """
 
@@ -15,7 +15,7 @@ import os
 import time
 
 from security.auth import auth_manager
-from core.traffic_engine import AegisTrafficEngine
+from core.traffic_engine import EcoGridTrafficEngine
 from core.consensus_engine import BFTConsensusEngine
 from core.battery_system import BatteryBank
 from security.crypto_ledger import CryptographicLedger
@@ -29,8 +29,8 @@ from cloud_auditor import auditor
 
 # Page Config
 st.set_page_config(
-    page_title="Aegis Traffic & EcoGrid AI SCADA",
-    page_icon="🚦",
+    page_title="EcoGrid Core AI SCADA Infrastructure",
+    page_icon="⚡",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -64,8 +64,8 @@ chaos = ChaosMonkey()
 # 🔐 AUTHENTICATION GATE & LOGIN MODAL
 # ────────────────────────────────────────────────────────────────────────
 if not st.session_state.authenticated:
-    st.markdown("<h1 class='main-header' style='text-align: center;'>🚦 AEGIS TRAFFIC & ECOGRID CORE</h1>", unsafe_allow_html=True)
-    st.markdown("<p class='sub-header' style='text-align: center;'>Enterprise Multi-Agent SCADA & Intelligent Urban Traffic Platform</p>", unsafe_allow_html=True)
+    st.markdown("<h1 class='main-header' style='text-align: center;'>⚡ ECOGRID CORE AI INFRASTRUCTURE</h1>", unsafe_allow_html=True)
+    st.markdown("<p class='sub-header' style='text-align: center;'>Enterprise Multi-Agent SCADA & Smart Grid Infrastructure Platform</p>", unsafe_allow_html=True)
     st.markdown("---")
 
     col1, col2, col3 = st.columns([1, 2, 1])
@@ -121,7 +121,7 @@ if not st.session_state.authenticated:
         with auth_tab3:
             reg_user = st.text_input("Desired Username", key="r_user")
             reg_pwd = st.text_input("Password (Min 8 chars, 1 Upper, 1 Lower, 1 Digit)", type="password", key="r_pwd")
-            reg_role = st.selectbox("Assign Role", ["Traffic Controller", "Microgrid Engineer", "System Auditor"], key="r_role")
+            reg_role = st.selectbox("Assign Role", ["Microgrid Engineer", "Traffic Controller", "System Auditor"], key="r_role")
 
             if reg_pwd:
                 valid, msg = auth_manager.validate_password_strength(reg_pwd)
@@ -178,8 +178,8 @@ st.sidebar.markdown("<h3 style='color:#00E5FF;'>🕹️ DEDICATED DOMAIN TABS</h
 nav_tab = st.sidebar.radio(
     "Select Feature Domain",
     [
-        "🚦 Aegis Traffic Operations",
-        "⚡ EcoGrid SCADA & Energy",
+        "⚡ EcoGrid SCADA & Microgrid",
+        "🚦 Smart City Traffic & EV Grid",
         "🌐 Multi-Country Currency Center",
         "🧠 AI Infrastructure Copilot",
         "🤖 Kaggle AI & ML Hub",
@@ -190,68 +190,9 @@ nav_tab = st.sidebar.radio(
 )
 
 # ────────────────────────────────────────────────────────────────────────
-# TAB 1: AEGIS TRAFFIC OPERATIONS
+# TAB 1: ECOGRID SCADA & MICROGRID
 # ────────────────────────────────────────────────────────────────────────
-if "Aegis Traffic" in nav_tab:
-    st.markdown("<h2 class='main-header'>🚦 AEGIS INTELLIGENT TRAFFIC CONTROL CENTER</h2>", unsafe_allow_html=True)
-    st.markdown("<p class='sub-header'>Real-Time Urban Congestion Index, Signal Phase Optimization, and EV Queue Balancing</p>", unsafe_allow_html=True)
-
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        int_choice = st.selectbox("Target Intersection", ["INT_ALPHA_CBD", "INT_BETA_IND", "INT_GAMMA_MED"])
-    with col2:
-        v_count = st.slider("Main Street Vehicles/Hr", 50, 1500, 950, step=25)
-    with col3:
-        v_speed = st.slider("Average Traffic Speed (km/h)", 5.0, 80.0, 22.5, step=2.5)
-    with col4:
-        weather_choice = st.selectbox("Weather Profile", ["SUNNY", "CLOUDY", "RAINY", "STORMY"])
-
-    st.markdown("---")
-    metrics = AegisTrafficEngine.calculate_intersection_metrics(v_count, v_speed, weather_choice)
-
-    m1, m2, m3, m4 = st.columns(4)
-    m1.metric("Congestion Index (ICI)", f"{metrics['congestion_index']:.2f}")
-    m2.metric("Traffic Flow Status", metrics['traffic_status_level'])
-    m3.metric("Vehicle Density", f"{v_count} veh/hr")
-    m4.metric("Average Speed", f"{v_speed} km/h")
-
-    st.markdown("### 🚦 Adaptive Signal Timing Optimizer")
-    c_left, c_right = st.columns([2, 1])
-
-    with c_left:
-        cross_count = st.slider("Cross Street Vehicle Load (veh/hr)", 50, 800, 300, step=25)
-        emergency_trigger = st.checkbox("🚨 ACTIVATE EMERGENCY GREEN CORRIDOR OVERRIDE", value=False)
-
-        opt_plan = AegisTrafficEngine.optimize_signal_timing(int_choice, v_count, cross_count, emergency_trigger)
-
-        if emergency_trigger:
-            st.error(opt_plan["action_summary"])
-        else:
-            st.success(opt_plan["action_summary"])
-
-        fig_sig = go.Figure(go.Bar(
-            x=['Main Street Green', 'Cross Street Green', 'Pedestrian Walk'],
-            y=[opt_plan['main_street_green_sec'], opt_plan['cross_street_green_sec'], opt_plan['pedestrian_walk_sec']],
-            marker_color=['#00FF66', '#00E5FF', '#FFB300']
-        ))
-        fig_sig.update_layout(title="Signal Phase Duration Allocation (Seconds)", paper_bgcolor="#121A30", plot_bgcolor="#121A30", font_color="#FFFFFF")
-        st.plotly_chart(fig_sig, use_container_width=True)
-
-    with c_right:
-        st.markdown("### 🔋 EV Charging Station Queue Control")
-        grid_load_val = st.number_input("Current Grid Load (kW)", value=1650.0, step=50.0)
-        ev_count_val = st.slider("Queued EV Vehicles", 1, 30, 15)
-
-        ev_res = AegisTrafficEngine.balance_ev_charging_queue(grid_load_val, 2000.0, ev_count_val)
-        st.write(f"**Mode:** `{ev_res['charging_mode']}`")
-        st.write(f"**Power Per Plug:** `{ev_res['power_per_plug_kw']} kW`")
-        st.write(f"**Total Station Draw:** `{ev_res['allocated_station_kw']} kW`")
-        st.write(f"**Grid Margin:** `{ev_res['remaining_grid_margin_kw']} kW`")
-
-# ────────────────────────────────────────────────────────────────────────
-# TAB 2: ECOGRID SCADA ENERGY GRID
-# ────────────────────────────────────────────────────────────────────────
-elif "EcoGrid SCADA" in nav_tab:
+if "EcoGrid SCADA" in nav_tab:
     st.markdown("<h2 class='main-header'>⚡ ECOGRID MULTI-AGENT SCADA CONTROL</h2>", unsafe_allow_html=True)
     st.markdown("<p class='sub-header'>Byzantine Fault Tolerant Microgrid Telemetry & Real-Time Sine Wave Simulation</p>", unsafe_allow_html=True)
 
@@ -286,6 +227,65 @@ elif "EcoGrid SCADA" in nav_tab:
                           title="Real-Time Grid Frequency Profiles (Hz)")
         fig_grid.update_layout(paper_bgcolor="#121A30", plot_bgcolor="#121A30", font_color="#FFFFFF")
         st.plotly_chart(fig_grid, use_container_width=True)
+
+# ────────────────────────────────────────────────────────────────────────
+# TAB 2: SMART CITY TRAFFIC & EV GRID
+# ────────────────────────────────────────────────────────────────────────
+elif "Smart City Traffic" in nav_tab:
+    st.markdown("<h2 class='main-header'>🚦 SMART CITY TRAFFIC & EV GRID LOAD CONTROL</h2>", unsafe_allow_html=True)
+    st.markdown("<p class='sub-header'>Intersection Congestion Index, Signal Phase Optimization, and EV Queue Balancing</p>", unsafe_allow_html=True)
+
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        int_choice = st.selectbox("Target Intersection", ["INT_ALPHA_CBD", "INT_BETA_IND", "INT_GAMMA_MED"])
+    with col2:
+        v_count = st.slider("Main Street Vehicles/Hr", 50, 1500, 950, step=25)
+    with col3:
+        v_speed = st.slider("Average Traffic Speed (km/h)", 5.0, 80.0, 22.5, step=2.5)
+    with col4:
+        weather_choice = st.selectbox("Weather Profile", ["SUNNY", "CLOUDY", "RAINY", "STORMY"])
+
+    st.markdown("---")
+    metrics = EcoGridTrafficEngine.calculate_intersection_metrics(v_count, v_speed, weather_choice)
+
+    m1, m2, m3, m4 = st.columns(4)
+    m1.metric("Congestion Index (ICI)", f"{metrics['congestion_index']:.2f}")
+    m2.metric("Traffic Flow Status", metrics['traffic_status_level'])
+    m3.metric("Vehicle Density", f"{v_count} veh/hr")
+    m4.metric("Average Speed", f"{v_speed} km/h")
+
+    st.markdown("### 🚦 Adaptive Signal Timing Optimizer")
+    c_left, c_right = st.columns([2, 1])
+
+    with c_left:
+        cross_count = st.slider("Cross Street Vehicle Load (veh/hr)", 50, 800, 300, step=25)
+        emergency_trigger = st.checkbox("🚨 ACTIVATE EMERGENCY GREEN CORRIDOR OVERRIDE", value=False)
+
+        opt_plan = EcoGridTrafficEngine.optimize_signal_timing(int_choice, v_count, cross_count, emergency_trigger)
+
+        if emergency_trigger:
+            st.error(opt_plan["action_summary"])
+        else:
+            st.success(opt_plan["action_summary"])
+
+        fig_sig = go.Figure(go.Bar(
+            x=['Main Street Green', 'Cross Street Green', 'Pedestrian Walk'],
+            y=[opt_plan['main_street_green_sec'], opt_plan['cross_street_green_sec'], opt_plan['pedestrian_walk_sec']],
+            marker_color=['#00FF66', '#00E5FF', '#FFB300']
+        ))
+        fig_sig.update_layout(title="Signal Phase Duration Allocation (Seconds)", paper_bgcolor="#121A30", plot_bgcolor="#121A30", font_color="#FFFFFF")
+        st.plotly_chart(fig_sig, use_container_width=True)
+
+    with c_right:
+        st.markdown("### 🔋 EV Charging Station Queue Control")
+        grid_load_val = st.number_input("Current Grid Load (kW)", value=1650.0, step=50.0)
+        ev_count_val = st.slider("Queued EV Vehicles", 1, 30, 15)
+
+        ev_res = EcoGridTrafficEngine.balance_ev_charging_queue(grid_load_val, 2000.0, ev_count_val)
+        st.write(f"**Mode:** `{ev_res['charging_mode']}`")
+        st.write(f"**Power Per Plug:** `{ev_res['power_per_plug_kw']} kW`")
+        st.write(f"**Total Station Draw:** `{ev_res['allocated_station_kw']} kW`")
+        st.write(f"**Grid Margin:** `{ev_res['remaining_grid_margin_kw']} kW`")
 
 # ────────────────────────────────────────────────────────────────────────
 # TAB 3: MULTI-COUNTRY CURRENCY CENTER
@@ -331,17 +331,17 @@ elif "Multi-Country Currency" in nav_tab:
 # TAB 4: AI INFRASTRUCTURE COPILOT
 # ────────────────────────────────────────────────────────────────────────
 elif "AI Infrastructure Copilot" in nav_tab:
-    st.markdown("<h2 class='main-header'>🧠 AI INFRASTRUCTURE COPILOT & DIAGNOSTICS</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 class='main-header'>🧠 AI SCADA INFRASTRUCTURE COPILOT</h2>", unsafe_allow_html=True)
     st.markdown("<p class='sub-header'>Powered by Google GenAI (Gemini) & Edge Cognitive AI with Executive Summaries</p>", unsafe_allow_html=True)
 
     c_q1, c_q2 = st.columns([2, 1])
     with c_q1:
-        st.markdown("### 💬 Ask AI Copilot a Detailed Question")
+        st.markdown("### 💬 Ask EcoGrid AI Copilot a Detailed Question")
         preset_q = st.selectbox(
             "Quick Question Presets",
             [
                 "Custom Question",
-                "How does Aegis Traffic optimize signal timing during peak hour congestion?",
+                "How does EcoGrid Core optimize signal timing and EV charging load during peak hours?",
                 "What safety protocols trigger when a 53.1 Hz frequency spoofing attack occurs?",
                 "How does 3/3 BFT Consensus protect microgrid load dispatch decisions?",
                 "Explain the financial impact of dynamic solar power generation predictions."
@@ -350,11 +350,11 @@ elif "AI Infrastructure Copilot" in nav_tab:
 
         user_q = st.text_area("Your Query", value="" if preset_q == "Custom Question" else preset_q, height=100)
 
-        if st.button("🚀 Analyze with AI Copilot", type="primary", use_container_width=True):
+        if st.button("🚀 Analyze with EcoGrid AI Copilot", type="primary", use_container_width=True):
             if not user_q.strip():
                 st.warning("Please enter a question or select a preset.")
             else:
-                with st.spinner("AI Copilot analyzing system telemetry and diagnostic models..."):
+                with st.spinner("EcoGrid AI Copilot analyzing system telemetry and diagnostic models..."):
                     ctx = {
                         "active_country": st.session_state.selected_country,
                         "battery_soc": battery.state_of_charge,
@@ -372,11 +372,11 @@ elif "AI Infrastructure Copilot" in nav_tab:
                     st.markdown("#### 🔬 DETAILED TECHNICAL ANALYSIS & ACTION PLAN")
                     st.markdown(res["full_response"])
 
-    with c_right:
+    with c_q2:
         st.markdown("### ⚡ AI System Diagnostic Status")
         st.info("📡 Cloud Channel: Gemini 2.5 Flash Ready")
         st.success("🤖 Local Edge AI Engine: Active")
-        st.caption("AI Copilot synthesizes grid telemetry, BFT consensus votes, and Kaggle ML model predictions.")
+        st.caption("EcoGrid AI Copilot synthesizes grid telemetry, BFT consensus votes, and Kaggle ML model predictions.")
 
 # ────────────────────────────────────────────────────────────────────────
 # TAB 5: KAGGLE AI & ML HUB
@@ -521,8 +521,8 @@ An anomaly event ({reason}) was flagged on {t_node}. The 3/3 BFT consensus core 
 """ + "\n".join([f"- {s}" for s in prescript]) + """
 
 ## 🔐 Signatures
-- **Aegis Traffic Chief:** Verified
-- **EcoGrid SCADA Core:** Sealed (SHA-256 Ledger)
+- **EcoGrid SCADA Chief:** Verified
+- **EcoGrid Core Core:** Sealed (SHA-256 Ledger)
 """
 
         st.markdown(report_body)

@@ -2,7 +2,7 @@ import json
 import os
 
 class TerminalDashboard:
-    """Renders an enterprise administrative status dashboard directly in the terminal interface."""
+    """Renders an enterprise administrative status dashboard directly in the terminal interface for EcoGrid Core."""
 
     @staticmethod
     def load_active_region_meta():
@@ -34,11 +34,11 @@ class TerminalDashboard:
         estimated_mitigation = saved_kwh * base_rate
 
         print("█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█")
-        print(f"█   AEGIS TRAFFIC & ECOGRID SCADA COCKPIT v6.0-PROD              █")
+        print(f"█   ECOGRID CORE AI SCADA COCKPIT v6.5-PROD                       █")
         print("█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█")
         print(f"  [RUN STATE] {system_status}  |  [ITERATION] #{iteration}  |  [SECTORS] {total_nodes}/3")
         print(" ─────────────────────────────────────────────────────────────────")
-        print(f"  🚦 [AEGIS TRAFFIC]    Intersection Mode: ADAPTIVE_ML_OPTIMIZED")
+        print(f"  🚦 [TRAFFIC & EV GRID] Intersection Mode: ADAPTIVE_ML_OPTIMIZED")
         print(f"  🌍 [ENVIRONMENT]      Sky: {weather['weather_condition']}  |  Solar Eff: {int(weather['solar_generation_efficiency']*100)}%")
         print(f"  💰 [MARKET RATE]      Spot Rate: {spot_rate} INR / MWh")
         print(f"  🌐 [SECTOR REGION]    Active Node: Region {region_code} ({region_meta['currency']})")
