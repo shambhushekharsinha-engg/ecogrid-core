@@ -1,0 +1,7 @@
+.git
+.streamlit
+tests
+*.png
+*.jpg
+*.mp4
+reports
