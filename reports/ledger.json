@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "index": 1,
+    "timestamp": "2026-07-30 02:16:18",
+    "agent": "TEST_AGENT",
+    "action": "UNIT_TEST_ACTION",
+    "details": {
+      "status": "SUCCESS"
+    },
+    "previous_hash": "00000000000000000000000000000000",
+    "current_hash": "1dfc0e66174fd72659403055a880b69acd245b9459eb1a7734965416e9eab13f"
+  }
+]

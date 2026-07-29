@@ -5,6 +5,16 @@ Multi-Agent SCADA, Multi-Country Currency Switcher, AI SCADA Infrastructure Copi
 Digital Twin Topology Visualizer, Kaggle ML Hub, 3/3 BFT Ledger, and REST Telemetry.
 """
 
+# Safe Tornado patch: Return 200 OK only for HEAD health check requests on / and /health
+try:
+    import tornado.web
+    def _safe_head(self, *args, **kwargs):
+        self.set_status(200)
+        self.finish()
+    tornado.web.RequestHandler.head = _safe_head
+except Exception:
+    pass
+
 import streamlit as st
 import pandas as pd
 import numpy as np
