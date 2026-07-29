@@ -1,25 +1,25 @@
-# ────────────── CORE WEB UI & DATA VISUALIZATION ──────────────
-streamlit>=1.32.0
-pandas>=2.2.1
-numpy>=1.26.4
-plotly>=5.18.0
+# ────────────── CORE WEB UI & DATA VISUALIZATION (PINNED MONOLITHIC BUNDLE) ──────────────
+streamlit==1.32.0
+pandas==2.2.1
+numpy==1.26.4
+plotly==5.18.0
 
 # ────────────── MACHINE LEARNING ENGINE & KAGGLE DATASETS ──────────────
-scikit-learn>=1.4.0
-joblib>=1.3.2
+scikit-learn==1.4.0
+joblib==1.3.2
 
 # ────────────── PRODUCTION FASTAPI REST BACKEND ──────────────
-fastapi>=0.109.0
-uvicorn>=0.27.0
-pydantic>=2.6.0
+fastapi==0.109.0
+uvicorn==0.27.0
+pydantic==2.6.0
 
 # ────────────── INDUSTRIAL CLOUD COGNITIVE & EDGE AI ──────────────
-google-genai>=0.1.0
-ollama>=0.2.1
+google-genai==0.1.0
+ollama==0.2.1
 
 # ────────────── DATABASE & SECURITY ──────────────
-psycopg2-binary>=2.9.9
+psycopg2-binary==2.9.9
 
 # ────────────── TESTING & VERIFICATION ──────────────
-pytest>=8.0.0
-httpx>=0.26.0
+pytest==8.0.0
+httpx==0.26.0
