@@ -1,14 +1,12 @@
 """
-EcoGrid Core Production Startup Orchestrator
-Pre-trains Kaggle ML models, patches Tornado RequestHandler in-process for Render HEAD / health check 200 OK,
-disables inotify file watchers, launches FastAPI REST service on port 8000,
-and runs Streamlit SCADA Command Cockpit on public $PORT.
+EcoGrid Core Lightweight Startup Orchestrator
+Optimized for 512MB RAM cloud environments (Render / PaaS).
+Patches Tornado RequestHandler in-process for Render HEAD / health check 200 OK,
+disables inotify file watchers, and runs Streamlit SCADA Command Cockpit on public $PORT.
 """
 
 import os
 import sys
-import time
-import subprocess
 
 # Ensure project root is present in sys.path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -23,37 +21,14 @@ try:
 except Exception as e:
     print(f"⚠️ Tornado patch note: {e}")
 
-from ml_engine.train_models import train_all_models
-
 def main():
-    print("🚀 [ECOGRID CORE] Initializing Native Production Web Server...")
+    print("🚀 [ECOGRID CORE] Initializing Lightweight Production Cockpit...")
 
-    # 1. Pre-train ML models if not already present
-    model_path = os.path.join("models", "traffic_congestion_model.joblib")
-    if not os.path.exists(model_path):
-        print("🤖 [ECOGRID ML] Pre-training Kaggle Machine Learning models...")
-        train_all_models()
-
-    # 2. Launch FastAPI REST Microservice on background port 8000
-    print("📡 [FASTAPI REST API] Starting background microservice on port 8000...")
-    api_cmd = [
-        sys.executable, "-m", "uvicorn", "api.server:app",
-        "--host", "0.0.0.0",
-        "--port", "8000"
-    ]
-    try:
-        subprocess.Popen(
-            api_cmd,
-            env=dict(os.environ, PYTHONPATH=os.path.dirname(os.path.abspath(__file__)))
-        )
-    except Exception as e:
-        print(f"⚠️ FastAPI background note: {e}")
-
-    # 3. Determine public web port assigned by Render ($PORT or default 10000 / 8501)
+    # Determine public web port assigned by Render ($PORT or default 10000)
     port = os.environ.get("PORT", "10000")
     print(f"⚡ [STREAMLIT WEB COCKPIT] Launching primary web interface on 0.0.0.0:{port}...")
 
-    # 4. Programmatically run Streamlit in the SAME process so Tornado retains the HEAD 200 OK patch
+    # Programmatically run Streamlit in the SAME process (Memory footprint: ~210MB)
     sys.argv = [
         "streamlit", "run", "app.py",
         "--server.port", str(port),
