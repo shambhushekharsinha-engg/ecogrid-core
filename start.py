@@ -1,7 +1,8 @@
 """
 EcoGrid Core Production Startup Orchestrator
 Pre-trains Kaggle ML models, patches Tornado for Render HEAD / health check 200 OK,
-launches FastAPI REST service on port 8000, and runs Streamlit SCADA Command Cockpit on public $PORT.
+disables inotify file watchers, launches FastAPI REST service on port 8000,
+and runs Streamlit SCADA Command Cockpit on public $PORT.
 """
 
 import os
@@ -15,7 +16,11 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 # Patch Tornado RequestHandler so HEAD / requests (Render health check) return 200 OK
 try:
     import tornado.web
-    tornado.web.RequestHandler.head = lambda self, *args, **kwargs: self.set_status(200)
+    def _ok_head(self, *args, **kwargs):
+        self.set_status(200)
+        self.finish()
+    tornado.web.RequestHandler.head = _ok_head
+    tornado.web.StaticFileHandler.head = _ok_head
 except Exception:
     pass
 
@@ -49,12 +54,14 @@ def main():
     port = os.environ.get("PORT", "10000")
     print(f"⚡ [STREAMLIT WEB COCKPIT] Launching primary web interface on 0.0.0.0:{port}...")
 
-    # 4. Run Streamlit natively on public $PORT
+    # 4. Run Streamlit natively on public $PORT with fileWatcherType=none
     streamlit_cmd = [
         sys.executable, "-m", "streamlit", "run", "app.py",
         "--server.port", str(port),
         "--server.address", "0.0.0.0",
         "--server.headless", "true",
+        "--server.fileWatcherType", "none",
+        "--browser.gatherUsageStats", "false",
         "--server.enableCORS", "false",
         "--server.enableXsrfProtection", "false"
     ]

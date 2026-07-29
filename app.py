@@ -8,7 +8,11 @@ Digital Twin Topology Visualizer, Kaggle ML Hub, 3/3 BFT Ledger, and REST API Te
 # Patch Tornado RequestHandler so HEAD / requests (Render health check) return 200 OK
 try:
     import tornado.web
-    tornado.web.RequestHandler.head = lambda self, *args, **kwargs: self.set_status(200)
+    def _ok_head(self, *args, **kwargs):
+        self.set_status(200)
+        self.finish()
+    tornado.web.RequestHandler.head = _ok_head
+    tornado.web.StaticFileHandler.head = _ok_head
 except Exception:
     pass
 
