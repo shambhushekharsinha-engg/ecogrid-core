@@ -273,30 +273,28 @@ else:
     curr_info = GroundLevelMitigation.get_currency_info(selected_country_code)
     st.sidebar.info(f"Currency: **{curr_info['currency']} ({curr_info['symbol']})**\nBase Rate: **{curr_info['symbol']}{curr_info['base_rate_kwh']}/kWh**")
 
-    st.sidebar.divider()
+    # Title Banner
+    st.markdown("<h1 style='color: #00E5FF; font-weight: 800;'>⚡ ECOGRID CORE AI SCADA COCKPIT</h1>", unsafe_allow_html=True)
+    st.caption("Multi-Agent Microgrid SCADA, Smart City Traffic, EV Loadshedding & AI Infrastructure Copilot")
+    st.write("")
 
-    # Dedicated Sidebar Panel Selector
-    st.sidebar.markdown("<h3 style='color: #F15BB5;'>🕹️ CONTROL PANELS</h3>", unsafe_allow_html=True)
-    active_panel = st.sidebar.radio(
-        "Select Panel",
-        [
-            "📖 Welcome & User Guide",
-            "⚡ SCADA & Microgrid",
-            "🚦 Smart City Traffic",
-            "🌐 Multi-Country Currency",
-            "🧠 AI SCADA Copilot",
-            "🤖 Kaggle AI & ML Hub",
-            "🛡️ Cybersecurity & 3/3 BFT",
-            "📑 Incident Reports",
-            "📡 REST API Telemetry"
-        ],
-        key="main_sidebar_nav_panel"
-    )
+    # Renders all 9 tabs on the main area, placing graphs and dashboards on the right inside each tab
+    tab_welcome, tab_scada, tab_traffic, tab_currency, tab_ai, tab_kaggle, tab_cyber, tab_incident, tab_api = st.tabs([
+        "📖 Welcome & User Guide",
+        "⚡ SCADA & Microgrid",
+        "🚦 Smart City Traffic",
+        "🌐 Multi-Country Currency",
+        "🧠 AI SCADA Copilot",
+        "🤖 Kaggle AI & ML Hub",
+        "🛡️ Cybersecurity & 3/3 BFT",
+        "📑 Incident Reports",
+        "📡 REST API Telemetry"
+    ])
 
     # ────────────────────────────────────────────────────────────────────────
-    # PANEL 1: WELCOME & SYSTEM USER GUIDE
+    # TAB 1: WELCOME & SYSTEM USER GUIDE
     # ────────────────────────────────────────────────────────────────────────
-    if active_panel == "📖 Welcome & User Guide":
+    with tab_welcome:
         try:
             st.markdown("<h2>📖 SYSTEM OPERATIONAL USER GUIDE</h2>", unsafe_allow_html=True)
             st.write("")
@@ -319,19 +317,19 @@ else:
                 <div class='dashboard-card card-cyan'>
                     <div class='metric-label'>Quick Navigation Manual</div>
                     <p style='margin-top:10px; font-size:0.95rem; color:#94A3B8;'>
-                    - Use the <b>Control Panels</b> selector in the sidebar to switch between domain feature panels.<br><br>
+                    - Navigate between operational panels using the 9 top tabs.<br><br>
                     - Use the <b>Instant Currency Switcher</b> in the sidebar to convert spot clearing tariffs across 10 global sector nodes.<br><br>
                     - Test <b>Role Permissions</b>: Log out anytime using the sidebar button and test the Admin, Grid Chief Engineer, Traffic Chief, or Guest Auditor presets.
                     </p>
                 </div>
                 """, unsafe_allow_html=True)
         except Exception as e:
-            st.error(f"Panel Error: {e}")
+            st.error(f"Tab Error: {e}")
 
     # ────────────────────────────────────────────────────────────────────────
-    # PANEL 2: ECOGRID SCADA & MICROGRID
+    # TAB 2: ECOGRID SCADA & MICROGRID
     # ────────────────────────────────────────────────────────────────────────
-    elif active_panel == "⚡ SCADA & Microgrid":
+    with tab_scada:
         try:
             st.markdown("<h2>⚡ ECOGRID MULTI-AGENT SCADA CONTROL</h2>", unsafe_allow_html=True)
             st.caption("Byzantine Fault Tolerant Microgrid Telemetry & Real-Time Sine Wave Simulation")
@@ -340,18 +338,16 @@ else:
             col_ctrl, col_dash = st.columns([2, 3])
             with col_ctrl:
                 st.markdown("### 🎛️ Operational Parameters")
-                saved_kwh = st.slider("Mitigated Energy Volume (kWh)", 10.0, 5000.0, 250.0, step=25.0, key="panel_scada_kwh_slider")
+                saved_kwh = st.slider("Mitigated Energy Volume (kWh)", 10.0, 5000.0, 250.0, step=25.0, key="tab_scada_kwh_slider")
 
                 st.divider()
                 st.markdown("### 🔋 Battery Storage Reservoirs")
-                if st.button("Discharge Battery Cell Reserve (50 kW Load)", key="panel_scada_discharge_btn"):
+                if st.button("Discharge Battery Cell Reserve (50 kW Load)", key="tab_scada_discharge_btn"):
                     b_state = battery.discharge_for_arbitrage(50.0)
                     ledger.record_transaction("Arbitrageur_Agent", "BATTERY_DISCHARGE", b_state)
 
             with col_dash:
                 st.markdown("### 📊 Live Grid Telemetry Dashboard")
-                
-                # Metric Cards
                 mit_data = GroundLevelMitigation.calculate_regional_mitigation(saved_kwh, st.session_state.selected_country)
                 
                 m_a, m_b, m_c = st.columns(3)
@@ -377,7 +373,7 @@ else:
                     </div>
                     """, unsafe_allow_html=True)
 
-                # Digital Twin Network Chart
+                # Digital Twin Topology Chart
                 fig_topo = go.Figure()
                 fig_topo.add_trace(go.Scatter(
                     x=[0, 1, 1, 2, 0, 2], y=[0, 1, 1, 0, 0, 0],
@@ -387,36 +383,24 @@ else:
                 ))
                 node_x = [0, 1, 2]
                 node_y = [0, 1, 0]
-                node_text = ["Node Alpha (Residential)<br>Load: 240 kW | Freq: 50.01 Hz", 
-                             "Node Beta (Industrial)<br>Load: 680 kW | Freq: 49.95 Hz", 
-                             "Node Gamma (Medical)<br>Load: 310 kW | Freq: 50.02 Hz"]
                 node_colors = ['#00FF66', '#FFB300', '#00E5FF']
                 fig_topo.add_trace(go.Scatter(
                     x=node_x, y=node_y,
                     mode='markers+text',
                     text=["Node Alpha", "Node Beta", "Node Gamma"],
                     textposition="top center",
-                    hovertext=node_text,
-                    hoverinfo='text',
-                    marker=dict(
-                        size=[30, 45, 35],
-                        color=node_colors,
-                        line=dict(width=2, color='#FFFFFF')
-                    )
+                    marker=dict(size=[30, 45, 35], color=node_colors, line=dict(width=2, color='#FFFFFF'))
                 ))
                 fig_topo.update_layout(
-                    title="Interactive Grid Node Topology & Power Flow Vector",
-                    showlegend=False,
-                    paper_bgcolor="#121A30",
-                    plot_bgcolor="#121A30",
-                    font_color="#FFFFFF",
+                    title="Interactive Grid Node Topology", showlegend=False,
+                    paper_bgcolor="#121A30", plot_bgcolor="#121A30", font_color="#FFFFFF",
                     xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
                     yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
                     margin=dict(l=10, r=10, t=40, b=10)
                 )
-                st.plotly_chart(fig_topo, key="panel_scada_topo_chart")
+                st.plotly_chart(fig_topo, key="tab_scada_topo_chart")
 
-                # Frequency Streams Plot
+                # Frequency chart
                 df_stream = pd.DataFrame({
                     "Time (s)": np.arange(1, 21),
                     "Node_Alpha (Residential)": 50.0 + np.random.normal(0, 0.08, 20),
@@ -426,14 +410,14 @@ else:
                 fig_grid = px.line(df_stream, x="Time (s)", y=["Node_Alpha (Residential)", "Node_Beta (Industrial)", "Node_Gamma (Medical)"],
                                   title="Real-Time Grid Frequency Profiles (Hz)")
                 fig_grid.update_layout(paper_bgcolor="#121A30", plot_bgcolor="#121A30", font_color="#FFFFFF")
-                st.plotly_chart(fig_grid, key="panel_scada_freq_chart")
+                st.plotly_chart(fig_grid, key="tab_scada_freq_chart")
         except Exception as e:
-            st.error(f"Panel Error: {e}")
+            st.error(f"Tab Error: {e}")
 
     # ────────────────────────────────────────────────────────────────────────
-    # PANEL 3: SMART CITY TRAFFIC & EV GRID
+    # TAB 3: SMART CITY TRAFFIC & EV GRID
     # ────────────────────────────────────────────────────────────────────────
-    elif active_panel == "🚦 Smart City Traffic":
+    with tab_traffic:
         try:
             st.markdown("<h2>🚦 SMART CITY TRAFFIC & EV GRID LOAD CONTROL</h2>", unsafe_allow_html=True)
             st.caption("Intersection Congestion Index, Signal Phase Optimization, and EV Queue Balancing")
@@ -442,15 +426,15 @@ else:
             col_ctrl, col_dash = st.columns([2, 3])
             with col_ctrl:
                 st.markdown("### 🎛️ Traffic Environment Controls")
-                int_choice = st.selectbox("Target Intersection ID", ["INT_ALPHA_CBD", "INT_BETA_IND", "INT_GAMMA_MED"], key="panel_traffic_int_select")
-                v_count = st.slider("Main Street Vehicles/Hr", 50, 1500, 950, step=25, key="panel_traffic_vcount_slider")
-                v_speed = st.slider("Average Traffic Speed (km/h)", 5.0, 80.0, 22.5, step=2.5, key="panel_traffic_vspeed_slider")
-                weather_choice = st.selectbox("Weather Profile Matrix", ["SUNNY", "CLOUDY", "RAINY", "STORMY"], key="panel_traffic_weather_select")
+                int_choice = st.selectbox("Target Intersection ID", ["INT_ALPHA_CBD", "INT_BETA_IND", "INT_GAMMA_MED"], key="tab_traffic_int_select")
+                v_count = st.slider("Main Street Vehicles/Hr", 50, 1500, 950, step=25, key="tab_traffic_vcount_slider")
+                v_speed = st.slider("Average Traffic Speed (km/h)", 5.0, 80.0, 22.5, step=2.5, key="tab_traffic_vspeed_slider")
+                weather_choice = st.selectbox("Weather Profile Matrix", ["SUNNY", "CLOUDY", "RAINY", "STORMY"], key="tab_traffic_weather_select")
 
                 st.divider()
                 st.markdown("### 🚦 Adaptive Signal Timing Optimizer")
-                cross_count = st.slider("Cross Street Vehicle Load (veh/hr)", 50, 800, 300, step=25, key="panel_traffic_cross_slider")
-                emergency_trigger = st.checkbox("🚨 ACTIVATE EMERGENCY GREEN CORRIDOR OVERRIDE", value=False, key="panel_traffic_emerg_chk")
+                cross_count = st.slider("Cross Street Vehicle Load (veh/hr)", 50, 800, 300, step=25, key="tab_traffic_cross_slider")
+                emergency_trigger = st.checkbox("🚨 ACTIVATE EMERGENCY GREEN CORRIDOR OVERRIDE", value=False, key="tab_traffic_emerg_chk")
 
             with col_dash:
                 st.markdown("### 📊 Live Traffic & EV Queue Dashboard")
@@ -484,12 +468,12 @@ else:
                     marker_color=['#00FF66', '#00E5FF', '#FFB300']
                 ))
                 fig_sig.update_layout(title="Signal Phase Duration Allocation (Seconds)", paper_bgcolor="#121A30", plot_bgcolor="#121A30", font_color="#FFFFFF")
-                st.plotly_chart(fig_sig, key="panel_traffic_signal_chart")
+                st.plotly_chart(fig_sig, key="tab_traffic_signal_chart")
 
                 st.divider()
                 st.markdown("### 🔋 EV Charging Queue Status")
-                grid_load_val = st.number_input("Current Grid Load (kW)", value=1650.0, step=50.0, key="panel_traffic_gridload_num")
-                ev_count_val = st.slider("Queued EV Vehicles", 1, 30, 15, key="panel_traffic_evcount_slider")
+                grid_load_val = st.number_input("Current Grid Load (kW)", value=1650.0, step=50.0, key="tab_traffic_gridload_num")
+                ev_count_val = st.slider("Queued EV Vehicles", 1, 30, 15, key="tab_traffic_evcount_slider")
 
                 ev_res = EcoGridTrafficEngine.balance_ev_charging_queue(grid_load_val, 2000.0, ev_count_val)
                 
@@ -509,12 +493,12 @@ else:
                     </div>
                     """, unsafe_allow_html=True)
         except Exception as e:
-            st.error(f"Panel Error: {e}")
+            st.error(f"Tab Error: {e}")
 
     # ────────────────────────────────────────────────────────────────────────
-    # PANEL 4: MULTI-COUNTRY CURRENCY CENTER
+    # TAB 4: MULTI-COUNTRY CURRENCY CENTER
     # ────────────────────────────────────────────────────────────────────────
-    elif active_panel == "🌐 Multi-Country Currency":
+    with tab_currency:
         try:
             st.markdown("<h2>🌐 GLOBAL MULTI-COUNTRY CURRENCY CENTER</h2>", unsafe_allow_html=True)
             st.caption("Instant Financial Conversion & Utility Tariff Comparison Matrix Across 10 Countries")
@@ -524,12 +508,11 @@ else:
 
             with col_ctrl:
                 st.markdown("### 🎛️ Financial Spot Parameters")
-                base_spot_inr = st.number_input("Base Spot Market Rate (INR / MWh)", value=3500.0, step=100.0, key="panel_curr_spot_inr_num")
-                eval_kwh = st.slider("Evaluation Energy Range (kWh)", 100.0, 10000.0, 1500.0, step=100.0, key="panel_curr_eval_kwh_slider")
+                base_spot_inr = st.number_input("Base Spot Market Rate (INR / MWh)", value=3500.0, step=100.0, key="tab_curr_spot_inr_num")
+                eval_kwh = st.slider("Evaluation Energy Range (kWh)", 100.0, 10000.0, 1500.0, step=100.0, key="tab_curr_eval_kwh_slider")
 
             with col_dash:
                 st.markdown("### 🌍 Tariff Matrix Dashboard")
-                
                 active_c = st.session_state.selected_country
                 active_mit = GroundLevelMitigation.calculate_regional_mitigation(eval_kwh, active_c)
                 
@@ -567,14 +550,14 @@ else:
                     labels={"value": "Local Currency Units", "Country": "Sector Country"}
                 )
                 fig_curr.update_layout(paper_bgcolor="#121A30", plot_bgcolor="#121A30", font_color="#FFFFFF")
-                st.plotly_chart(fig_curr, key="panel_curr_bar_chart")
+                st.plotly_chart(fig_curr, key="tab_curr_bar_chart")
         except Exception as e:
-            st.error(f"Panel Error: {e}")
+            st.error(f"Tab Error: {e}")
 
     # ────────────────────────────────────────────────────────────────────────
-    # PANEL 5: AI SCADA INFRASTRUCTURE COPILOT
+    # TAB 5: AI INFRASTRUCTURE COPILOT
     # ────────────────────────────────────────────────────────────────────────
-    elif active_panel == "🧠 AI SCADA Copilot":
+    with tab_ai:
         try:
             st.markdown("<h2>🧠 AI SCADA INFRASTRUCTURE COPILOT</h2>", unsafe_allow_html=True)
             st.caption("Powered by Google GenAI (Gemini) & Edge Cognitive AI with Executive Summaries")
@@ -592,16 +575,14 @@ else:
                         "How does 3/3 BFT Consensus protect microgrid load dispatch decisions?",
                         "Explain the financial impact of dynamic solar power generation predictions."
                     ],
-                    key="panel_ai_preset_select"
+                    key="tab_ai_preset_select"
                 )
 
-                user_q = st.text_area("Your Query string", value="" if preset_q == "Custom Question" else preset_q, height=100, key="panel_ai_query_text")
-                trigger_analysis = st.button("🚀 Analyze with EcoGrid AI Copilot", type="primary", key="panel_ai_analyze_btn")
+                user_q = st.text_area("Your Query string", value="" if preset_q == "Custom Question" else preset_q, height=100, key="tab_ai_query_text")
+                trigger_analysis = st.button("🚀 Analyze with EcoGrid AI Copilot", type="primary", key="tab_ai_analyze_btn")
 
             with col_dash:
                 st.markdown("### 🤖 Analysis Output Stream")
-                
-                # Static Status Cards
                 m_a, m_b = st.columns(2)
                 with m_a:
                     st.markdown("""
@@ -638,12 +619,12 @@ else:
                             st.markdown("#### 🔬 DETAILED TECHNICAL ANALYSIS & ACTION PLAN")
                             st.markdown(res["full_response"])
         except Exception as e:
-            st.error(f"Panel Error: {e}")
+            st.error(f"Tab Error: {e}")
 
     # ────────────────────────────────────────────────────────────────────────
-    # PANEL 6: KAGGLE AI & ML HUB
+    # TAB 6: KAGGLE AI & ML HUB
     # ────────────────────────────────────────────────────────────────────────
-    elif active_panel == "🤖 Kaggle AI & ML Hub":
+    with tab_kaggle:
         try:
             st.markdown("<h2>🤖 KAGGLE AI & ML MODEL INTELLIGENCE HUB</h2>", unsafe_allow_html=True)
             st.caption("Machine Learning Predictors & Dataset Data Explorer")
@@ -652,7 +633,7 @@ else:
             col_ctrl, col_dash = st.columns([2, 3])
             with col_ctrl:
                 st.markdown("### 🚀 Training Operations")
-                if st.button("🔄 Train / Retrain All 4 Kaggle Models Now", type="primary", key="panel_kaggle_retrain_btn"):
+                if st.button("🔄 Train / Retrain All 4 Kaggle Models Now", type="primary", key="tab_kaggle_retrain_btn"):
                     with st.spinner("Training Kaggle models on dataset matrices..."):
                         retrain_res = train_all_models()
                         predictor.load_models()
@@ -661,16 +642,14 @@ else:
 
                 st.divider()
                 st.markdown("### 🔮 Live Predictor Sandboxes")
-                p_temp = st.slider("Ambient Temp (°C)", 10.0, 45.0, 32.0, key="panel_kaggle_ptemp_slider")
-                p_hum = st.slider("Humidity (%)", 20.0, 95.0, 50.0, key="panel_kaggle_phum_slider")
-                p_ev = st.slider("EV Station kW", 50.0, 1200.0, 600.0, key="panel_kaggle_pev_slider")
-                p_irr = st.slider("Irradiance (W/m²)", 0.0, 1200.0, 850.0, key="panel_kaggle_pirr_slider")
-                p_cloud = st.slider("Cloud Cover (%)", 0.0, 100.0, 15.0, key="panel_kaggle_pcloud_slider")
+                p_temp = st.slider("Ambient Temp (°C)", 10.0, 45.0, 32.0, key="tab_kaggle_ptemp_slider")
+                p_hum = st.slider("Humidity (%)", 20.0, 95.0, 50.0, key="tab_kaggle_phum_slider")
+                p_ev = st.slider("EV Station kW", 50.0, 1200.0, 600.0, key="tab_kaggle_pev_slider")
+                p_irr = st.slider("Irradiance (W/m²)", 0.0, 1200.0, 850.0, key="tab_kaggle_pirr_slider")
+                p_cloud = st.slider("Cloud Cover (%)", 0.0, 100.0, 15.0, key="tab_kaggle_pcloud_slider")
 
             with col_dash:
                 st.markdown("### 📊 Kaggle Predictions & Dataset matrix")
-                
-                # Predictions Output
                 pred_load = predictor.predict_grid_load(p_temp, p_hum, p_ev)
                 pred_solar = predictor.predict_solar_generation(p_irr, 35.0, p_cloud)
 
@@ -691,7 +670,7 @@ else:
                     """, unsafe_allow_html=True)
 
                 st.divider()
-                ds_choice = st.selectbox("Select Kaggle Dataset to Inspect", ["Traffic Flow Dataset", "Grid Load Dataset", "Solar Generation Dataset"], key="panel_kaggle_ds_select")
+                ds_choice = st.selectbox("Select Kaggle Dataset to Inspect", ["Traffic Flow Dataset", "Grid Load Dataset", "Solar Generation Dataset"], key="tab_kaggle_ds_select")
                 if ds_choice == "Traffic Flow Dataset":
                     df_ds = DatasetLoader.load_traffic_dataset()
                 elif ds_choice == "Grid Load Dataset":
@@ -701,12 +680,12 @@ else:
 
                 st.dataframe(df_ds)
         except Exception as e:
-            st.error(f"Panel Error: {e}")
+            st.error(f"Tab Error: {e}")
 
     # ────────────────────────────────────────────────────────────────────────
-    # PANEL 7: CYBERSECURITY & 3/3 BFT LEDGER
+    # TAB 7: CYBERSECURITY & 3/3 BFT LEDGER
     # ────────────────────────────────────────────────────────────────────────
-    elif active_panel == "🛡️ Cybersecurity & 3/3 BFT":
+    with tab_cyber:
         try:
             st.header("🛡️ CYBERSECURITY & 3/3 BFT CRYPTOGRAPHIC LEDGER")
             st.caption("3/3 Byzantine Fault Tolerance (BFT) Signature Consensus & SHA-256 Ledger Audit")
@@ -715,18 +694,16 @@ else:
             col_ctrl, col_dash = st.columns([2, 3])
             with col_ctrl:
                 st.markdown("### 💥 Chaos Monkey Threat Injector")
-                target_n = st.selectbox("Target Injection Node", ["Node_Alpha_Residential", "Node_Beta_Industrial", "Node_Gamma_Medical"], key="panel_cyber_target_select")
-                freq_inject = st.slider("Spoofed Frequency Value (Hz)", 48.0, 54.0, 53.1, key="panel_cyber_freq_slider")
-                trigger_chaos = st.button("Inject Spoofed Telemetry Attack", key="panel_cyber_inject_btn")
+                target_n = st.selectbox("Target Injection Node", ["Node_Alpha_Residential", "Node_Beta_Industrial", "Node_Gamma_Medical"], key="tab_cyber_target_select")
+                freq_inject = st.slider("Spoofed Frequency Value (Hz)", 48.0, 54.0, 53.1, key="tab_cyber_freq_slider")
+                trigger_chaos = st.button("Inject Spoofed Telemetry Attack", key="tab_cyber_inject_btn")
 
                 st.divider()
                 st.markdown("### ⚖️ Consensus Node Vote")
-                eval_bft = st.button("Evaluate 3/3 Unanimous Consensus Vote", key="panel_cyber_bft_eval_btn")
+                eval_bft = st.button("Evaluate 3/3 Unanimous Consensus Vote", key="tab_cyber_bft_eval_btn")
 
             with col_dash:
                 st.markdown("### 🛡️ Cybersecurity Operations Center")
-                
-                # Check status
                 is_val, val_msg = ledger.verify_chain()
                 
                 m_a, m_b = st.columns(2)
@@ -766,12 +743,12 @@ else:
                 except Exception as e:
                     st.warning(f"Ledger file empty or initializing: {e}")
         except Exception as e:
-            st.error(f"Panel Error: {e}")
+            st.error(f"Tab Error: {e}")
 
     # ────────────────────────────────────────────────────────────────────────
-    # PANEL 8: INCIDENT REPORTS & PRESCRIPTIONS
+    # TAB 8: INCIDENT REPORTS & PRESCRIPTIONS
     # ────────────────────────────────────────────────────────────────────────
-    elif active_panel == "📑 Incident Reports":
+    with tab_incident:
         try:
             st.header("📑 INCIDENT REPORTS & MAINTENANCE PRESCRIPTIONS")
             st.caption("Automated Actionable Engineering Protocols for Ground-Level Technicians")
@@ -780,9 +757,9 @@ else:
             col_ctrl, col_dash = st.columns([2, 3])
             with col_ctrl:
                 st.markdown("### 🛠️ Incident Generator Matrix")
-                reason = st.selectbox("Trigger Reason", ["Frequency_Spoofing_Attack", "Budget_Overrun_Load_Spike", "Routine_Maintenance_Sweep"], key="panel_inc_reason_select")
-                val_metric = st.number_input("Observed Metric Value", value=53.1, key="panel_inc_metric_num")
-                t_node = st.selectbox("Target Node", ["Node_Alpha_Residential", "Node_Beta_Industrial", "Node_Gamma_Medical"], key="panel_inc_tnode_select")
+                reason = st.selectbox("Trigger Reason", ["Frequency_Spoofing_Attack", "Budget_Overrun_Load_Spike", "Routine_Maintenance_Sweep"], key="tab_inc_reason_select")
+                val_metric = st.number_input("Observed Metric Value", value=53.1, key="tab_inc_metric_num")
+                t_node = st.selectbox("Target Node", ["Node_Alpha_Residential", "Node_Beta_Industrial", "Node_Gamma_Medical"], key="tab_inc_tnode_select")
 
             with col_dash:
                 st.markdown("### 📋 Incident Diagnostic Report")
@@ -812,12 +789,12 @@ An anomaly event ({reason}) was flagged on {t_node}. The 3/3 BFT consensus core 
 """
                 st.text(report_body)
         except Exception as e:
-            st.error(f"Panel Error: {e}")
+            st.error(f"Tab Error: {e}")
 
     # ────────────────────────────────────────────────────────────────────────
-    # PANEL 9: REST API & SYSTEM TELEMETRY
+    # TAB 9: REST API & SYSTEM TELEMETRY
     # ────────────────────────────────────────────────────────────────────────
-    elif active_panel == "📡 REST API Telemetry":
+    with tab_api:
         try:
             st.header("🌐 REST API & SYSTEM DEPLOYMENT TELEMETRY")
             st.caption("OpenAPI Swagger Endpoints & Containerized Service Status")
@@ -848,4 +825,4 @@ An anomaly event ({reason}) was flagged on {t_node}. The 3/3 BFT consensus core 
                 ])
                 st.dataframe(endpoints_df)
         except Exception as e:
-            st.error(f"Panel Error: {e}")
+            st.error(f"Tab Error: {e}")

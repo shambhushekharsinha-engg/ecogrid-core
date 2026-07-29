@@ -1,24 +1,13 @@
 [
   {
     "index": 1,
-    "timestamp": "2026-07-30 03:12:51",
+    "timestamp": "2026-07-30 03:25:24",
     "agent": "TEST_AGENT",
     "action": "UNIT_TEST_ACTION",
     "details": {
       "status": "SUCCESS"
     },
     "previous_hash": "00000000000000000000000000000000",
-    "current_hash": "93c563656f996138945aa006167394864916eeb58237b5a22e2a86f1ee44ba6a"
-  },
-  {
-    "index": 2,
-    "timestamp": "2026-07-30 03:18:13",
-    "agent": "TEST_AGENT",
-    "action": "UNIT_TEST_ACTION",
-    "details": {
-      "status": "SUCCESS"
-    },
-    "previous_hash": "93c563656f996138945aa006167394864916eeb58237b5a22e2a86f1ee44ba6a",
-    "current_hash": "a4e71f3c4ed36de395cd710c8478d13cd783432ed0a58f0629d47030f6cd62de"
+    "current_hash": "c63926dbb042e1716a002ea613c390764c57fa716fa71b6ff12e33f82ad0cadf"
   }
 ]
