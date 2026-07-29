@@ -159,12 +159,32 @@ class AuthManager:
         except Exception as e:
             return False, f"Authentication system error: {str(e)}"
 
+    _demo_users_ensured = False
+
     def ensure_demo_users(self):
-        """Auto-provisions and forces updates for standard demo accounts."""
+        """Auto-provisions standard demo accounts if not already present."""
+        if AuthManager._demo_users_ensured:
+            return
         for username, meta in self.DEMO_USERS.items():
             try:
-                self.register_user(username, meta["password"], meta["role"], force_update=True)
+                conn = db_manager.get_connection()
+                user_exists = False
+                if db_manager.use_postgres:
+                    with conn:
+                        with conn.cursor() as cur:
+                            cur.execute("SELECT id FROM users WHERE LOWER(username) = %s;", (username.lower(),))
+                            user_exists = bool(cur.fetchone())
+                else:
+                    with conn:
+                        cur = conn.cursor()
+                        cur.execute("SELECT id FROM users WHERE LOWER(username) = ?;", (username.lower(),))
+                        user_exists = bool(cur.fetchone())
+                    conn.close()
+
+                if not user_exists:
+                    self.register_user(username, meta["password"], meta["role"])
             except Exception:
                 pass
+        AuthManager._demo_users_ensured = True
 
 auth_manager = AuthManager()

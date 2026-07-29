@@ -45,21 +45,80 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Cyberpunk Industrial Visual Styling
+# Dark Theme & Neon Cyberpunk Visual Design
 st.markdown("""
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+    
     .stApp {
-        background-color: #0A0F1D;
-        color: #F1F5F9;
-        font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
+        background: radial-gradient(circle at top right, #121A30 0%, #060913 70%);
+        color: #E2E8F0;
+        font-family: 'Inter', sans-serif;
     }
+    
     h1, h2, h3 {
-        color: #00E5FF !important;
-        font-weight: 800 !important;
+        font-family: 'Orbitron', sans-serif;
+        background: linear-gradient(90deg, #00F5D4, #00BBF9, #F15BB5, #9B5DE5);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 15px rgba(0, 245, 212, 0.3);
+        font-weight: 900 !important;
     }
+    
     .stButton>button {
-        border-radius: 6px;
+        border-radius: 8px;
+        font-weight: bold;
+        background: linear-gradient(135deg, #00BBF9 0%, #9B5DE5 100%) !important;
+        color: white !important;
+        border: none !important;
+        box-shadow: 0 4px 15px rgba(0, 187, 249, 0.3) !important;
+        transition: all 0.3s ease;
+    }
+    
+    .stButton>button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 187, 249, 0.5) !important;
+    }
+    
+    .login-box {
+        background: rgba(10, 15, 29, 0.85);
+        border: 2px solid #00F5D4;
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 8px 32px 0 rgba(0, 245, 212, 0.2);
+        backdrop-filter: blur(12px);
+        margin-top: 20px;
+    }
+    
+    .dashboard-card {
+        background: rgba(18, 26, 48, 0.6);
+        border: 1px solid rgba(0, 245, 212, 0.2);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    
+    .card-cyan { border-left: 5px solid #00BBF9; }
+    .card-green { border-left: 5px solid #00F5D4; }
+    .card-magenta { border-left: 5px solid #F15BB5; }
+    .card-purple { border-left: 5px solid #9B5DE5; }
+    
+    .metric-value {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 2.2rem;
+        font-weight: 900;
+        color: #00F5D4;
+        text-shadow: 0 0 10px rgba(0, 245, 212, 0.5);
+    }
+    
+    .metric-label {
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 1.1rem;
+        color: #94A3B8;
         font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -80,25 +139,29 @@ chaos = ChaosMonkey()
 # 🔐 SCREEN 1: LOGIN PORTAL (EXCLUSIVELY WHEN UNAUTHENTICATED)
 # ────────────────────────────────────────────────────────────────────────
 if not st.session_state.authenticated:
-    st.markdown("<h1 style='text-align: center; color: #00E5FF; font-weight: 900;'>⚡ ECOGRID CORE AI INFRASTRUCTURE</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: #94A3B8; font-size: 1.1rem;'>Enterprise Multi-Agent SCADA & Smart Grid Control Cockpit</p>", unsafe_allow_html=True)
-    st.divider()
+    st.markdown("<h1 style='text-align: center; font-size: 3rem;'>⚡ ECOGRID CORE AI SCADA</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #94A3B8; font-size: 1.2rem; font-family: Rajdhani;'>Enterprise Multi-Agent SCADA & Smart Grid Control Cockpit</p>", unsafe_allow_html=True)
+    st.write("")
 
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        st.markdown("<h3 style='color: #00FF66; text-align: center;'>🔐 SECURE SYSTEM ACCESS PORTAL</h3>", unsafe_allow_html=True)
-        st.caption("Select a 1-click Quick Demo Login role preset or authenticate with credentials below.")
+        st.markdown("""
+        <div class='login-box'>
+            <h2 style='color: #00F5D4; text-align: center; margin-top: 0; font-size: 1.8rem;'>🔐 SECURE PORTAL ACCESS</h2>
+            <p style='color: #94A3B8; text-align: center; font-size: 0.95rem; margin-bottom: 20px;'>Configure your access parameters to initialize the multi-agent control shell.</p>
+        </div>
+        """, unsafe_allow_html=True)
         st.write("")
 
         access_choice = st.selectbox(
-            "Select Access Method",
+            "Access Method Protocol",
             ["⚡ 1-Click Quick Demo Login", "🔑 Standard Login", "📝 Register Account"],
-            key="login_access_method_select"
+            key="login_access_choice_select"
         )
         st.write("")
 
         if access_choice == "⚡ 1-Click Quick Demo Login":
-            st.info("🎯 Select an operational role to bypass manual login:")
+            st.info("🎯 Select a control profile for instant authorization:")
             c_a, c_b = st.columns(2)
             with c_a:
                 if st.button("👨‍💻 Admin Operator", type="primary", key="quick_admin_btn"):
@@ -136,8 +199,8 @@ if not st.session_state.authenticated:
                         st.error(f"Login failed: {res}")
 
         elif access_choice == "🔑 Standard Login":
-            login_user = st.text_input("Username", key="standard_user_input")
-            login_pwd = st.text_input("Password", type="password", key="standard_pwd_input")
+            login_user = st.text_input("Username / Operator ID", key="standard_user_input")
+            login_pwd = st.text_input("Password / Secure Passkey", type="password", key="standard_pwd_input")
             if st.button("Authenticate Session", type="primary", key="standard_submit_btn"):
                 if not login_user.strip() or not login_pwd.strip():
                     st.warning("Please enter both username and password.")
@@ -153,9 +216,9 @@ if not st.session_state.authenticated:
                         st.error(res)
 
         else:
-            reg_user = st.text_input("Desired Username", key="create_user_input")
-            reg_pwd = st.text_input("Password (Min 8 chars, 1 Upper, 1 Lower, 1 Digit)", type="password", key="create_pwd_input")
-            reg_role = st.selectbox("Assign Role", ["Microgrid Engineer", "Traffic Controller", "System Auditor"], key="create_role_select")
+            reg_user = st.text_input("New Username", key="create_user_input")
+            reg_pwd = st.text_input("New Password (Min 8 chars, Upper, Lower, Special)", type="password", key="create_pwd_input")
+            reg_role = st.selectbox("Operational Assign Role", ["Microgrid Engineer", "Traffic Controller", "System Auditor"], key="create_role_select")
 
             if reg_pwd:
                 valid, msg = auth_manager.validate_password_strength(reg_pwd)
@@ -164,7 +227,7 @@ if not st.session_state.authenticated:
                 else:
                     st.caption(f"⚠️ {msg}")
 
-            if st.button("Register & Login", key="create_submit_btn"):
+            if st.button("Register & Initialize Session", key="create_submit_btn"):
                 ok, msg = auth_manager.register_user(reg_user, reg_pwd, reg_role)
                 if ok:
                     st.success(msg)
@@ -184,7 +247,7 @@ if not st.session_state.authenticated:
 else:
     user_data = st.session_state.user_info
 
-    st.sidebar.markdown("### 🟢 OPERATIONAL SESSION ACTIVE")
+    st.sidebar.markdown("<h3 style='color: #00F5D4;'>🟢 SESSION ACTIVE</h3>", unsafe_allow_html=True)
     st.sidebar.markdown(f"**Operator:** `{user_data['username']}`")
     st.sidebar.markdown(f"**Role:** `{user_data['role']}`")
 
@@ -196,10 +259,10 @@ else:
     st.sidebar.divider()
 
     # Global Instant Multi-Country Currency Selector
-    st.sidebar.markdown("### 🌐 INSTANT CURRENCY SWITCHER")
+    st.sidebar.markdown("<h3 style='color: #00BBF9;'>🌐 INTERNATIONAL SECTOR</h3>", unsafe_allow_html=True)
     country_options = list(GroundLevelMitigation.COUNTRY_MATRIX.keys())
     selected_country_code = st.sidebar.selectbox(
-        "Select Global Sector Node",
+        "Global Sector Node",
         country_options,
         index=country_options.index(st.session_state.selected_country),
         format_func=lambda c: f"{c} - {GroundLevelMitigation.COUNTRY_MATRIX[c]['name']} ({GroundLevelMitigation.COUNTRY_MATRIX[c]['symbol']})",
@@ -208,14 +271,14 @@ else:
     st.session_state.selected_country = selected_country_code
 
     curr_info = GroundLevelMitigation.get_currency_info(selected_country_code)
-    st.sidebar.info(f"Active Currency: **{curr_info['currency']} ({curr_info['symbol']})**\nBase Tariff: **{curr_info['symbol']}{curr_info['base_rate_kwh']}/kWh**")
+    st.sidebar.info(f"Currency: **{curr_info['currency']} ({curr_info['symbol']})**\nBase Rate: **{curr_info['symbol']}{curr_info['base_rate_kwh']}/kWh**")
 
     st.sidebar.divider()
 
-    # Dedicated Sidebar Panel Selector (Rock-solid 100% reliable navigation)
-    st.sidebar.markdown("### 🕹️ NAVIGATION PANELS")
+    # Dedicated Sidebar Panel Selector
+    st.sidebar.markdown("<h3 style='color: #F15BB5;'>🕹️ CONTROL PANELS</h3>", unsafe_allow_html=True)
     active_panel = st.sidebar.radio(
-        "Select Domain Panel",
+        "Select Panel",
         [
             "📖 Welcome & User Guide",
             "⚡ SCADA & Microgrid",
@@ -230,45 +293,38 @@ else:
         key="main_sidebar_nav_panel"
     )
 
-    st.markdown("<h1 style='color: #00E5FF; font-weight: 800;'>⚡ ECOGRID CORE AI SCADA COCKPIT</h1>", unsafe_allow_html=True)
-    st.caption("Multi-Agent Microgrid SCADA, Smart City Traffic, EV Loadshedding & AI Infrastructure Copilot")
-    st.divider()
-
     # ────────────────────────────────────────────────────────────────────────
     # PANEL 1: WELCOME & SYSTEM USER GUIDE
     # ────────────────────────────────────────────────────────────────────────
     if active_panel == "📖 Welcome & User Guide":
         try:
-            st.header("📖 WELCOME & SYSTEM OPERATIONAL USER GUIDE")
-            st.markdown("""
-            Welcome to **EcoGrid Core**, an enterprise-grade multi-agent microgrid SCADA and smart city traffic infrastructure platform.
-            """)
+            st.markdown("<h2>📖 SYSTEM OPERATIONAL USER GUIDE</h2>", unsafe_allow_html=True)
+            st.write("")
 
-            c1, c2, c3 = st.columns(3)
-            with c1:
-                st.info("### ⚡ SCADA & Microgrid\nReal-time BFT microgrid load balancing, sine-wave frequency stream monitors, battery SOC health, and regional tariff savings calculation.")
-            with c2:
-                st.success("### 🚦 Smart City Traffic & EV\nIntersection Congestion Index (ICI), adaptive signal duration phase optimization, emergency corridor overrides, and EV load shedding.")
-            with c3:
-                st.warning("### 🌐 Multi-Country Currency\nInstant financial conversion across 10 international grid sectors (INR ₹, USD $, EUR €, GBP £, JPY ¥, AUD $, BRL R$, CAD $, UAE AED, ZAR R).")
+            col_ctrl, col_dash = st.columns([1, 1])
 
-            st.divider()
+            with col_ctrl:
+                st.markdown("""
+                ### 🚀 Key System Features & Capabilities:
+                - **⚡ SCADA & Microgrid Operations:** Real-time BFT microgrid load balancing, sine-wave frequency stream monitors, battery SOC health, and regional tariff savings calculation.
+                - **🚦 Smart City Traffic & EV Queue Control:** Real-time Intersection Congestion Index (ICI), adaptive green light timing phase optimization, emergency corridor overrides, and EV queue load shedding.
+                - **🌐 Multi-Country Currency Switcher:** Instant financial conversion and tariff matrix across 10 international grid sectors (INR, USD, EUR, GBP, JPY, AUD, BRL, CAD, AED, ZAR).
+                - **🧠 AI SCADA Infrastructure Copilot:** Powered by Google Gemini 2.5 Flash & Edge AI, producing structured 3-part answers.
+                - **🤖 Kaggle AI & ML Hub:** Scikit-Learn time-series models trained on Kaggle datasets with live prediction sandboxes, CSV dataset export, and automated retrainer.
+                - **🛡️ Cybersecurity & 3/3 BFT:** Chaos Monkey frequency spoofing threat injector, 3/3 BFT unanimous signature consensus evaluator, and SHA-256 cryptographic audit ledger.
+                """)
 
-            c4, c5, c6 = st.columns(3)
-            with c4:
-                st.markdown("### 🧠 AI Infrastructure Copilot\nGoogle Gemini 2.5 Flash & Edge AI producing structured 3-part answers (Executive Summary, Detailed Analysis, and Action Plan).")
-            with c5:
-                st.markdown("### 🤖 Kaggle AI & ML Hub\nScikit-Learn time-series models trained on Kaggle datasets with live prediction sandboxes, CSV dataset export, and automated retrainer.")
-            with c6:
-                st.markdown("### 🛡️ Cybersecurity & 3/3 BFT\nChaos Monkey frequency spoofing threat injector, 3/3 BFT unanimous signature consensus evaluator, and SHA-256 cryptographic audit ledger.")
-
-            st.divider()
-            st.markdown("""
-            ### 🕹️ Quick Start & Navigation Manual:
-            - **Switch Domain Panels:** Use the **Navigation Panels** selector in the sidebar to switch between feature domains.
-            - **Change International Currency:** Use the **Instant Currency Switcher** in the sidebar to convert spot clearing tariffs across 10 global sector nodes.
-            - **Test Role Permissions:** Log out anytime using the sidebar button and test the **Admin**, **Grid Chief Engineer**, **Traffic Chief**, or **Guest Auditor** presets.
-            """)
+            with col_dash:
+                st.markdown("""
+                <div class='dashboard-card card-cyan'>
+                    <div class='metric-label'>Quick Navigation Manual</div>
+                    <p style='margin-top:10px; font-size:0.95rem; color:#94A3B8;'>
+                    - Use the <b>Control Panels</b> selector in the sidebar to switch between domain feature panels.<br><br>
+                    - Use the <b>Instant Currency Switcher</b> in the sidebar to convert spot clearing tariffs across 10 global sector nodes.<br><br>
+                    - Test <b>Role Permissions</b>: Log out anytime using the sidebar button and test the Admin, Grid Chief Engineer, Traffic Chief, or Guest Auditor presets.
+                    </p>
+                </div>
+                """, unsafe_allow_html=True)
         except Exception as e:
             st.error(f"Panel Error: {e}")
 
@@ -277,29 +333,51 @@ else:
     # ────────────────────────────────────────────────────────────────────────
     elif active_panel == "⚡ SCADA & Microgrid":
         try:
-            st.header("⚡ ECOGRID MULTI-AGENT SCADA CONTROL")
+            st.markdown("<h2>⚡ ECOGRID MULTI-AGENT SCADA CONTROL</h2>", unsafe_allow_html=True)
             st.caption("Byzantine Fault Tolerant Microgrid Telemetry & Real-Time Sine Wave Simulation")
+            st.write("")
 
-            col1, col2 = st.columns([1, 2])
-            with col1:
-                st.subheader("🌐 Regional Tariff Savings")
+            col_ctrl, col_dash = st.columns([2, 3])
+            with col_ctrl:
+                st.markdown("### 🎛️ Operational Parameters")
                 saved_kwh = st.slider("Mitigated Energy Volume (kWh)", 10.0, 5000.0, 250.0, step=25.0, key="panel_scada_kwh_slider")
 
-                mit_data = GroundLevelMitigation.calculate_regional_mitigation(saved_kwh, st.session_state.selected_country)
-                st.metric(f"Mitigation Savings ({mit_data['country_name']})", mit_data['total_savings_formatted'])
-
                 st.divider()
-                st.subheader("🔋 Battery Storage Health")
+                st.markdown("### 🔋 Battery Storage Reservoirs")
                 if st.button("Discharge Battery Cell Reserve (50 kW Load)", key="panel_scada_discharge_btn"):
                     b_state = battery.discharge_for_arbitrage(50.0)
                     ledger.record_transaction("Arbitrageur_Agent", "BATTERY_DISCHARGE", b_state)
 
-                st.metric("State of Charge (SOC)", f"{battery.state_of_charge}%")
-                st.metric("Battery Chemical Health", f"{battery.battery_health}%")
-
-            with col2:
-                st.subheader("🕸️ Digital Twin Real-Time Grid Node Topology")
+            with col_dash:
+                st.markdown("### 📊 Live Grid Telemetry Dashboard")
                 
+                # Metric Cards
+                mit_data = GroundLevelMitigation.calculate_regional_mitigation(saved_kwh, st.session_state.selected_country)
+                
+                m_a, m_b, m_c = st.columns(3)
+                with m_a:
+                    st.markdown(f"""
+                    <div class='dashboard-card card-green'>
+                        <div class='metric-label'>Mitigation Savings</div>
+                        <div class='metric-value'>{mit_data['total_savings_formatted']}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                with m_b:
+                    st.markdown(f"""
+                    <div class='dashboard-card card-cyan'>
+                        <div class='metric-label'>State of Charge (SOC)</div>
+                        <div class='metric-value'>{battery.state_of_charge}%</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                with m_c:
+                    st.markdown(f"""
+                    <div class='dashboard-card card-magenta'>
+                        <div class='metric-label'>Cell Health</div>
+                        <div class='metric-value'>{battery.battery_health}%</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+                # Digital Twin Network Chart
                 fig_topo = go.Figure()
                 fig_topo.add_trace(go.Scatter(
                     x=[0, 1, 1, 2, 0, 2], y=[0, 1, 1, 0, 0, 0],
@@ -307,14 +385,12 @@ else:
                     hoverinfo='none',
                     mode='lines'
                 ))
-                
                 node_x = [0, 1, 2]
                 node_y = [0, 1, 0]
                 node_text = ["Node Alpha (Residential)<br>Load: 240 kW | Freq: 50.01 Hz", 
                              "Node Beta (Industrial)<br>Load: 680 kW | Freq: 49.95 Hz", 
                              "Node Gamma (Medical)<br>Load: 310 kW | Freq: 50.02 Hz"]
                 node_colors = ['#00FF66', '#FFB300', '#00E5FF']
-                
                 fig_topo.add_trace(go.Scatter(
                     x=node_x, y=node_y,
                     mode='markers+text',
@@ -328,7 +404,6 @@ else:
                         line=dict(width=2, color='#FFFFFF')
                     )
                 ))
-                
                 fig_topo.update_layout(
                     title="Interactive Grid Node Topology & Power Flow Vector",
                     showlegend=False,
@@ -336,18 +411,18 @@ else:
                     plot_bgcolor="#121A30",
                     font_color="#FFFFFF",
                     xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
-                    yaxis=dict(showgrid=False, zeroline=False, showticklabels=False)
+                    yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+                    margin=dict(l=10, r=10, t=40, b=10)
                 )
                 st.plotly_chart(fig_topo, key="panel_scada_topo_chart")
 
-                st.subheader("📊 Live Grid Node Frequency Streams")
+                # Frequency Streams Plot
                 df_stream = pd.DataFrame({
                     "Time (s)": np.arange(1, 21),
                     "Node_Alpha (Residential)": 50.0 + np.random.normal(0, 0.08, 20),
                     "Node_Beta (Industrial)": 49.95 + np.random.normal(0, 0.12, 20),
                     "Node_Gamma (Medical)": 50.02 + np.random.normal(0, 0.04, 20)
                 })
-
                 fig_grid = px.line(df_stream, x="Time (s)", y=["Node_Alpha (Residential)", "Node_Beta (Industrial)", "Node_Gamma (Medical)"],
                                   title="Real-Time Grid Frequency Profiles (Hz)")
                 fig_grid.update_layout(paper_bgcolor="#121A30", plot_bgcolor="#121A30", font_color="#FFFFFF")
@@ -360,37 +435,44 @@ else:
     # ────────────────────────────────────────────────────────────────────────
     elif active_panel == "🚦 Smart City Traffic":
         try:
-            st.header("🚦 SMART CITY TRAFFIC & EV GRID LOAD CONTROL")
+            st.markdown("<h2>🚦 SMART CITY TRAFFIC & EV GRID LOAD CONTROL</h2>", unsafe_allow_html=True)
             st.caption("Intersection Congestion Index, Signal Phase Optimization, and EV Queue Balancing")
+            st.write("")
 
-            col1, col2, col3, col4 = st.columns(4)
-            with col1:
-                int_choice = st.selectbox("Target Intersection", ["INT_ALPHA_CBD", "INT_BETA_IND", "INT_GAMMA_MED"], key="panel_traffic_int_select")
-            with col2:
+            col_ctrl, col_dash = st.columns([2, 3])
+            with col_ctrl:
+                st.markdown("### 🎛️ Traffic Environment Controls")
+                int_choice = st.selectbox("Target Intersection ID", ["INT_ALPHA_CBD", "INT_BETA_IND", "INT_GAMMA_MED"], key="panel_traffic_int_select")
                 v_count = st.slider("Main Street Vehicles/Hr", 50, 1500, 950, step=25, key="panel_traffic_vcount_slider")
-            with col3:
                 v_speed = st.slider("Average Traffic Speed (km/h)", 5.0, 80.0, 22.5, step=2.5, key="panel_traffic_vspeed_slider")
-            with col4:
-                weather_choice = st.selectbox("Weather Profile", ["SUNNY", "CLOUDY", "RAINY", "STORMY"], key="panel_traffic_weather_select")
+                weather_choice = st.selectbox("Weather Profile Matrix", ["SUNNY", "CLOUDY", "RAINY", "STORMY"], key="panel_traffic_weather_select")
 
-            st.divider()
-            metrics = EcoGridTrafficEngine.calculate_intersection_metrics(v_count, v_speed, weather_choice)
-
-            m1, m2, m3, m4 = st.columns(4)
-            m1.metric("Congestion Index (ICI)", f"{metrics['congestion_index']:.2f}")
-            m2.metric("Traffic Flow Status", metrics['traffic_status_level'])
-            m3.metric("Vehicle Density", f"{v_count} veh/hr")
-            m4.metric("Average Speed", f"{v_speed} km/h")
-
-            st.subheader("🚦 Adaptive Signal Timing Optimizer")
-            c_left, c_right = st.columns([2, 1])
-
-            with c_left:
+                st.divider()
+                st.markdown("### 🚦 Adaptive Signal Timing Optimizer")
                 cross_count = st.slider("Cross Street Vehicle Load (veh/hr)", 50, 800, 300, step=25, key="panel_traffic_cross_slider")
                 emergency_trigger = st.checkbox("🚨 ACTIVATE EMERGENCY GREEN CORRIDOR OVERRIDE", value=False, key="panel_traffic_emerg_chk")
 
-                opt_plan = EcoGridTrafficEngine.optimize_signal_timing(int_choice, v_count, cross_count, emergency_trigger)
+            with col_dash:
+                st.markdown("### 📊 Live Traffic & EV Queue Dashboard")
+                metrics = EcoGridTrafficEngine.calculate_intersection_metrics(v_count, v_speed, weather_choice)
+                
+                m_a, m_b = st.columns(2)
+                with m_a:
+                    st.markdown(f"""
+                    <div class='dashboard-card card-magenta'>
+                        <div class='metric-label'>Congestion Index (ICI)</div>
+                        <div class='metric-value'>{metrics['congestion_index']:.2f}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                with m_b:
+                    st.markdown(f"""
+                    <div class='dashboard-card card-cyan'>
+                        <div class='metric-label'>Flow Status</div>
+                        <div class='metric-value'>{metrics['traffic_status_level']}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
 
+                opt_plan = EcoGridTrafficEngine.optimize_signal_timing(int_choice, v_count, cross_count, emergency_trigger)
                 if emergency_trigger:
                     st.error(opt_plan["action_summary"])
                 else:
@@ -404,16 +486,28 @@ else:
                 fig_sig.update_layout(title="Signal Phase Duration Allocation (Seconds)", paper_bgcolor="#121A30", plot_bgcolor="#121A30", font_color="#FFFFFF")
                 st.plotly_chart(fig_sig, key="panel_traffic_signal_chart")
 
-            with c_right:
-                st.subheader("🔋 EV Charging Station Queue Control")
+                st.divider()
+                st.markdown("### 🔋 EV Charging Queue Status")
                 grid_load_val = st.number_input("Current Grid Load (kW)", value=1650.0, step=50.0, key="panel_traffic_gridload_num")
                 ev_count_val = st.slider("Queued EV Vehicles", 1, 30, 15, key="panel_traffic_evcount_slider")
 
                 ev_res = EcoGridTrafficEngine.balance_ev_charging_queue(grid_load_val, 2000.0, ev_count_val)
-                st.write(f"**Mode:** `{ev_res['charging_mode']}`")
-                st.write(f"**Power Per Plug:** `{ev_res['power_per_plug_kw']} kW`")
-                st.write(f"**Total Station Draw:** `{ev_res['allocated_station_kw']} kW`")
-                st.write(f"**Grid Margin:** `{ev_res['remaining_grid_margin_kw']} kW`")
+                
+                m_c, m_d = st.columns(2)
+                with m_c:
+                    st.markdown(f"""
+                    <div class='dashboard-card card-green'>
+                        <div class='metric-label'>Allocated Power</div>
+                        <div class='metric-value'>{ev_res['allocated_station_kw']} kW</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                with m_d:
+                    st.markdown(f"""
+                    <div class='dashboard-card card-purple'>
+                        <div class='metric-label'>Remaining Margin</div>
+                        <div class='metric-value'>{ev_res['remaining_grid_margin_kw']} kW</div>
+                    </div>
+                    """, unsafe_allow_html=True)
         except Exception as e:
             st.error(f"Panel Error: {e}")
 
@@ -422,22 +516,30 @@ else:
     # ────────────────────────────────────────────────────────────────────────
     elif active_panel == "🌐 Multi-Country Currency":
         try:
-            st.header("🌐 GLOBAL MULTI-COUNTRY CURRENCY CENTER")
+            st.markdown("<h2>🌐 GLOBAL MULTI-COUNTRY CURRENCY CENTER</h2>", unsafe_allow_html=True)
             st.caption("Instant Financial Conversion & Utility Tariff Comparison Matrix Across 10 Countries")
+            st.write("")
 
-            col_curr_a, col_curr_b = st.columns([1, 2])
+            col_ctrl, col_dash = st.columns([2, 3])
 
-            with col_curr_a:
-                st.subheader("💱 Live Tariff Calculator")
+            with col_ctrl:
+                st.markdown("### 🎛️ Financial Spot Parameters")
                 base_spot_inr = st.number_input("Base Spot Market Rate (INR / MWh)", value=3500.0, step=100.0, key="panel_curr_spot_inr_num")
                 eval_kwh = st.slider("Evaluation Energy Range (kWh)", 100.0, 10000.0, 1500.0, step=100.0, key="panel_curr_eval_kwh_slider")
 
+            with col_dash:
+                st.markdown("### 🌍 Tariff Matrix Dashboard")
+                
                 active_c = st.session_state.selected_country
                 active_mit = GroundLevelMitigation.calculate_regional_mitigation(eval_kwh, active_c)
-                st.success(f"**Selected Node ({active_mit['country_name']}):** {active_mit['total_savings_formatted']}")
+                
+                st.markdown(f"""
+                <div class='dashboard-card card-green'>
+                    <div class='metric-label'>Active Node Savings ({active_mit['country_name']})</div>
+                    <div class='metric-value'>{active_mit['total_savings_formatted']}</div>
+                </div>
+                """, unsafe_allow_html=True)
 
-            with col_curr_b:
-                st.subheader("🌍 10-Sector Country Tariff Matrix")
                 matrix_rows = []
                 for c_code, meta in GroundLevelMitigation.COUNTRY_MATRIX.items():
                     converted_rate, formatted_rate = GroundLevelMitigation.convert_price_from_inr(base_spot_inr, c_code)
@@ -455,17 +557,17 @@ else:
                 df_matrix = pd.DataFrame(matrix_rows)
                 st.dataframe(df_matrix)
 
-            st.divider()
-            st.subheader("📊 Financial Mitigation Comparison Chart")
-            fig_curr = px.bar(
-                df_matrix,
-                x="Country",
-                y=[meta["base_rate_kwh"] * eval_kwh for meta in GroundLevelMitigation.COUNTRY_MATRIX.values()],
-                title=f"Mitigation Value across International Grid Sectors for {eval_kwh} kWh",
-                labels={"value": "Local Currency Units", "Country": "Sector Country"}
-            )
-            fig_curr.update_layout(paper_bgcolor="#121A30", plot_bgcolor="#121A30", font_color="#FFFFFF")
-            st.plotly_chart(fig_curr, key="panel_curr_bar_chart")
+                st.divider()
+                st.markdown("### 📊 Sector Financial Mitigation Chart")
+                fig_curr = px.bar(
+                    df_matrix,
+                    x="Country",
+                    y=[meta["base_rate_kwh"] * eval_kwh for meta in GroundLevelMitigation.COUNTRY_MATRIX.values()],
+                    title=f"Mitigation Value across International Grid Sectors for {eval_kwh} kWh",
+                    labels={"value": "Local Currency Units", "Country": "Sector Country"}
+                )
+                fig_curr.update_layout(paper_bgcolor="#121A30", plot_bgcolor="#121A30", font_color="#FFFFFF")
+                st.plotly_chart(fig_curr, key="panel_curr_bar_chart")
         except Exception as e:
             st.error(f"Panel Error: {e}")
 
@@ -474,12 +576,13 @@ else:
     # ────────────────────────────────────────────────────────────────────────
     elif active_panel == "🧠 AI SCADA Copilot":
         try:
-            st.header("🧠 AI SCADA INFRASTRUCTURE COPILOT")
+            st.markdown("<h2>🧠 AI SCADA INFRASTRUCTURE COPILOT</h2>", unsafe_allow_html=True)
             st.caption("Powered by Google GenAI (Gemini) & Edge Cognitive AI with Executive Summaries")
+            st.write("")
 
-            c_q1, c_q2 = st.columns([2, 1])
-            with c_q1:
-                st.subheader("💬 Ask EcoGrid AI Copilot a Detailed Question")
+            col_ctrl, col_dash = st.columns([2, 3])
+            with col_ctrl:
+                st.markdown("### 💬 Copilot Shell Agent Query")
                 preset_q = st.selectbox(
                     "Quick Question Presets",
                     [
@@ -492,9 +595,30 @@ else:
                     key="panel_ai_preset_select"
                 )
 
-                user_q = st.text_area("Your Query", value="" if preset_q == "Custom Question" else preset_q, height=100, key="panel_ai_query_text")
+                user_q = st.text_area("Your Query string", value="" if preset_q == "Custom Question" else preset_q, height=100, key="panel_ai_query_text")
+                trigger_analysis = st.button("🚀 Analyze with EcoGrid AI Copilot", type="primary", key="panel_ai_analyze_btn")
 
-                if st.button("🚀 Analyze with EcoGrid AI Copilot", type="primary", key="panel_ai_analyze_btn"):
+            with col_dash:
+                st.markdown("### 🤖 Analysis Output Stream")
+                
+                # Static Status Cards
+                m_a, m_b = st.columns(2)
+                with m_a:
+                    st.markdown("""
+                    <div class='dashboard-card card-cyan'>
+                        <div class='metric-label'>Cloud Agent Channel</div>
+                        <div class='metric-value' style='font-size:1.3rem; color:#00BBF9;'>Gemini 2.5 Flash</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                with m_b:
+                    st.markdown("""
+                    <div class='dashboard-card card-green'>
+                        <div class='metric-label'>Local Edge Engine</div>
+                        <div class='metric-value' style='font-size:1.3rem; color:#00F5D4;'>Active</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+                if trigger_analysis:
                     if not user_q.strip():
                         st.warning("Please enter a question or select a preset.")
                     else:
@@ -513,12 +637,6 @@ else:
                             st.divider()
                             st.markdown("#### 🔬 DETAILED TECHNICAL ANALYSIS & ACTION PLAN")
                             st.markdown(res["full_response"])
-
-            with c_q2:
-                st.subheader("⚡ AI System Diagnostic Status")
-                st.info("📡 Cloud Channel: Gemini 2.5 Flash Ready")
-                st.success("🤖 Local Edge AI Engine: Active")
-                st.caption("EcoGrid AI Copilot synthesizes grid telemetry, BFT consensus votes, and Kaggle ML model predictions.")
         except Exception as e:
             st.error(f"Panel Error: {e}")
 
@@ -527,48 +645,61 @@ else:
     # ────────────────────────────────────────────────────────────────────────
     elif active_panel == "🤖 Kaggle AI & ML Hub":
         try:
-            st.header("🤖 KAGGLE AI & ML MODEL INTELLIGENCE HUB")
+            st.markdown("<h2>🤖 KAGGLE AI & ML MODEL INTELLIGENCE HUB</h2>", unsafe_allow_html=True)
             st.caption("Machine Learning Predictors & Dataset Data Explorer")
+            st.write("")
 
-            st.subheader("🚀 Retrain Pipeline Trigger")
-            if st.button("🔄 Train / Retrain All 4 Kaggle Models Now", type="primary", key="panel_kaggle_retrain_btn"):
-                with st.spinner("Training Kaggle models on dataset matrices..."):
-                    retrain_res = train_all_models()
-                    predictor.load_models()
-                    st.success("All 4 Kaggle ML Models successfully trained and updated!")
-                    st.json(retrain_res)
+            col_ctrl, col_dash = st.columns([2, 3])
+            with col_ctrl:
+                st.markdown("### 🚀 Training Operations")
+                if st.button("🔄 Train / Retrain All 4 Kaggle Models Now", type="primary", key="panel_kaggle_retrain_btn"):
+                    with st.spinner("Training Kaggle models on dataset matrices..."):
+                        retrain_res = train_all_models()
+                        predictor.load_models()
+                        st.success("All 4 Kaggle ML Models successfully trained and updated!")
+                        st.json(retrain_res)
 
-            st.divider()
-            st.subheader("🔮 Live Interactive Prediction Sandbox")
-
-            c1, c2 = st.columns(2)
-            with c1:
-                st.markdown("#### 1. Grid Load Predictor")
+                st.divider()
+                st.markdown("### 🔮 Live Predictor Sandboxes")
                 p_temp = st.slider("Ambient Temp (°C)", 10.0, 45.0, 32.0, key="panel_kaggle_ptemp_slider")
                 p_hum = st.slider("Humidity (%)", 20.0, 95.0, 50.0, key="panel_kaggle_phum_slider")
                 p_ev = st.slider("EV Station kW", 50.0, 1200.0, 600.0, key="panel_kaggle_pev_slider")
-                pred_load = predictor.predict_grid_load(p_temp, p_hum, p_ev)
-                st.metric("Predicted Total Grid Load", f"{pred_load:.2f} kW")
-
-            with c2:
-                st.markdown("#### 2. Solar Output Predictor")
                 p_irr = st.slider("Irradiance (W/m²)", 0.0, 1200.0, 850.0, key="panel_kaggle_pirr_slider")
                 p_cloud = st.slider("Cloud Cover (%)", 0.0, 100.0, 15.0, key="panel_kaggle_pcloud_slider")
+
+            with col_dash:
+                st.markdown("### 📊 Kaggle Predictions & Dataset matrix")
+                
+                # Predictions Output
+                pred_load = predictor.predict_grid_load(p_temp, p_hum, p_ev)
                 pred_solar = predictor.predict_solar_generation(p_irr, 35.0, p_cloud)
-                st.metric("Predicted Solar Generation", f"{pred_solar:.2f} kW")
 
-            st.divider()
-            st.subheader("📊 Kaggle Dataset Data Explorer & CSV Export")
+                m_a, m_b = st.columns(2)
+                with m_a:
+                    st.markdown(f"""
+                    <div class='dashboard-card card-magenta'>
+                        <div class='metric-label'>Predicted Grid Load</div>
+                        <div class='metric-value'>{pred_load:.2f} kW</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                with m_b:
+                    st.markdown(f"""
+                    <div class='dashboard-card card-green'>
+                        <div class='metric-label'>Predicted Solar Generation</div>
+                        <div class='metric-value'>{pred_solar:.2f} kW</div>
+                    </div>
+                    """, unsafe_allow_html=True)
 
-            ds_choice = st.selectbox("Select Kaggle Dataset to Inspect", ["Traffic Flow Dataset", "Grid Load Dataset", "Solar Generation Dataset"], key="panel_kaggle_ds_select")
-            if ds_choice == "Traffic Flow Dataset":
-                df_ds = DatasetLoader.load_traffic_dataset()
-            elif ds_choice == "Grid Load Dataset":
-                df_ds = DatasetLoader.load_grid_load_dataset()
-            else:
-                df_ds = DatasetLoader.load_solar_dataset()
+                st.divider()
+                ds_choice = st.selectbox("Select Kaggle Dataset to Inspect", ["Traffic Flow Dataset", "Grid Load Dataset", "Solar Generation Dataset"], key="panel_kaggle_ds_select")
+                if ds_choice == "Traffic Flow Dataset":
+                    df_ds = DatasetLoader.load_traffic_dataset()
+                elif ds_choice == "Grid Load Dataset":
+                    df_ds = DatasetLoader.load_grid_load_dataset()
+                else:
+                    df_ds = DatasetLoader.load_solar_dataset()
 
-            st.dataframe(df_ds)
+                st.dataframe(df_ds)
         except Exception as e:
             st.error(f"Panel Error: {e}")
 
@@ -579,14 +710,42 @@ else:
         try:
             st.header("🛡️ CYBERSECURITY & 3/3 BFT CRYPTOGRAPHIC LEDGER")
             st.caption("3/3 Byzantine Fault Tolerance (BFT) Signature Consensus & SHA-256 Ledger Audit")
+            st.write("")
 
-            col1, col2 = st.columns(2)
-            with col1:
-                st.subheader("💥 Chaos Monkey Threat Injector")
+            col_ctrl, col_dash = st.columns([2, 3])
+            with col_ctrl:
+                st.markdown("### 💥 Chaos Monkey Threat Injector")
                 target_n = st.selectbox("Target Injection Node", ["Node_Alpha_Residential", "Node_Beta_Industrial", "Node_Gamma_Medical"], key="panel_cyber_target_select")
                 freq_inject = st.slider("Spoofed Frequency Value (Hz)", 48.0, 54.0, 53.1, key="panel_cyber_freq_slider")
+                trigger_chaos = st.button("Inject Spoofed Telemetry Attack", key="panel_cyber_inject_btn")
 
-                if st.button("Inject Spoofed Telemetry Attack", key="panel_cyber_inject_btn"):
+                st.divider()
+                st.markdown("### ⚖️ Consensus Node Vote")
+                eval_bft = st.button("Evaluate 3/3 Unanimous Consensus Vote", key="panel_cyber_bft_eval_btn")
+
+            with col_dash:
+                st.markdown("### 🛡️ Cybersecurity Operations Center")
+                
+                # Check status
+                is_val, val_msg = ledger.verify_chain()
+                
+                m_a, m_b = st.columns(2)
+                with m_a:
+                    st.markdown(f"""
+                    <div class='dashboard-card card-green'>
+                        <div class='metric-label'>Ledger Integrity</div>
+                        <div class='metric-value' style='font-size:1.1rem; color:#00F5D4;'>{val_msg}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                with m_b:
+                    st.markdown(f"""
+                    <div class='dashboard-card card-cyan'>
+                        <div class='metric-label'>Protection Core</div>
+                        <div class='metric-value' style='font-size:1.1rem; color:#00BBF9;'>3/3 BFT Unanimous</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+                if trigger_chaos:
                     anom_res = predictor.detect_cyber_anomaly(freq_inject, 1200.0)
                     if anom_res["is_attack_detected"]:
                         st.error(f"🚨 CYBER THREAT CONTAINED! Anomaly: {anom_res['anomaly_type']}")
@@ -594,21 +753,11 @@ else:
                     else:
                         st.success("Telemetry within safe operational boundaries.")
 
-                st.divider()
-                st.subheader("⚖️ 3/3 BFT Consensus Evaluator")
-                eval_bft = st.button("Evaluate 3/3 Unanimous Consensus Vote", key="panel_cyber_bft_eval_btn")
                 if eval_bft:
                     bft_res = BFTConsensusEngine.evaluate_state_proposal("GRID_LOAD_TRANSFER", target_n, {"grid_freq_hz": freq_inject})
                     st.json(bft_res)
 
-            with col2:
-                st.subheader("📜 Cryptographic SHA-256 Ledger Explorer")
-                is_val, val_msg = ledger.verify_chain()
-                if is_val:
-                    st.success(f"✅ {val_msg}")
-                else:
-                    st.error(f"🚨 {val_msg}")
-
+                st.divider()
                 try:
                     with open("reports/ledger.json", "r", encoding="utf-8") as f:
                         blocks = json.load(f)
@@ -626,22 +775,24 @@ else:
         try:
             st.header("📑 INCIDENT REPORTS & MAINTENANCE PRESCRIPTIONS")
             st.caption("Automated Actionable Engineering Protocols for Ground-Level Technicians")
+            st.write("")
 
-            c_p1, c_p2 = st.columns([1, 2])
-            with c_p1:
-                st.subheader("🛠️ Prescription Generator")
+            col_ctrl, col_dash = st.columns([2, 3])
+            with col_ctrl:
+                st.markdown("### 🛠️ Incident Generator Matrix")
                 reason = st.selectbox("Trigger Reason", ["Frequency_Spoofing_Attack", "Budget_Overrun_Load_Spike", "Routine_Maintenance_Sweep"], key="panel_inc_reason_select")
                 val_metric = st.number_input("Observed Metric Value", value=53.1, key="panel_inc_metric_num")
                 t_node = st.selectbox("Target Node", ["Node_Alpha_Residential", "Node_Beta_Industrial", "Node_Gamma_Medical"], key="panel_inc_tnode_select")
 
+            with col_dash:
+                st.markdown("### 📋 Incident Diagnostic Report")
                 prescript = GroundLevelMitigation.get_prescription(reason, val_metric, t_node)
 
-                st.markdown("### 📋 Generated Protocols:")
+                st.markdown("#### Generated Field Protocols:")
                 for step in prescript:
                     st.write(step)
 
-            with c_p2:
-                st.subheader("📄 Forensic Incident Report Generator")
+                st.divider()
                 report_title = f"INCIDENT REPORT: {reason.upper()} on {t_node.upper()}"
                 report_body = f"""# {report_title}
 **Date/Time:** {time.strftime('%Y-%m-%d %H:%M:%S')}  
@@ -659,8 +810,7 @@ An anomaly event ({reason}) was flagged on {t_node}. The 3/3 BFT consensus core 
 - **EcoGrid SCADA Chief:** Verified
 - **EcoGrid Core Core:** Sealed (SHA-256 Ledger)
 """
-
-                st.markdown(report_body)
+                st.text(report_body)
         except Exception as e:
             st.error(f"Panel Error: {e}")
 
@@ -671,25 +821,31 @@ An anomaly event ({reason}) was flagged on {t_node}. The 3/3 BFT consensus core 
         try:
             st.header("🌐 REST API & SYSTEM DEPLOYMENT TELEMETRY")
             st.caption("OpenAPI Swagger Endpoints & Containerized Service Status")
+            st.write("")
 
-            c1, c2, c3 = st.columns(3)
-            c1.metric("REST API Engine", "FastAPI v6.5.0-PROD")
-            c2.metric("API Endpoint Port", "8000")
-            c3.metric("OpenAPI Swagger UI", "http://localhost:8000/docs")
+            col_ctrl, col_dash = st.columns([1, 2])
+            with col_ctrl:
+                st.markdown("""
+                ### 📡 Microservice Telemetry Node
+                - **REST API Engine:** FastAPI v6.5.0-PROD
+                - **Endpoint Port:** `8000`
+                - **OpenAPI Swagger UI:** `http://localhost:8000/docs`
+                """)
 
-            st.subheader("📑 Available Microservice REST Endpoints")
-            endpoints_df = pd.DataFrame([
-                {"Method": "POST", "Endpoint": "/api/v1/auth/login", "Description": "Authenticate user credentials & issue session token"},
-                {"Method": "POST", "Endpoint": "/api/v1/auth/demo-login", "Description": "1-click Quick Demo Login preset"},
-                {"Method": "POST", "Endpoint": "/api/v1/predict/traffic", "Description": "ML Traffic Congestion Index prediction"},
-                {"Method": "POST", "Endpoint": "/api/v1/traffic/optimize-signal", "Description": "Adaptive Signal Timing Phase Allocation"},
-                {"Method": "POST", "Endpoint": "/api/v1/ai/copilot", "Description": "AI Copilot Q&A with Executive Summary"},
-                {"Method": "POST", "Endpoint": "/api/v1/currency/convert", "Description": "Instant multi-country currency conversion"},
-                {"Method": "POST", "Endpoint": "/api/v1/predict/load", "Description": "Kaggle ML Grid Load prediction"},
-                {"Method": "POST", "Endpoint": "/api/v1/scada/bft-consensus", "Description": "3/3 BFT Consensus voting on state changes"},
-                {"Method": "GET", "Endpoint": "/api/v1/ledger", "Description": "Verify SHA-256 ledger block chain integrity"},
-                {"Method": "POST", "Endpoint": "/api/v1/ml/retrain", "Description": "Trigger automated model retraining"}
-            ])
-            st.dataframe(endpoints_df)
+            with col_dash:
+                st.markdown("### 📑 Endpoint Directory Matrix")
+                endpoints_df = pd.DataFrame([
+                    {"Method": "POST", "Endpoint": "/api/v1/auth/login", "Description": "Authenticate user credentials & issue session token"},
+                    {"Method": "POST", "Endpoint": "/api/v1/auth/demo-login", "Description": "1-click Quick Demo Login preset"},
+                    {"Method": "POST", "Endpoint": "/api/v1/predict/traffic", "Description": "ML Traffic Congestion Index prediction"},
+                    {"Method": "POST", "Endpoint": "/api/v1/traffic/optimize-signal", "Description": "Adaptive Signal Timing Phase Allocation"},
+                    {"Method": "POST", "Endpoint": "/api/v1/ai/copilot", "Description": "AI Copilot Q&A with Executive Summary"},
+                    {"Method": "POST", "Endpoint": "/api/v1/currency/convert", "Description": "Instant multi-country currency conversion"},
+                    {"Method": "POST", "Endpoint": "/api/v1/predict/load", "Description": "Kaggle ML Grid Load prediction"},
+                    {"Method": "POST", "Endpoint": "/api/v1/scada/bft-consensus", "Description": "3/3 BFT Consensus voting on state changes"},
+                    {"Method": "GET", "Endpoint": "/api/v1/ledger", "Description": "Verify SHA-256 ledger block chain integrity"},
+                    {"Method": "POST", "Endpoint": "/api/v1/ml/retrain", "Description": "Trigger automated model retraining"}
+                ])
+                st.dataframe(endpoints_df)
         except Exception as e:
             st.error(f"Panel Error: {e}")
