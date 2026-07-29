@@ -27,7 +27,7 @@ COPY . .
 RUN PYTHONPATH=/app python -m ml_engine.train_models
 
 # Expose Streamlit Dashboard (8501) and FastAPI REST API (8000)
-EXPOSE 8501 8000
+EXPOSE 8501 8000 10000
 
-# Default entrypoint starts both REST API and Streamlit UI
-CMD uvicorn api.server:app --host 0.0.0.0 --port 8000 & streamlit run app.py --server.port 8501 --server.address 0.0.0.0
+# Default entrypoint launches master production orchestrator start.py
+CMD ["python", "start.py"]
