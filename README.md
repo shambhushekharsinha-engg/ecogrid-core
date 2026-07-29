@@ -1,135 +1,134 @@
-# ⚡ EcoGrid: Multi-Agent SCADA Infrastructure
+# 🚦 Aegis Traffic & ⚡ EcoGrid Core Infrastructure
 
-█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀██    ECOGRID AI INFRASTRUCTURE SYSTEMS MANAGEMENT PANEL v5.5-UI   ██▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/FastAPI-REST_Backend-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI">
+  <img src="https://img.shields.io/badge/Streamlit-8_Domain_Tabs-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white" alt="Streamlit">
+  <img src="https://img.shields.io/badge/Google_Gemini-AI_Copilot-4285F4?style=for-the-badge&logo=googlecloud&logoColor=white" alt="Google Gemini">
+  <img src="https://img.shields.io/badge/Scikit--Learn-Kaggle_AI-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white" alt="Scikit-Learn">
+  <img src="https://img.shields.io/badge/Multi--Currency-10_Countries-00FF66?style=for-the-badge" alt="Multi-Currency">
   <img src="https://img.shields.io/badge/Docker-Containerized-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
-  <img src="https://img.shields.io/badge/Render-Deployed-46E3B7?style=for-the-badge&logo=render&logoColor=black" alt="Render">
-  <img src="https://img.shields.io/badge/Streamlit-Configured-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white" alt="Streamlit">
   <img src="https://img.shields.io/badge/License-MIT-000000?style=for-the-badge" alt="License">
 </p>
 
 ---
 
-## 🔬 Project Overview
+## 🔬 System Overview
 
-**EcoGrid** is a next-generation, containerized microgrid control infrastructure designed to solve the critical vulnerabilities of modern centralized power networks. Traditional Supervisory Control and Data Acquisition (SCADA) systems act as single points of failure, leaving them highly susceptible to systemic cloud outages, localized network partitioning, and targeted cyber-physical attacks. 
+**Aegis Traffic & EcoGrid Core** is an enterprise-grade, containerized urban infrastructure intelligence platform combining **Aegis AI Intelligent Traffic Signal Optimization** with **EcoGrid Multi-Agent Microgrid SCADA Management**. 
 
-By replacing rigid centralized orchestrators with an autonomous, **distributed multi-agent intelligence architecture**, EcoGrid establishes a self-healing grid environment secured by a **3/3 Byzantine Fault Tolerant (BFT) consensus core** and automated **cloud-to-edge failover mechanisms**.
-
----
-
-## 🏗️ Core Architectural Pillars
-
-* 🤖 **Autonomous Multi-Agent Coordination:** Independent, specialized software agents continuously track localized load demand, evaluate battery states of charge, and perform automated peer-to-peer load-balancing operations in real time.
-
-* 🛡️ **3/3 Byzantine Fault Tolerance (BFT):** Secures grid governance against internal node corruption or malicious data injection. Critical operational changes require a unanimous, cryptographic signature validation across all active cluster agents.
-
-* 🔐 **Immutable Cryptographic Audit Trails:** Every system state change, telemetry baseline update, and consensus agreement is cryptographically signed and secured using **SHA-256 chaining**, creating a permanent, tamper-evident local forensic ledger.
-
-* 🔌 **Automated Cloud-to-Edge Failover:** Equipped with a dedicated latency and heartbeat listener that monitors cloud routing health. If cloud communication drops, edge nodes automatically isolate and transition to localized config baselines without a single byte of state loss.
-
-* 🌐 **Global Multi-Currency Localization:** Features an integrated regionalization engine mapping operations across 10 international grid sectors (including India, US, UK, EU, and Japan), calculating dynamic power mitigation value metrics using real-world localized utility tariffs and currency criteria.
+Equipped with an **AI Infrastructure Copilot** (powered by Google Gemini 2.5 Flash & Edge AI), an **Instant Multi-Country Currency Switcher** across 10 international sectors, Kaggle time-series dataset Machine Learning models, 3/3 Byzantine Fault Tolerance (BFT) consensus, and a tamper-evident SHA-256 cryptographic audit ledger.
 
 ---
 
-## 📁 Technical Repository Structure
+## 🗂️ 8 Dedicated System Domain Tabs
 
-The production codebase is structurally organized into modular directories separating the telemetry interface, cryptographic security layers, core agent execution mechanics, and regional settings profiles:
+The Streamlit Web Cockpit (`app.py`) features 8 dedicated domain tabs:
 
-```text
-ecogrid-core/
-│
-├── .streamlit/
-│   └── config.toml             # Frontend UI configuration presets
-│
-├── agents/
-│   ├── arbitrageur.json        # Market optimization agent properties
-│   └── forecaster.json         # Predictive load demand configurations
-│
-├── config/
-│   ├── sample_grid_data.csv    # Real-world country baseline telemetry datasets
-│   └── scenarios.json          # Multi-country pricing and 20 stress-testing profiles
-│
-├── core/
-│   ├── battery_system.py       # Localized storage node simulation logic
-│   ├── data_aggregator.py      # Real-time multi-agent parameter consolidation
-│   └── mitigation_engine.py    # Active load balancing and multi-currency calculations
-│
-├── reports/
-│   ├── build_matrix.py         # System calculation validation models
-│   └── ledger.json             # Local persistent cryptographic ledger history
-│
-├── security/
-│   ├── chaos_monkey.py         # Fault-injection tool for live network partitioning simulation
-│   └── crypto_ledger.py        # 3/3 BFT SHA-256 cryptographic chaining core
-│
-├── skills\grid-safety/
-│   └── SKILL.md                # Autonomous safety protocol declarations
-│
-├── app.py                      # Global entry point application
-├── cloud_auditor.py            # Render-to-edge latency and heartbeat listener
-├── dashboard_ui.py             # Console-powered global telemetry cockpit UI
-├── Dockerfile                  # Production micro-container configurations
-├── EcoGrid_Architecture_...xlsx # Structural engineering and currency calculation sheets
-├── LICENSE                     # Open-source distribution parameters
-├── main.py                     # System operational runtime orchestrator
-├── mcp_server.py               # Model Context Protocol communications server
-├── README.md                   # Technical onboarding documentation
-└── requirements.txt            # Python dependency matrix
-```
-### ⚙️ Core Protocol & Verification Workflow 
-The ecosystem ensures complete transparency and resilience during operational cycles via a strict 4-step pipeline:
-```
-[ Telemetry Capture ] ──> [ Consensus Verification ] ──> [ Cryptographic Locking ] ──> [ Edge Failover Router ]
-```
+1. 🚦 **Aegis Traffic Operations:** Intersection Congestion Index (ICI), adaptive green light timing optimization, emergency green wave corridor override, and EV charging queue load shedding.
+2. ⚡ **EcoGrid SCADA & Energy Grid:** Multi-agent microgrid load balancing, battery state-of-charge health tracking, live sine-wave frequency stream monitors, and dynamic regional tariff savings.
+3. 🌐 **Multi-Country Currency Center:** Instant currency conversion and tariff comparison matrix across 10 international grid sectors (INR ₹, USD $, EUR €, GBP £, JPY ¥, AUD $, BRL R$, CAD $, UAE AED, ZAR R).
+4. 🧠 **AI Infrastructure Copilot:** AI Q&A Assistant providing detailed technical analyses, Executive Summaries, and bulleted engineering action plans.
+5. 🤖 **Kaggle AI & ML Model Hub:** Scikit-Learn model predictors, live prediction sandboxes, Kaggle dataset data explorer, and 1-click CSV dataset exporter.
+6. 🛡️ **Cybersecurity & 3/3 BFT Ledger:** Chaos Monkey threat injector, 3/3 BFT unanimous signature consensus evaluator, SHA-256 ledger explorer, and audit CSV exporter.
+7. 📑 **Incident Reports & Prescriptions:** Automated ground-level engineering prescriptions for on-site technicians and downloadable Markdown forensic incident reports.
+8. 📡 **REST API & System Telemetry:** Live FastAPI microservice endpoints matrix, OpenAPI Swagger UI link, and system deployment status.
 
-###  (Node anomaly check)       (3/3 BFT Bounded Vote)         (SHA-256 Ledger Block)       (Heartbeat Status Sync)
+---
 
-Telemetry Capture: Node sensors track voltage, capacity, and current frequencies, instantly broadcasting telemetry state packets to neighboring agents.Consensus Verification: Peer nodes cross-verify incoming streams against their internal validation engines. If parameters match acceptable structural safety limits, agents sign off on the proposed state change.Cryptographic Locking: Upon crossing a unanimous 3/3 matching threshold, the transaction is declared immutable. The block computes a unique SHA-256 hash string, chaining it directly to the preceding audit ledger history.
+## 🌐 Instant Multi-Country Currency Matrix (10 Sectors)
 
-Failover Activation: If a primary network partition or high-ping timeout is flagged by the cloud auditor, a localized heartbeat routine kicks in, shifting node instruction parsing to edge profiles until a cloud handshake is re-established.
+Switching the active country node in the sidebar instantly updates spot market pricing, utility tariffs, and financial savings across the entire application:
 
-🚀 Quick Start Deployment Guide Prerequisites Python 3.11+ Docker (Optional, for containerized isolation runs) Local Configuration SetupClone the repository and navigate into the root workspace:
+| Country Code | Sector Country | Currency | Symbol | Base Tariff (/kWh) |
+| :--- | :--- | :--- | :--- | :--- |
+| **IN** | India | INR | ₹ | ₹7.50 |
+| **US** | United States | USD | $ | $0.18 |
+| **EU** | European Union | EUR | € | €0.24 |
+| **UK** | United Kingdom | GBP | £ | £0.35 |
+| **JP** | Japan | JPY | ¥ | ¥31.00 |
+| **AU** | Australia | AUD | $ | $0.36 |
+| **BR** | Brazil | BRL | R$ | R$0.75 |
+| **CA** | Canada | CAD | $ | $0.16 |
+| **UAE** | United Arab Emirates | AED | AED | AED 0.30 |
+| **ZA** | South Africa | ZAR | R | R 3.20 |
+
+---
+
+## 🔑 Quick Login Presets (Demo Credentials)
+
+| Role Preset | Username | Password | Access Level |
+| :--- | :--- | :--- | :--- |
+| **System Administrator** | `admin` | `Admin@123` | Full Administrative Access |
+| **Traffic Operations Chief** | `traffic_op` | `Traffic@123` | Aegis Traffic Signal Control & Emergency Routing |
+| **Microgrid Chief Engineer** | `grid_eng` | `Grid@123` | SCADA Energy Dispatch & Battery Storage |
+| **Guest Auditor** | `guest` | `Guest@123` | Read-only Ledger Verification |
+
+---
+
+## 🌐 FastAPI REST Microservice Endpoints
+
+OpenAPI Swagger documentation is accessible at `http://localhost:8000/docs`.
+
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/health` | System health, loaded ML models & database backend status |
+| `POST` | `/api/v1/auth/register` | Register new user account with password policy check |
+| `POST` | `/api/v1/auth/login` | Authenticate user credentials & issue session token |
+| `POST` | `/api/v1/auth/demo-login` | 1-click Quick Demo Login preset |
+| `POST` | `/api/v1/predict/traffic` | ML Traffic Congestion Index prediction |
+| `POST` | `/api/v1/traffic/optimize-signal` | Adaptive Signal Timing Phase Allocation |
+| `POST` | `/api/v1/traffic/ev-balance` | EV Charging Queue Load Shedding & Balancing |
+| `POST` | `/api/v1/ai/copilot` | AI Copilot Q&A with Executive Summary & Action Plan |
+| `POST` | `/api/v1/currency/convert` | Instant multi-country currency conversion |
+| `POST` | `/api/v1/predict/load` | Live ML Grid Load demand prediction |
+| `POST` | `/api/v1/scada/bft-consensus` | Evaluate 3/3 BFT Consensus vote on proposed action |
+| `GET` | `/api/v1/ledger` | Verify SHA-256 ledger block chain integrity |
+| `POST` | `/api/v1/ml/retrain` | Trigger automated Kaggle model retraining pipeline |
+
+---
+
+## 🚀 Deployment & Quickstart Guide
+
+### Option 1: Local Setup
+
+1. **Install Dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **Train Kaggle Machine Learning Models:**
+   ```bash
+   python -m ml_engine.train_models
+   ```
+
+3. **Run Automated Test Suite:**
+   ```bash
+   python -m pytest tests/test_suite.py
+   ```
+
+4. **Launch Application Services:**
+   - **Streamlit Web UI Command Cockpit (Port 8501):**
+     ```bash
+     streamlit run app.py
+     ```
+   - **FastAPI REST API Server (Port 8000):**
+     ```bash
+     uvicorn api.server:app --reload --port 8000
+     ```
+
+### Option 2: Docker Containerization
+
 ```bash
-git clone https://github.com/shambhushekharsinha-engg/ecogrid-core.git
+docker-compose up --build
 ```
-```
-cd ecogrid-core
-```
+Access the Streamlit Command Cockpit at `http://localhost:8501` and FastAPI OpenAPI Docs at `http://localhost:8000/docs`.
 
-Install the minimal dependency matrix:
-```
-pip install -r requirements.txt
-```
-Initialize the orchestrator application:
-```
-python main.py
-```
-## Operational Modes
-### Upon launching main.py,
- the interactive terminal cockpit initializes and prompts for execution paths:
+---
 
-### Mode 1: Pre-configured Scenarios:
- Sequentially loops through 20 severe historical and adversarial microgrid stress-tests (e.g., Peak Summer Heatwave, Monsoon Flash Flood, or Ransomware Frequency Injection).
+## 👤 Developer Profile
 
-### Mode 2: Quick-Tap Menu:
- Provides full development flexibility, allowing users to manually select spot market pricing scales, atmospheric sky profiles, and inject targeted cyber-threats on individual nodes on the fly.
+**Developed by Shambhu Shekhar Sinha**, Computer Science & Engineering student specializing in Artificial Intelligence and Machine Learning.
 
-## 🧪 Simulated Stress-Testing Scenarios
- To prove structural resilience, the system natively tests and documents specific grid disruptions: 
-
-### Byzantine Threat Vector :
-  Attempts to inject fraudulent load readings into a specific node. The consensus core detects the outlier signature, blocks block-chaining, and generates an emergency containment log.
-  
-### Islanding Drill:
-  Simulates an abrupt cloud network failure. Edge monitors drop cloud polling speeds under 2.5 seconds and safely enforce local mitigation protocols until restoration occurs.
-  
-### Ledger Security Test:
-  Attempts to retroactively manipulate logging blocks trigger an immediate hash-mismatch warning, neutralizing tamper trends before they penetrate adjacent system boundaries.
-  
-  ## 👤 Developer Profile 
-  ### Developed with passion by Shambhu Shekhar Sinha, a Computer Science and Engineering student specializing in Artificial Intelligence and Machine Learning.
-  
-  ### 📄 License:
-         This project is licensed under the MIT License - see the LICENSE file for complete open-source governance parameters.
+### 📄 License
+Licensed under the [MIT License](LICENSE).

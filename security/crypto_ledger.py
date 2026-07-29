@@ -1,104 +1,113 @@
 """
-EcoGrid AI: Cryptographic Ledger Core Engine
-Database Layer: Cloud PostgreSQL (Supabase Connection Pooler Integrated)
-Architect: Shambhu Shekhar Sinha
-
-Description:
-- Formulates an append-only, tamper-evident transactional block matrix.
-- Natively connects to PostgreSQL infrastructure using connection pooling strings.
+EcoGrid & Aegis Traffic: Cryptographic Ledger Engine
+Handles tamper-evident transaction serialization, SHA-256 block chaining,
+and verification across Postgres / SQLite / JSON persistence layers.
 """
 
 import os
 import time
 import json
 import hashlib
-import psycopg2
-from psycopg2.extras import RealDictCursor
+from database.db import db_manager
 
 class CryptographicLedger:
-    """Handles secure transaction serialization and verification block streaming to PostgreSQL."""
+    """Append-only tamper-evident transactional block chain manager."""
 
-    def __init__(self):
-        # Pull the DATABASE_URL environment token set in the cloud deployment platform settings
-        self.db_url = os.environ.get("DATABASE_URL")
-        if self.db_url:
-            self._init_db()
+    def __init__(self, json_file_path="reports/ledger.json"):
+        self.json_file_path = json_file_path
+        os.makedirs(os.path.dirname(self.json_file_path), exist_ok=True)
+        if not os.path.exists(self.json_file_path):
+            with open(self.json_file_path, "w", encoding="utf-8") as f:
+                json.dump([], f)
 
-    def _get_connection(self):
-        """Establishes an isolated database cursor handle using the pooling credentials."""
-        # Clean up connection strings that contain mixed escape characters from the pooler format
-        cleaned_url = self.db_url.strip() if self.db_url else ""
-        return psycopg2.connect(cleaned_url)
-
-    def _init_db(self):
-        """Generates the relational audit ledger table matrix schema inside the Supabase cluster."""
-        try:
-            with self._get_connection() as conn:
-                with conn.cursor() as cur:
-                    cur.execute("""
-                        CREATE TABLE IF NOT EXISTS grid_ledger (
-                            id SERIAL PRIMARY KEY,
-                            block_index INT NOT NULL,
-                            timestamp TEXT NOT NULL,
-                            agent TEXT NOT NULL,
-                            action TEXT NOT NULL,
-                            details TEXT NOT NULL,
-                            previous_hash TEXT NOT NULL,
-                            current_hash TEXT NOT NULL
-                        );
-                    """)
-                conn.commit()
-        except Exception as e:
-            # Prevent app initialization failure if database sync drops temporarily
-            print(f"⚠️ Relational Ledger table initialization bypass: {str(e)}")
-
-    def _calculate_hash(self, block_dict):
-        """Generates an deterministic SHA-256 validation seal across block parameters."""
+    def _calculate_hash(self, block_dict: dict) -> str:
+        """Generates a deterministic SHA-256 validation seal for a block."""
         block_string = json.dumps(block_dict, sort_keys=True).encode()
         return hashlib.sha256(block_string).hexdigest()
 
-    def record_transaction(self, agent_name, action, details):
-        """Asynchronously serializes, chains, and commits a transaction block to the cloud database."""
-        if not self.db_url:
-            return "00000000000000000000000000000000"
+    def record_transaction(self, agent_name: str, action: str, details: dict) -> str:
+        """Serializes, chains, and commits a transaction block to database and JSON audit file."""
+        timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+        details_str = json.dumps(details) if isinstance(details, dict) else str(details)
+
+        # 1. Load local JSON ledger for fallback and fast frontend rendering
+        try:
+            with open(self.json_file_path, "r", encoding="utf-8") as f:
+                local_blocks = json.load(f)
+        except Exception:
+            local_blocks = []
+
+        prev_hash = local_blocks[-1]["current_hash"] if local_blocks else "00000000000000000000000000000000"
+        block_index = len(local_blocks) + 1
+
+        new_block = {
+            "index": block_index,
+            "timestamp": timestamp,
+            "agent": agent_name,
+            "action": action,
+            "details": details,
+            "previous_hash": prev_hash
+        }
+        current_hash = self._calculate_hash(new_block)
+        new_block["current_hash"] = current_hash
+
+        local_blocks.append(new_block)
 
         try:
-            with self._get_connection() as conn:
-                with conn.cursor(cursor_factory=RealDictCursor) as cur:
-                    # Fetch total count to dynamically calculate the next block index identifier
-                    cur.execute("SELECT COUNT(*) FROM grid_ledger;")
-                    chain_len = cur.fetchone()['count']
-                    
-                    # Fetch the final block hash in the sequence to preserve chain link continuity
-                    cur.execute("SELECT current_hash FROM grid_ledger ORDER BY id DESC LIMIT 1;")
-                    last_row = cur.fetchone()
-                    prev_hash = last_row['current_hash'] if last_row else "00000000000000000000000000000000"
-                    
-                    new_block_template = {
-                        "index": chain_len + 1,
-                        "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
-                        "agent": agent_name,
-                        "action": action,
-                        "details": json.dumps(details),
-                        "previous_hash": prev_hash
-                    }
-                    current_hash = self._calculate_hash(new_block_template)
-                    
-                    # Execute atomic transaction load query down onto the Supabase cluster
+            with open(self.json_file_path, "w", encoding="utf-8") as f:
+                json.dump(local_blocks, f, indent=2)
+        except Exception as e:
+            print(f"⚠️ Local JSON ledger update error: {e}")
+
+        # 2. Persist to relational DB
+        try:
+            conn = db_manager.get_connection()
+            if db_manager.use_postgres:
+                with conn:
+                    with conn.cursor() as cur:
+                        cur.execute("""
+                            INSERT INTO grid_ledger (block_index, timestamp, agent, action, details, previous_hash, current_hash)
+                            VALUES (%s, %s, %s, %s, %s, %s, %s);
+                        """, (block_index, timestamp, agent_name, action, details_str, prev_hash, current_hash))
+            else:
+                with conn:
+                    cur = conn.cursor()
                     cur.execute("""
                         INSERT INTO grid_ledger (block_index, timestamp, agent, action, details, previous_hash, current_hash)
-                        VALUES (%s, %s, %s, %s, %s, %s, %s);
-                    """, (
-                        new_block_template["index"], 
-                        new_block_template["timestamp"], 
-                        agent_name, 
-                        action, 
-                        new_block_template["details"], 
-                        prev_hash, 
-                        current_hash
-                    ))
-                conn.commit()
-            return current_hash
-        except Exception as err:
-            print(f"⚠️ Failed streaming transaction block payload to cloud database: {str(err)}")
-            return "ERROR_DATA_STREAM_DROP"
+                        VALUES (?, ?, ?, ?, ?, ?, ?);
+                    """, (block_index, timestamp, agent_name, action, details_str, prev_hash, current_hash))
+                conn.close()
+        except Exception as e:
+            print(f"⚠️ Relational ledger record note: {e}")
+
+        return current_hash
+
+    def verify_chain(self) -> tuple[bool, str]:
+        """Verifies the SHA-256 hash link continuity of the ledger blocks."""
+        try:
+            with open("reports/ledger.json", "r", encoding="utf-8") as f:
+                blocks = json.load(f)
+            
+            if not blocks:
+                return True, "Ledger is empty. Chain integrity nominal."
+
+            for i in range(len(blocks)):
+                block = blocks[i]
+                if i > 0 and block["previous_hash"] != blocks[i - 1]["current_hash"]:
+                    return False, f"Broken chain link detected at block index {block['index']}!"
+
+                calc_payload = {
+                    "index": block["index"],
+                    "timestamp": block["timestamp"],
+                    "agent": block["agent"],
+                    "action": block["action"],
+                    "details": block["details"],
+                    "previous_hash": block["previous_hash"]
+                }
+                calc_hash = self._calculate_hash(calc_payload)
+                if calc_hash != block["current_hash"]:
+                    return False, f"Tampered block hash at index {block['index']}!"
+
+            return True, f"All {len(blocks)} blocks cryptographically verified and valid."
+        except Exception as e:
+            return False, f"Verification failed: {str(e)}"

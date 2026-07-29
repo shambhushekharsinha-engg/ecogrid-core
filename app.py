@@ -1,458 +1,561 @@
 """
-EcoGrid AI: Production-Grade Multi-Agent Microgrid SCADA Orchestrator
-Submission Track: Agents for Good (Kaggle Capstone)
-Architect: Shambhu Shekhar Sinha
-
-Design Philosophy:
-- Separation of Concerns (SoC) via independent core/security folder decoupling.
-- Byzantine Fault Tolerant (BFT) Multi-Agent state consensus valuation matrix.
-- Asynchronous Edge-to-Cloud hybrid fault-tolerant telemetry processing loops.
+Aegis Traffic & EcoGrid SCADA Enterprise Command Cockpit UI
+Integrated User Authentication, Aegis Traffic Control, Multi-Agent SCADA,
+Multi-Country Currency Switcher, AI Infrastructure Copilot with Summaries,
+Kaggle ML Hub, 3/3 BFT Ledger, Incident Reports, and REST API Telemetry.
 """
 
 import streamlit as st
-import random
-import ollama
+import pandas as pd
+import numpy as np
+import plotly.express as px
+import plotly.graph_objects as go
 import json
 import os
-import pandas as pd
+import time
+
+from security.auth import auth_manager
+from core.traffic_engine import AegisTrafficEngine
+from core.consensus_engine import BFTConsensusEngine
 from core.battery_system import BatteryBank
 from security.crypto_ledger import CryptographicLedger
 from security.chaos_monkey import ChaosMonkey
 from core.mitigation_engine import GroundLevelMitigation
 from core.data_aggregator import DataAggregator
-from cloud_auditor import CloudCognitiveAuditor
+from ml_engine.predictor import predictor
+from ml_engine.train_models import train_all_models
+from ml_engine.dataset_loader import DatasetLoader
+from cloud_auditor import auditor
 
-# ────────────── CONFIGURATION & ENGINE INITIALIZATION ──────────────
-# Establish high-density viewport bounds matching industrial SCADA terminal frameworks
-st.set_page_config(page_title="EcoGrid AI SCADA Core", page_icon="⚡", layout="wide")
-
-# Persistent Context State Caching: Initialize historic time-series data vectors across render ticks
-if "telemetry_history" not in st.session_state:
-    st.session_state.telemetry_history = pd.DataFrame(columns=["Iteration", "Alpha Freq", "Beta Freq", "Gamma Freq"])
-if "iteration_count" not in st.session_state:
-    st.session_state.iteration_count = 0
-
-# Instantiate isolated object components from core modular subdirectories
-battery = BatteryBank()
-ledger = CryptographicLedger()
-chaos = ChaosMonkey()
-auditor = CloudCognitiveAuditor()
-
-# ────────────── SIDEBAR CONTROL REGISTRY PANEL ──────────────
-st.sidebar.markdown("<h2 style='color: #00E5FF; font-family: monospace;'>🎛️ SCADA CONTROL</h2>", unsafe_allow_html=True)
-data_source_mode = st.sidebar.selectbox(
-    "Ingestion Pipeline Vector", 
-    ["1. Standard Crisis Scenarios File", "2. Live Managed Stream Ingestion (MCP Mock)", "3. Custom Manual Drill", "4. Upload External Industrial CSV Data"]
+# Page Config
+st.set_page_config(
+    page_title="Aegis Traffic & EcoGrid AI SCADA",
+    page_icon="🚦",
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
-# Core state variables initialization matrix with strict type enforcement profiles
-price, sky, eff, attack_node, attack_type = 3000, "SUNNY", 0.95, "None", "NONE"
-csv_records = None
-data_origin_string = "Static Memory"
-vector_color = "#00FF66" # Default system baseline functional tint
+# Custom Cyberpunk Industrial CSS Theme
+st.markdown("""
+<style>
+    .stApp { background-color: #0A0F1D; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    .main-header { font-size: 2.2rem; color: #00E5FF; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; }
+    .sub-header { color: #8F9CAE; font-size: 1rem; margin-bottom: 20px; }
+    .metric-card { background: #121A30; border: 1px solid #1E294B; border-radius: 8px; padding: 16px; margin: 5px 0; }
+    .summary-box { background: #0E1628; border-left: 4px solid #00E5FF; padding: 15px; border-radius: 4px; margin: 10px 0; }
+    .status-badge { font-weight: bold; padding: 4px 10px; border-radius: 4px; display: inline-block; }
+    div[data-testid="stMetricValue"] { font-family: monospace; color: #00FF66 !important; }
+</style>
+""", unsafe_allow_html=True)
 
-# Global Token Initialization Pass to protect downstream metric models from scoping crashes
-currency_symbol = "₹"
-currency_code = "INR"
-selected_country = "IN"
-localized_mitigation_cost = 1125.0
+# Session State Initialization
+if "authenticated" not in st.session_state:
+    st.session_state.authenticated = False
+if "user_info" not in st.session_state:
+    st.session_state.user_info = None
+if "selected_country" not in st.session_state:
+    st.session_state.selected_country = "IN"
 
-# ────────────────── MULTI-VECTOR DATA INGESTION MATRIX ──────────────────
-if "Standard Crisis" in data_source_mode:
-    data_origin_string = "config/scenarios.json"
-    vector_color = "#FF9900" # Amber indicator for file configuration playback
-    
-    # 1. Initialize ALL default fallback variables to guarantee global scope
-    base_price = 4500
-    base_sky = "CLEAR"
-    base_attack_node = "NONE"
-    base_attack_type = "NONE"
-    selected_country = "IN"
-    currency_symbol = "₹"
-    currency_code = "INR"
-    base_rate = 7.50
-    custom_saved_kwh = 150.0
-    localized_mitigation_cost = 1125.0
-    
-    try:
-        # Secure File IO Parsing Pass targeting the global scenario matrix
-        with open("config/scenarios.json", "r", encoding="utf-8") as f:
-            data = json.load(f)
-            scenarios = data.get("simulation_scenarios", [])
-            pricing_matrix = data.get("regional_pricing_matrix", {})
-        
-        # 2. Stress-Test Template Selector (1-20)
-        sc_names = [s["scenario_name"] for s in scenarios]
-        selected_sc = st.sidebar.selectbox("Choose Target Scenario Template (1-20)", sc_names)
-        active_sc = next(s for s in scenarios if s["scenario_name"] == selected_sc)
-        
-        # 3. Global Node Country Selector (1-10)
-        available_countries = list(pricing_matrix.keys()) if pricing_matrix else ["IN", "US"]
-        selected_country = st.sidebar.selectbox("🌐 Select Active Global Country Node", available_countries, index=0)
-        
-        # 4. Extract active metrics from targeted scenario dictionary
-        base_price = active_sc["market_price_inr"]
-        base_sky = active_sc["weather_condition"]
-        base_attack_node = active_sc["forced_attack_node"]
-        base_attack_type = active_sc.get("attack_type", "NONE")
-
-        # 5. Extract country specific metadata for dynamic currency scaling
-        country_meta = pricing_matrix.get(selected_country, {"currency": "INR", "symbol": "₹", "base_rate_per_kwh": 7.50})
-        currency_symbol = country_meta.get("symbol", "₹")
-        currency_code = country_meta.get("currency", "INR")
-        base_rate = country_meta.get("base_rate_per_kwh", 7.50)
-
-        # 6. Interactive Range Slider added to the sidebar panel
-        st.sidebar.markdown("---")
-        st.sidebar.markdown("### 📊 MITIGATION METRIC SCALE")
-        custom_saved_kwh = st.sidebar.slider(
-            "Set Mitigated Energy Range (kWh):",
-            min_value=0.0,
-            max_value=10000.0,
-            value=150.0,
-            step=10.0
-        )
-
-        # 7. Compute dynamic localized pricing math up to any slider value
-        localized_mitigation_cost = custom_saved_kwh * base_rate
-        
-        # Map localized environment attributes onto runtime configuration states
-        sky = base_sky
-        price = base_price
-        attack_node = base_attack_node
-        attack_type = base_attack_type
-        
-        weather_eff_map = {"SUNNY": 0.95, "CLOUDY": 0.45, "RAINY": 0.15, "STORMY": 0.05}
-        eff = weather_eff_map.get(sky, 0.95)
-        
-    except Exception as e:
-        st.sidebar.error(f"Failed parsing dataset fields from configuration: {str(e)}")
-
-elif "Live Managed" in data_source_mode:
-    vector_color = "#00E5FF" # Cyan accent indicating live streaming mathematical calculation engine
-    sky = st.sidebar.selectbox("Weather Environment Profile", ["SUNNY", "CLOUDY", "RAINY", "STORMY"])
-    price = st.sidebar.slider("Grid Clearing Price (INR / MWh)", 1000, 8000, 2800, step=50)
-    attack_node = st.sidebar.selectbox("Anomaly Target Node Selection", ["None", "Node_Alpha_Residential", "Node_Beta_Industrial", "Node_Gamma_Medical"])
-    attack_type = "FREQUENCY_SPOOF" if attack_node != "None" else "NONE"
-    
-    # Target static method processing inside decoupled core/data_aggregator.py module
-    live_stream_data = DataAggregator.simulate_live_api_fetch(sky)
-    eff = live_stream_data["solar_efficiency"]
-    data_origin_string = live_stream_data["source"]
-
-elif "Custom Manual" in data_source_mode:
-    vector_color = "#CC00FF" # Purple accent representing manual sandboxed execution drilling
-    data_origin_string = "User Custom Build Matrix"
-    sky = st.sidebar.selectbox("Weather Environment Profile", ["SUNNY", "CLOUDY", "RAINY", "STORMY"])
-    price = st.sidebar.slider("Grid Clearing Price (INR / MWh)", 1000, 8000, 3500, step=50)
-    attack_node = st.sidebar.selectbox("Anomaly Target Node Selection", ["None", "Node_Alpha_Residential", "Node_Beta_Industrial", "Node_Gamma_Medical"])
-    attack_type = "FREQUENCY_SPOOF" if attack_node != "None" else "NONE"
-    weather_eff_map = {"SUNNY": 0.95, "CLOUDY": 0.45, "RAINY": 0.15, "STORMY": 0.05}
-    eff = weather_eff_map[sky]
-
-elif "Upload External" in data_source_mode:
-    vector_color = "#FFFF00" # Yellow branding for binary external upload processing structures
-    data_origin_string = "User CSV Upload Stream"
-    sky = st.sidebar.selectbox("Weather Environment Profile", ["SUNNY", "CLOUDY", "RAINY", "STORMY"])
-    price = st.sidebar.slider("Grid Clearing Price (INR / MWh)", 1000, 8000, 3200, step=50)
-    attack_node, attack_type = "None", "NONE"
-    weather_eff_map = {"SUNNY": 0.95, "CLOUDY": 0.45, "RAINY": 0.15, "STORMY": 0.05}
-    eff = weather_eff_map[sky]
-    
-    uploaded_file = st.sidebar.file_uploader("Upload Industrial Grid Time-Series CSV File", type=["csv"])
-    if uploaded_file is not None:
-        csv_records = DataAggregator.parse_uploaded_csv(uploaded_file.read())
+ledger = CryptographicLedger()
+battery = BatteryBank()
+chaos = ChaosMonkey()
 
 # ────────────────────────────────────────────────────────────────────────
+# 🔐 AUTHENTICATION GATE & LOGIN MODAL
+# ────────────────────────────────────────────────────────────────────────
+if not st.session_state.authenticated:
+    st.markdown("<h1 class='main-header' style='text-align: center;'>🚦 AEGIS TRAFFIC & ECOGRID CORE</h1>", unsafe_allow_html=True)
+    st.markdown("<p class='sub-header' style='text-align: center;'>Enterprise Multi-Agent SCADA & Intelligent Urban Traffic Platform</p>", unsafe_allow_html=True)
+    st.markdown("---")
 
-# CHROMATIC ADAPTATION STATE ENGINE: Calculate metric visual indicator ranges based on metric intensity values
-price_color = "#00FF66" if price < 3500 else ("#FFB300" if price < 5500 else "#FF3333")
-weather_color = "#FFD700" if sky == "SUNNY" else ("#778899" if sky == "CLOUDY" else "#4682B4" if sky == "RAINY" else "#9400D3")
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.markdown("<h3 style='color: #00E5FF; text-align: center;'>🔐 SECURE PORTAL ACCESS</h3>", unsafe_allow_html=True)
 
-# DYNAMIC FRONTEND OVERRIDES: Inject fine-grained CSS overrides to implement the Cyberpunk Navy SCADA theme
-st.markdown(f"""
-    <style>
-    .stApp {{ background-color: #0A0F1D; }}
-    .streamlit-expanderHeader {{ background-color: #121A30 !important; border: 1px solid #1E294B !important; }}
-    div[data-testid="stMetricValue"] {{ font-family: monospace; }}
-    
-    /* Force main operational execution button to dynamically adapt its color profile to the ingestion vector */
-    div.stButton > button:first-child {{
-        background-color: #121824 !important; color: {vector_color} !important; font-weight: bold !important; 
-        border: 1px solid {vector_color} !important; box-shadow: 0px 0px 12px {vector_color}33; width: 100%; height: 45px;
-    }}
-    div.stButton > button:first-child:hover {{ background-color: {vector_color} !important; color: #0A0F1D !important; }}
-    </style>
+        auth_tab1, auth_tab2, auth_tab3 = st.tabs(["⚡ 1-Click Quick Demo Login", "🔑 Standard Login", "📝 Register Account"])
+
+        with auth_tab1:
+            st.info("Select a pre-configured role to bypass manual login:")
+            c_a, c_b = st.columns(2)
+            with c_a:
+                if st.button("👨‍💻 Admin Operator", use_container_width=True):
+                    ok, res = auth_manager.authenticate_user("admin", "Admin@123")
+                    if ok:
+                        st.session_state.authenticated = True
+                        st.session_state.user_info = res
+                        st.rerun()
+                if st.button("⚡ Grid Chief Engineer", use_container_width=True):
+                    ok, res = auth_manager.authenticate_user("grid_eng", "Grid@123")
+                    if ok:
+                        st.session_state.authenticated = True
+                        st.session_state.user_info = res
+                        st.rerun()
+            with c_b:
+                if st.button("🚦 Traffic Operations Chief", use_container_width=True):
+                    ok, res = auth_manager.authenticate_user("traffic_op", "Traffic@123")
+                    if ok:
+                        st.session_state.authenticated = True
+                        st.session_state.user_info = res
+                        st.rerun()
+                if st.button("👁️ Guest Auditor", use_container_width=True):
+                    ok, res = auth_manager.authenticate_user("guest", "Guest@123")
+                    if ok:
+                        st.session_state.authenticated = True
+                        st.session_state.user_info = res
+                        st.rerun()
+
+        with auth_tab2:
+            login_user = st.text_input("Username", key="l_user")
+            login_pwd = st.text_input("Password", type="password", key="l_pwd")
+            if st.button("Login", use_container_width=True, type="primary"):
+                ok, res = auth_manager.authenticate_user(login_user, login_pwd)
+                if ok:
+                    st.session_state.authenticated = True
+                    st.session_state.user_info = res
+                    st.success("Login successful! Redirecting...")
+                    time.sleep(0.5)
+                    st.rerun()
+                else:
+                    st.error(res)
+
+        with auth_tab3:
+            reg_user = st.text_input("Desired Username", key="r_user")
+            reg_pwd = st.text_input("Password (Min 8 chars, 1 Upper, 1 Lower, 1 Digit)", type="password", key="r_pwd")
+            reg_role = st.selectbox("Assign Role", ["Traffic Controller", "Microgrid Engineer", "System Auditor"], key="r_role")
+
+            if reg_pwd:
+                valid, msg = auth_manager.validate_password_strength(reg_pwd)
+                if valid:
+                    st.caption("✅ Password strength: Strong")
+                else:
+                    st.caption(f"⚠️ {msg}")
+
+            if st.button("Register Account", use_container_width=True):
+                ok, msg = auth_manager.register_user(reg_user, reg_pwd, reg_role)
+                if ok:
+                    st.success(msg)
+                else:
+                    st.error(msg)
+    st.stop()
+
+# ────────────────────────────────────────────────────────────────────────
+# 🎛️ SIDEBAR & GLOBAL MULTI-COUNTRY CURRENCY SELECTOR
+# ────────────────────────────────────────────────────────────────────────
+user_data = st.session_state.user_info
+
+st.sidebar.markdown(f"""
+<div style='background:#121A30; border:1px solid #00E5FF; padding:10px; border-radius:6px; margin-bottom:15px;'>
+    <div style='color:#00E5FF; font-weight:bold; font-size:12px;'>🟢 SESSION ACTIVE</div>
+    <div style='color:#FFFFFF; font-size:14px; font-weight:bold;'>👤 {user_data['username']}</div>
+    <div style='color:#8F9CAE; font-size:11px;'>{user_data['role']}</div>
+</div>
 """, unsafe_allow_html=True)
 
-if auditor.api_key:
-    st.sidebar.markdown("<div style='color:#00FF66; font-size:12px; font-weight:bold; border: 1px solid #00FF66; padding: 8px; border-radius:4px; text-align:center; background:#00FF6611; margin-top:20px;'>📡 CLOUD AUDITOR CHANNEL: ACTIVE</div>", unsafe_allow_html=True)
-else:
-    st.sidebar.markdown("<div style='color:#FFB300; font-size:12px; font-weight:bold; border: 1px solid #FFB300; padding: 8px; border-radius:4px; text-align:center; background:#FFB30011; margin-top:20px;'>⚠️ CLOUD CHANNEL: OFFLINE</div>", unsafe_allow_html=True)
+if st.sidebar.button("🚪 Logout Session", use_container_width=True):
+    st.session_state.authenticated = False
+    st.session_state.user_info = None
+    st.rerun()
 
-# Defensive Programming Scope: Pre-instantiate ledger count out of local conditional block bounds
-ledger_len = 0
-try:
-    if os.path.exists("reports/ledger.json"):
-        with open("reports/ledger.json", "r") as f:
-            ledger_len = len(json.load(f))
-except Exception:
-    ledger_len = 0
+st.sidebar.markdown("---")
 
-# ────────────── HEADER MULTI-COLOR KPI STATUS PANEL ──────────────
-st.markdown("<h1 style='color: #E6EDF2; font-family: monospace;'>⚡ EcoGrid AI: Industrial Microgrid Control Cockpit</h1>", unsafe_allow_html=True)
-st.markdown("<p style='color: #8B949E; font-family: monospace;'>👥 <i>Individual Capstone Submission Baseline Framework • Track: Agents for Good</i></p>", unsafe_allow_html=True)
+# Global Instant Multi-Country Currency Selector
+st.sidebar.markdown("<h3 style='color:#00E5FF;'>🌐 INSTANT CURRENCY SWITCHER</h3>", unsafe_allow_html=True)
+country_options = list(GroundLevelMitigation.COUNTRY_MATRIX.keys())
+selected_country_code = st.sidebar.selectbox(
+    "Select Global Sector Node",
+    country_options,
+    index=country_options.index(st.session_state.selected_country),
+    format_func=lambda c: f"{c} - {GroundLevelMitigation.COUNTRY_MATRIX[c]['name']} ({GroundLevelMitigation.COUNTRY_MATRIX[c]['symbol']})"
+)
+st.session_state.selected_country = selected_country_code
 
-# Fixed: Metric panels now map the dynamic global currencies and localized calculations smoothly!
-st.markdown(f"""
-    <div style='display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px;'>
-        <div style='background: #121A30; padding: 15px; border-radius: 4px; border: 1px solid #1E294B; border-top: 4px solid {weather_color};'>
-            <span style='color: #8B949E; font-size: 11px; font-family: monospace;'>🌍 CLIMATE ENVIRONMENT</span><br>
-            <span style='color: {weather_color}; font-size: 20px; font-weight: bold; font-family: monospace;'>{sky}</span>
-        </div>
-        <div style='background: #121A30; padding: 15px; border-radius: 4px; border: 1px solid #1E294B; border-top: 4px solid {price_color};'>
-            <span style='color: #8B949E; font-size: 11px; font-family: monospace;'>💰 SPOT PRICE MODEL</span><br>
-            <span style='color: {price_color}; font-size: 20px; font-weight: bold; font-family: monospace;'>{price} {currency_code}/MWh</span>
-        </div>
-        <div style='background: #121A30; padding: 15px; border-radius: 4px; border: 1px solid #1E294B; border-top: 4px solid #00E5FF;'>
-            <span style='color: #8B949E; font-size: 11px; font-family: monospace;'>🔐 CRYPTO AUDIT TRAIL</span><br>
-            <span style='color: #00E5FF; font-size: 20px; font-weight: bold; font-family: monospace;'>{ledger_len} BLOCKS</span>
-        </div>
-        <div style='background: #121A30; padding: 15px; border-radius: 4px; border: 1px solid #1E294B; border-top: 4px solid #F59E0B;'>
-            <span style='color: #8B949E; font-size: 11px; font-family: monospace;'>📊 REGIONAL VALUE ({selected_country})</span><br>
-            <span style='color: #F59E0B; font-size: 18px; font-weight: bold; font-family: monospace;'>{currency_symbol}{localized_mitigation_cost:,.2f}</span>
-        </div>
-    </div>
-""", unsafe_allow_html=True)
+curr_info = GroundLevelMitigation.get_currency_info(selected_country_code)
+st.sidebar.caption(f"Active Currency: **{curr_info['currency']} ({curr_info['symbol']})** | Base Tariff: **{curr_info['symbol']}{curr_info['base_rate_kwh']}/kWh**")
 
-st.write("---")
+st.sidebar.markdown("---")
+st.sidebar.markdown("<h3 style='color:#00E5FF;'>🕹️ DEDICATED DOMAIN TABS</h3>", unsafe_allow_html=True)
 
-# ────────────── SCADA MAIN FIELD GRID LAYOUT SPLIT ──────────────
-main_col, side_col = st.columns([2, 1])
-
-with main_col:
-    if st.button("🚀 EXECUTE MULTI-AGENT SUBSTATION TELEMETRY DRILL"):
-        st.markdown("<h3 style='color: #E6EDF2; font-family: monospace;'>📡 Real-Time Substation Dispatch Feed</h3>", unsafe_allow_html=True)
-        
-        # Telemetry Assembly Logic
-        nodes = {}
-        if csv_records:
-            for rec in csv_records:
-                n_name = rec["node_name"]
-                nodes[n_name] = {"demand_kw": rec["demand_kw"], "grid_freq_hz": rec["grid_freq_hz"], "priority_level": 1 if "Medical" in n_name else (2 if "Industrial" in n_name else 3)}
-        elif "Live Managed" in data_source_mode:
-            for n_name, telemetry in live_stream_data["nodes"].items():
-                nodes[n_name] = {"demand_kw": telemetry["demand_kw"], "grid_freq_hz": telemetry["grid_freq_hz"], "priority_level": 1 if "Medical" in n_name else (2 if "Industrial" in n_name else 3)}
-        else:
-            nodes = {
-                "Node_Alpha_Residential": {"demand_kw": random.randint(120, 260), "grid_freq_hz": round(random.uniform(49.8, 50.2), 2), "priority_level": 3},
-                "Node_Beta_Industrial": {"demand_kw": random.randint(450, 850), "grid_freq_hz": round(random.uniform(49.7, 50.3), 2), "priority_level": 2},
-                "Node_Gamma_Medical": {"demand_kw": random.randint(220, 380), "grid_freq_hz": round(random.uniform(49.9, 50.1), 2), "priority_level": 1}
-            }
-
-        # Intercept telemetry mapping to inject user's selected parameter manipulation attack target node
-        if attack_node in nodes and attack_type != "NONE" and not csv_records:
-            nodes[attack_node]["grid_freq_hz"] = 52.95
-
-        # Timeline Cache Refreshing step
-        st.session_state.iteration_count += 1
-        new_history_row = {
-            "Iteration": st.session_state.iteration_count,
-            "Alpha Freq": nodes.get("Node_Alpha_Residential", {}).get("grid_freq_hz", 50.0),
-            "Beta Freq": nodes.get("Node_Beta_Industrial", {}).get("grid_freq_hz", 50.0),
-            "Gamma Freq": nodes.get("Node_Gamma_Medical", {}).get("grid_freq_hz", 50.0),
-        }
-        st.session_state.telemetry_history = pd.concat([st.session_state.telemetry_history, pd.DataFrame([new_history_row])], ignore_index=True)
-
-        last_tx_logged = None
-
-        # Process each individual substation transformer block container
-        for name, telemetry in nodes.items():
-            freq, load, priority = telemetry["grid_freq_hz"], telemetry["demand_kw"], telemetry["priority_level"]
-            is_attack = (attack_node == name) and (attack_type != "NONE")
-            
-            # Dynamic Chromatic state assignments
-            node_theme_bg = "#211517" if is_attack else ("#191612" if (freq > 50.5 or freq < 49.5) else "#111A15")
-            node_border = "#FF3333" if is_attack else ("#FFB300" if (freq > 50.5 or freq < 49.5) else "#00FF66")
-            status_text = "🚨 CRITICAL BREACH" if is_attack else ("⚠️ SIGNAL FAULT" if (freq > 50.5 or freq < 49.5) else "⚡ NODE NOMINAL")
-            
-            st.markdown(f"""
-                <div style='background-color: {node_theme_bg}; border-left: 6px solid {node_border}; border-top: 1px solid #222A3A; border-right: 1px solid #222A3A; border-bottom: 1px solid #222A3A; padding: 15px; margin-top: 15px; border-radius: 4px;'>
-                    <div style='display: flex; justify-content: space-between; align-items: center;'>
-                        <span style='font-family: monospace; font-size: 14px; font-weight: bold; color: #E6EDF2;'>📟 SUBSTATION BLOCK: {name.upper()}</span>
-                        <span style='font-family: monospace; font-size: 13px; font-weight: bold; color: {node_border};'>{status_text}</span>
-                    </div>
-                </div>
-            """, unsafe_allow_html=True)
-            
-            c1, c2, c3 = st.columns(3)
-            with c1: st.metric("Current Load", f"{load} kW")
-            with c2: st.metric("Line Signal Rate", f"{freq} Hz", delta=f"{round(freq - 50.0, 2)} Hz Dev")
-            with c3: st.metric("Priority Rank Tier", f"CLASS_0{priority}")
-
-            # ────────────── ADVANCED FEATURE: MULTI-AGENT BYZANTINE FAULT TOLERANCE CONSENSUS ──────────────
-            if is_attack:
-                st.markdown("<h5 style='color: #FFB300; font-family: monospace; margin-top: 10px; margin-bottom: 5px;'>🗳️ Byzantine Fault Tolerant (BFT) Agent Consensus Vote</h5>", unsafe_allow_html=True)
-                
-                # Model independent distributed voting logs to prove multi-agent protection capabilities
-                v1_status, v1_color = "🚨 BREACH OVERRIDE SIGNED", "#FF3333"
-                v2_status, v2_color = "🚨 BREACH OVERRIDE SIGNED", "#FF3333"
-                v3_status, v3_color = "🚨 BREACH OVERRIDE SIGNED", "#FF3333"
-                
-                col_a, col_b, col_c = st.columns(3)
-                with col_a: st.markdown(f"<div style='background:#121A30; padding:10px; border-radius:4px; border:1px solid #1E294B; text-align:center;'><span style='color:#8B949E; font-size:10px;'>🧠 FORECASTER AGENT</span><br><b style='color:{v1_color}; font-size:11px;'>{v1_status}</b></div>", unsafe_allow_html=True)
-                with col_b: st.markdown(f"<div style='background:#121A30; padding:10px; border-radius:4px; border:1px solid #1E294B; text-align:center;'><span style='color:#8B949E; font-size:10px;'>💰 ARBITRAGEUR AGENT</span><br><b style='color:{v2_color}; font-size:11px;'>{v2_status}</b></div>", unsafe_allow_html=True)
-                with col_c: st.markdown(f"<div style='background:#121A30; padding:10px; border-radius:4px; border:1px solid #1E294B; text-align:center;'><span style='color:#8B949E; font-size:10px;'>🛡️ IDS SECURITY KERNEL</span><br><b style='color:{v3_color}; font-size:11px;'>{v3_status}</b></div>", unsafe_allow_html=True)
-                
-                st.markdown("<p style='color:#00FF66; font-size:11px; font-family:monospace; margin-top:5px;'>📊 <b>Consensus Verdict:</b> 3/3 Supermajority Verified. Cryptographic breaker isolation signed and committed.</p>", unsafe_allow_html=True)
-                
-                st.markdown(f"""
-                    <div style="background-color: #05070A; border: 1px solid #4A151B; border-left: 4px solid #FF3333; font-family: 'Courier New', monospace; padding: 12px; color: #FF3333; border-radius: 4px; margin-top: 8px;">
-                        [THREAT ALERT] INDUSTRIAL PROTECTION KERNEL DEPLOYED ON VECTOR {attack_type}<br>
-                        [EXEC] isolation_ breaker_trip --node {name.upper()} --override true<br>
-                        [STATUS] Section completely decoupled via cryptographic consensus.
-                    </div>
-                """, unsafe_allow_html=True)
-                
-                # Write and register audit blocks to the append-only record ledger
-                log_hash = ledger.record_transaction("SECURITY_IDS_KERNEL", "CYBER_ATTACK_CONTAINMENT", {"targeted_node": name, "vector": attack_type, "frequency_hz": freq})
-                last_tx_logged = {"actor": "SECURITY_IDS_KERNEL", "action": "CYBER_ATTACK_CONTAINMENT", "node": name, "hash": log_hash}
-                
-                with st.expander("📝 View Structural Technical Mitigation Playbooks", expanded=False):
-                    for step in GroundLevelMitigation.get_prescription(attack_type, freq, name):
-                        st.caption(step)
-                continue
-
-            # Standard Agent Execution Matrix (Arbitrage vs Baseline Grid draw tracking)
-            if eff < 0.5 and price > 4000:
-                batt_state = battery.discharge_for_arbitrage(load)
-                tx_hash = ledger.record_transaction("Grid_Arbitrageur", "BATTERY_ROUTING_PIVOT", {"node": name, "soc": batt_state["current_soc"]})
-                last_tx_logged = {"actor": "Grid_Arbitrageur", "action": "BATTERY_ROUTING_PIVOT", "node": name, "hash": tx_hash}
-                st.markdown(f"<div style='color:#FFB300; font-family:monospace; font-size:12px; margin-top:5px;'>🔋 <b>Economic Arbitrage Active:</b> Power routed from storage reserves. Remaining SoC: {batt_state['current_soc']}%</div>", unsafe_allow_html=True)
-            else:
-                tx_hash = ledger.record_transaction("Grid_Arbitrageur", "GRID_CLEARANCE_APPROVAL", {"node": name})
-                last_tx_logged = {"actor": "Grid_Arbitrageur", "action": "GRID_CLEARANCE_APPROVAL", "node": name, "hash": tx_hash}
-                st.markdown("<div style='color:#00FF66; font-family:monospace; font-size:12px; margin-top:5px;'>✅ <b>Grid Sourcing Nominal:</b> Sourcing load demands straight from primary transmission feeds.</div>", unsafe_allow_html=True)
-
-        # ────────────── GOOGLE AI STUDIO CLOUD EDGE LINK ──────────────
-        if last_tx_logged:
-            st.write("---")
-            st.markdown("<h3 style='color: #00E5FF; font-family: monospace;'>🧠 Google AI Studio Cloud Cognitive Intelligence Briefing</h3>", unsafe_allow_html=True)
-            with st.spinner("Streaming encrypted transaction log frames to cloud core..."):
-                ai_briefing = auditor.generate_executive_briefing(last_tx_logged)
-            st.info(ai_briefing)
-
-with side_col:
-    st.markdown("<h3 style='color: #E6EDF2; font-family: monospace;'>📊 SCADA Trend Pen</h3>", unsafe_allow_html=True)
-    if not st.session_state.telemetry_history.empty:
-        chart_data = st.session_state.telemetry_history.set_index("Iteration")
-        st.line_chart(chart_data)
-    else:
-        st.caption("Awaiting matrix execution loop to chart traces.")
-
-    st.write("---")
-    st.markdown("<h3 style='color: #E6EDF2; font-family: monospace;'>📜 Forensic Audit Log</h3>", unsafe_allow_html=True)
-    try:
-        if os.path.exists("reports/ledger.json"):
-            with open("reports/ledger.json", "r") as f:
-                raw_ledger_data = json.load(f)
-            df_ledger = pd.DataFrame(raw_ledger_data)[["index", "agent", "action", "current_hash"]].tail(5)
-            st.dataframe(df_ledger, use_container_width=True)
-        else:
-            st.caption("No transaction records detected.")
-    except Exception:
-        st.caption("Initializing metrics database link...")
-
-    # ────────────── ADVANCED FEATURE: FORENSIC TIME-TRAVEL REPLAY ENGINE ──────────────
-    st.write("---")
-    st.markdown("<h3 style='color: #E6EDF2; font-family: monospace;'>⏳ Interactive Forensic Replay</h3>", unsafe_allow_html=True)
-    try:
-        if os.path.exists("reports/ledger.json"):
-            with open("reports/ledger.json", "r") as f:
-                full_chain = json.load(f)
-            
-            if len(full_chain) > 0:
-                # Add slider handle to let judges explicitly scroll backward in historical time-series logs
-                replay_idx = st.slider("Select Audit Block Replay Index", 1, len(full_chain), len(full_chain))
-                target_block = full_chain[replay_idx - 1]
-                
-                st.markdown(f"""
-                    <div style='background:#05070A; padding:12px; border-radius:4px; border:1px solid #1E294B; border-left:4px solid #00E5FF; font-family:monospace; font-size:11px;'>
-                        <b style='color:#00E5FF;'>🔍 INDEX BLOCK REPLAY MATRIX #{target_block['index']}</b><br>
-                        ⏱️ TIMESTAMP: {target_block['timestamp']}<br>
-                        👤 ACTOR NODE: <span style='color:#FFB300;'>{target_block['agent']}</span><br>
-                        ⚡ ACTION PROTOCOL: {target_block['action']}<br>
-                        🔐 SEAL HASH: <span style='color:#00FF66;'>{target_block['current_hash'][:16]}...</span>
-                    </div>
-                """, unsafe_allow_html=True)
-            else:
-                st.caption("Awaiting initial block instantiation sequence.")
-        else:
-            st.caption("No localized ledger streams loaded yet.")
-    except Exception:
-        st.caption("Awaiting verification loop launch pass...")
-
-# ────────────── 💬 ADVANCED OPERATIONS COPILOT (WITH LOCAL FALLBACK) ──────────────
-st.write("---")
-st.markdown("<h3 style='color: #00E5FF; font-family: monospace;'>💬 EcoGrid AI: Real-Time Operational Copilot Assistant</h3>", unsafe_allow_html=True)
-
-if "copilot_messages" not in st.session_state:
-    st.session_state.copilot_messages = [
-        {"role": "assistant", "content": "System dispatch link initialized. Local Edge Fallback (Ollama/Gemma2) is ARMED."}
+nav_tab = st.sidebar.radio(
+    "Select Feature Domain",
+    [
+        "🚦 Aegis Traffic Operations",
+        "⚡ EcoGrid SCADA & Energy",
+        "🌐 Multi-Country Currency Center",
+        "🧠 AI Infrastructure Copilot",
+        "🤖 Kaggle AI & ML Hub",
+        "🛡️ Cybersecurity & 3/3 BFT Ledger",
+        "📑 Incident Reports & Prescriptions",
+        "📡 REST API & System Telemetry"
     ]
+)
 
-chat_container = st.container()
+# ────────────────────────────────────────────────────────────────────────
+# TAB 1: AEGIS TRAFFIC OPERATIONS
+# ────────────────────────────────────────────────────────────────────────
+if "Aegis Traffic" in nav_tab:
+    st.markdown("<h2 class='main-header'>🚦 AEGIS INTELLIGENT TRAFFIC CONTROL CENTER</h2>", unsafe_allow_html=True)
+    st.markdown("<p class='sub-header'>Real-Time Urban Congestion Index, Signal Phase Optimization, and EV Queue Balancing</p>", unsafe_allow_html=True)
 
-with chat_container:
-    for msg in st.session_state.copilot_messages:
-        with st.chat_message(msg["role"]):
-            st.markdown(f"<span style='font-family: monospace;'>{msg['content']}</span>", unsafe_allow_html=True)
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        int_choice = st.selectbox("Target Intersection", ["INT_ALPHA_CBD", "INT_BETA_IND", "INT_GAMMA_MED"])
+    with col2:
+        v_count = st.slider("Main Street Vehicles/Hr", 50, 1500, 950, step=25)
+    with col3:
+        v_speed = st.slider("Average Traffic Speed (km/h)", 5.0, 80.0, 22.5, step=2.5)
+    with col4:
+        weather_choice = st.selectbox("Weather Profile", ["SUNNY", "CLOUDY", "RAINY", "STORMY"])
 
-if user_query := st.chat_input("Enter operational routing query or infrastructure triage inquiry..."):
-    st.session_state.copilot_messages.append({"role": "user", "content": user_query})
-    with st.chat_message("user"):
-        st.markdown(f"<span style='font-family: monospace;'>{user_query}</span>", unsafe_allow_html=True)
-        
-    with st.chat_message("assistant"):
-        with st.spinner("Formulating localized tactical recommendation..."):
-            
-            # Context Injection Engine: Pass active telemetry data variables into background system prompts
-            copilot_system_prompt = (
-                f"You are the senior industrial grid engineer for EcoGrid AI. "
-                f"Active Telemetry State: Env={sky}, Price={price} {currency_code}/MWh, IngestionSource={data_origin_string.split('/')[-1]}. "
-                f"Analyze the user's inquiry against this state and provide concise, professional, actionable advice. "
-                f"Max 3 sentences."
+    st.markdown("---")
+    metrics = AegisTrafficEngine.calculate_intersection_metrics(v_count, v_speed, weather_choice)
+
+    m1, m2, m3, m4 = st.columns(4)
+    m1.metric("Congestion Index (ICI)", f"{metrics['congestion_index']:.2f}")
+    m2.metric("Traffic Flow Status", metrics['traffic_status_level'])
+    m3.metric("Vehicle Density", f"{v_count} veh/hr")
+    m4.metric("Average Speed", f"{v_speed} km/h")
+
+    st.markdown("### 🚦 Adaptive Signal Timing Optimizer")
+    c_left, c_right = st.columns([2, 1])
+
+    with c_left:
+        cross_count = st.slider("Cross Street Vehicle Load (veh/hr)", 50, 800, 300, step=25)
+        emergency_trigger = st.checkbox("🚨 ACTIVATE EMERGENCY GREEN CORRIDOR OVERRIDE", value=False)
+
+        opt_plan = AegisTrafficEngine.optimize_signal_timing(int_choice, v_count, cross_count, emergency_trigger)
+
+        if emergency_trigger:
+            st.error(opt_plan["action_summary"])
+        else:
+            st.success(opt_plan["action_summary"])
+
+        fig_sig = go.Figure(go.Bar(
+            x=['Main Street Green', 'Cross Street Green', 'Pedestrian Walk'],
+            y=[opt_plan['main_street_green_sec'], opt_plan['cross_street_green_sec'], opt_plan['pedestrian_walk_sec']],
+            marker_color=['#00FF66', '#00E5FF', '#FFB300']
+        ))
+        fig_sig.update_layout(title="Signal Phase Duration Allocation (Seconds)", paper_bgcolor="#121A30", plot_bgcolor="#121A30", font_color="#FFFFFF")
+        st.plotly_chart(fig_sig, use_container_width=True)
+
+    with c_right:
+        st.markdown("### 🔋 EV Charging Station Queue Control")
+        grid_load_val = st.number_input("Current Grid Load (kW)", value=1650.0, step=50.0)
+        ev_count_val = st.slider("Queued EV Vehicles", 1, 30, 15)
+
+        ev_res = AegisTrafficEngine.balance_ev_charging_queue(grid_load_val, 2000.0, ev_count_val)
+        st.write(f"**Mode:** `{ev_res['charging_mode']}`")
+        st.write(f"**Power Per Plug:** `{ev_res['power_per_plug_kw']} kW`")
+        st.write(f"**Total Station Draw:** `{ev_res['allocated_station_kw']} kW`")
+        st.write(f"**Grid Margin:** `{ev_res['remaining_grid_margin_kw']} kW`")
+
+# ────────────────────────────────────────────────────────────────────────
+# TAB 2: ECOGRID SCADA ENERGY GRID
+# ────────────────────────────────────────────────────────────────────────
+elif "EcoGrid SCADA" in nav_tab:
+    st.markdown("<h2 class='main-header'>⚡ ECOGRID MULTI-AGENT SCADA CONTROL</h2>", unsafe_allow_html=True)
+    st.markdown("<p class='sub-header'>Byzantine Fault Tolerant Microgrid Telemetry & Real-Time Sine Wave Simulation</p>", unsafe_allow_html=True)
+
+    col1, col2 = st.columns([1, 2])
+    with col1:
+        st.markdown("### 🌐 Regional Tariff Savings")
+        saved_kwh = st.slider("Mitigated Energy Volume (kWh)", 10.0, 5000.0, 250.0, step=25.0)
+
+        mit_data = GroundLevelMitigation.calculate_regional_mitigation(saved_kwh, st.session_state.selected_country)
+        st.metric(f"Mitigation Savings ({mit_data['country_name']})", mit_data['total_savings_formatted'])
+
+        st.markdown("---")
+        st.markdown("### 🔋 Battery Storage Health")
+        b_discharge = st.button("Discharge Battery Cell Reserve (50 kW Load)")
+        if b_discharge:
+            b_state = battery.discharge_for_arbitrage(50.0)
+            ledger.record_transaction("Arbitrageur_Agent", "BATTERY_DISCHARGE", b_state)
+
+        st.metric("State of Charge (SOC)", f"{battery.state_of_charge}%")
+        st.metric("Battery Chemical Health", f"{battery.battery_health}%")
+
+    with col2:
+        st.markdown("### 📊 Live Grid Node Frequency Streams")
+        df_stream = pd.DataFrame({
+            "Time (s)": np.arange(1, 21),
+            "Node_Alpha (Residential)": 50.0 + np.random.normal(0, 0.08, 20),
+            "Node_Beta (Industrial)": 49.95 + np.random.normal(0, 0.12, 20),
+            "Node_Gamma (Medical)": 50.02 + np.random.normal(0, 0.04, 20)
+        })
+
+        fig_grid = px.line(df_stream, x="Time (s)", y=["Node_Alpha (Residential)", "Node_Beta (Industrial)", "Node_Gamma (Medical)"],
+                          title="Real-Time Grid Frequency Profiles (Hz)")
+        fig_grid.update_layout(paper_bgcolor="#121A30", plot_bgcolor="#121A30", font_color="#FFFFFF")
+        st.plotly_chart(fig_grid, use_container_width=True)
+
+# ────────────────────────────────────────────────────────────────────────
+# TAB 3: MULTI-COUNTRY CURRENCY CENTER
+# ────────────────────────────────────────────────────────────────────────
+elif "Multi-Country Currency" in nav_tab:
+    st.markdown("<h2 class='main-header'>🌐 GLOBAL MULTI-COUNTRY CURRENCY CENTER</h2>", unsafe_allow_html=True)
+    st.markdown("<p class='sub-header'>Instant Financial Conversion & Utility Tariff Comparison Matrix Across 10 Countries</p>", unsafe_allow_html=True)
+
+    base_spot_inr = st.number_input("Base Spot Market Clearing Rate (INR / MWh)", value=3500.0, step=100.0)
+    eval_kwh = st.slider("Evaluation Energy Range (kWh)", 100.0, 10000.0, 1500.0, step=100.0)
+
+    st.markdown("### 🌍 International Sector Comparison Matrix")
+    matrix_rows = []
+    for c_code, meta in GroundLevelMitigation.COUNTRY_MATRIX.items():
+        converted_rate, formatted_rate = GroundLevelMitigation.convert_price_from_inr(base_spot_inr, c_code)
+        mit = GroundLevelMitigation.calculate_regional_mitigation(eval_kwh, c_code)
+        matrix_rows.append({
+            "Country Code": c_code,
+            "Country Name": meta["name"],
+            "Currency": meta["currency"],
+            "Symbol": meta["symbol"],
+            "Utility Tariff (/kWh)": f"{meta['symbol']}{meta['base_rate_kwh']}",
+            "Converted Spot Rate (/MWh)": formatted_rate,
+            "Mitigated Savings": mit["total_savings_formatted"]
+        })
+
+    df_matrix = pd.DataFrame(matrix_rows)
+    st.dataframe(df_matrix, use_container_width=True)
+
+    st.markdown("---")
+    st.markdown("### 📊 Financial Mitigation Comparison Chart")
+    fig_curr = px.bar(
+        df_matrix,
+        x="Country Name",
+        y=[meta["base_rate_kwh"] * eval_kwh for meta in GroundLevelMitigation.COUNTRY_MATRIX.values()],
+        title=f"Mitigation Value across International Grid Sectors for {eval_kwh} kWh",
+        labels={"value": "Local Currency Units", "Country Name": "Sector Country"}
+    )
+    fig_curr.update_layout(paper_bgcolor="#121A30", plot_bgcolor="#121A30", font_color="#FFFFFF")
+    st.plotly_chart(fig_curr, use_container_width=True)
+
+# ────────────────────────────────────────────────────────────────────────
+# TAB 4: AI INFRASTRUCTURE COPILOT
+# ────────────────────────────────────────────────────────────────────────
+elif "AI Infrastructure Copilot" in nav_tab:
+    st.markdown("<h2 class='main-header'>🧠 AI INFRASTRUCTURE COPILOT & DIAGNOSTICS</h2>", unsafe_allow_html=True)
+    st.markdown("<p class='sub-header'>Powered by Google GenAI (Gemini) & Edge Cognitive AI with Executive Summaries</p>", unsafe_allow_html=True)
+
+    c_q1, c_q2 = st.columns([2, 1])
+    with c_q1:
+        st.markdown("### 💬 Ask AI Copilot a Detailed Question")
+        preset_q = st.selectbox(
+            "Quick Question Presets",
+            [
+                "Custom Question",
+                "How does Aegis Traffic optimize signal timing during peak hour congestion?",
+                "What safety protocols trigger when a 53.1 Hz frequency spoofing attack occurs?",
+                "How does 3/3 BFT Consensus protect microgrid load dispatch decisions?",
+                "Explain the financial impact of dynamic solar power generation predictions."
+            ]
+        )
+
+        user_q = st.text_area("Your Query", value="" if preset_q == "Custom Question" else preset_q, height=100)
+
+        if st.button("🚀 Analyze with AI Copilot", type="primary", use_container_width=True):
+            if not user_q.strip():
+                st.warning("Please enter a question or select a preset.")
+            else:
+                with st.spinner("AI Copilot analyzing system telemetry and diagnostic models..."):
+                    ctx = {
+                        "active_country": st.session_state.selected_country,
+                        "battery_soc": battery.state_of_charge,
+                        "loaded_models": list(predictor.models.keys())
+                    }
+                    res = auditor.answer_user_query(user_q, ctx)
+
+                    st.markdown("<div class='summary-box'>", unsafe_allow_html=True)
+                    st.markdown("#### 📋 EXECUTIVE SUMMARY")
+                    st.write(res["summary"])
+                    st.markdown(f"*Provider: `{res['provider']}`*", unsafe_allow_html=True)
+                    st.markdown("</div>", unsafe_allow_html=True)
+
+                    st.markdown("---")
+                    st.markdown("#### 🔬 DETAILED TECHNICAL ANALYSIS & ACTION PLAN")
+                    st.markdown(res["full_response"])
+
+    with c_right:
+        st.markdown("### ⚡ AI System Diagnostic Status")
+        st.info("📡 Cloud Channel: Gemini 2.5 Flash Ready")
+        st.success("🤖 Local Edge AI Engine: Active")
+        st.caption("AI Copilot synthesizes grid telemetry, BFT consensus votes, and Kaggle ML model predictions.")
+
+# ────────────────────────────────────────────────────────────────────────
+# TAB 5: KAGGLE AI & ML HUB
+# ────────────────────────────────────────────────────────────────────────
+elif "Kaggle AI" in nav_tab:
+    st.markdown("<h2 class='main-header'>🤖 KAGGLE AI & ML MODEL INTELLIGENCE HUB</h2>", unsafe_allow_html=True)
+    st.markdown("<p class='sub-header'>Machine Learning Predictors & Dataset Data Explorer</p>", unsafe_allow_html=True)
+
+    st.markdown("### 🚀 Retrain Pipeline Trigger")
+    if st.button("🔄 Train / Retrain All 4 Kaggle Models Now", type="primary"):
+        with st.spinner("Training Kaggle models on dataset matrices..."):
+            retrain_res = train_all_models()
+            predictor.load_models()
+            st.success("All 4 Kaggle ML Models successfully trained and updated!")
+            st.json(retrain_res)
+
+    st.markdown("---")
+    st.markdown("### 🔮 Live Interactive Prediction Sandbox")
+
+    c1, c2 = st.columns(2)
+    with c1:
+        st.markdown("#### 1. Grid Load Predictor")
+        p_temp = st.slider("Ambient Temp (°C)", 10.0, 45.0, 32.0)
+        p_hum = st.slider("Humidity (%)", 20.0, 95.0, 50.0)
+        p_ev = st.slider("EV Station kW", 50.0, 1200.0, 600.0)
+        pred_load = predictor.predict_grid_load(p_temp, p_hum, p_ev)
+        st.metric("Predicted Total Grid Load", f"{pred_load:.2f} kW")
+
+    with c2:
+        st.markdown("#### 2. Solar Output Predictor")
+        p_irr = st.slider("Irradiance (W/m²)", 0.0, 1200.0, 850.0)
+        p_cloud = st.slider("Cloud Cover (%)", 0.0, 100.0, 15.0)
+        pred_solar = predictor.predict_solar_generation(p_irr, 35.0, p_cloud)
+        st.metric("Predicted Solar Generation", f"{pred_solar:.2f} kW")
+
+    st.markdown("---")
+    st.markdown("### 📊 Kaggle Dataset Data Explorer & CSV Export")
+
+    ds_choice = st.selectbox("Select Kaggle Dataset to Inspect", ["Traffic Flow Dataset", "Grid Load Dataset", "Solar Generation Dataset"])
+    if ds_choice == "Traffic Flow Dataset":
+        df_ds = DatasetLoader.load_traffic_dataset()
+    elif ds_choice == "Grid Load Dataset":
+        df_ds = DatasetLoader.load_grid_load_dataset()
+    else:
+        df_ds = DatasetLoader.load_solar_dataset()
+
+    st.dataframe(df_ds, use_container_width=True)
+
+    csv_data = df_ds.to_csv(index=False).encode('utf-8')
+    st.download_button(
+        label=f"📥 Download {ds_choice} as CSV",
+        data=csv_data,
+        file_name=f"{ds_choice.lower().replace(' ', '_')}.csv",
+        mime="text/csv"
+    )
+
+# ────────────────────────────────────────────────────────────────────────
+# TAB 6: CYBERSECURITY & 3/3 BFT LEDGER
+# ────────────────────────────────────────────────────────────────────────
+elif "Cybersecurity" in nav_tab:
+    st.markdown("<h2 class='main-header'>🛡️ CYBERSECURITY & 3/3 BFT CRYPTOGRAPHIC LEDGER</h2>", unsafe_allow_html=True)
+    st.markdown("<p class='sub-header'>3/3 Byzantine Fault Tolerance (BFT) Signature Consensus & SHA-256 Ledger Audit</p>", unsafe_allow_html=True)
+
+    col1, col2 = st.columns(2)
+    with col1:
+        st.markdown("### 💥 Chaos Monkey Threat Injector")
+        target_n = st.selectbox("Target Injection Node", ["Node_Alpha_Residential", "Node_Beta_Industrial", "Node_Gamma_Medical"])
+        freq_inject = st.slider("Spoofed Frequency Value (Hz)", 48.0, 54.0, 53.1)
+
+        if st.button("Inject Spoofed Telemetry Attack"):
+            anom_res = predictor.detect_cyber_anomaly(freq_inject, 1200.0)
+            if anom_res["is_attack_detected"]:
+                st.error(f"🚨 CYBER THREAT CONTAINED! Anomaly: {anom_res['anomaly_type']}")
+                ledger.record_transaction("SECURITY_KERNEL", "CYBER_ATTACK_CONTAINMENT", {"targeted_node": target_n, "freq": freq_inject})
+            else:
+                st.success("Telemetry within safe operational boundaries.")
+
+        st.markdown("---")
+        st.markdown("### ⚖️ 3/3 BFT Consensus Evaluator")
+        eval_bft = st.button("Evaluate 3/3 Unanimous Consensus Vote")
+        if eval_bft:
+            bft_res = BFTConsensusEngine.evaluate_state_proposal("GRID_LOAD_TRANSFER", target_n, {"grid_freq_hz": freq_inject})
+            st.json(bft_res)
+
+    with col2:
+        st.markdown("### 📜 Cryptographic SHA-256 Ledger Explorer")
+        is_val, val_msg = ledger.verify_chain()
+        if is_val:
+            st.success(f"✅ {val_msg}")
+        else:
+            st.error(f"🚨 {val_msg}")
+
+        try:
+            with open("reports/ledger.json", "r", encoding="utf-8") as f:
+                blocks = json.load(f)
+            st.markdown(f"**Total Verified Blocks:** `{len(blocks)}`")
+            st.dataframe(pd.DataFrame(blocks).tail(10), use_container_width=True)
+
+            ledger_csv = pd.DataFrame(blocks).to_csv(index=False).encode('utf-8')
+            st.download_button(
+                label="📥 Download Audit Ledger as CSV",
+                data=ledger_csv,
+                file_name="grid_audit_ledger.csv",
+                mime="text/csv"
             )
-            
-            # ────────────────── HYBRID FAULT-TOLERANT ROUTING ENGINE ──────────────────
-            # Try cloud routing via Google AI Studio context models first, fallback to edge on fault drops
-            try:
-                if not auditor.api_key:
-                    raise ConnectionError("Cloud routing verification token context empty.")
-                    
-                full_prompt = f"{copilot_system_prompt}\n\nUser Question: {user_query}\nExpert Response:"
-                response_payload = auditor.client.models.generate_content(
-                    model='gemini-2.5-flash',
-                    contents=full_prompt
-                )
-                copilot_response = f"☁️ [CLOUD BROADCAST] {response_payload.text}"
-                
-            except Exception as e:
-                # ─── CRITICAL EDGE AUTONOMY FALLBACK TRIGGER ───
-                # Triggers on connection loss or API server high demand to fetch insights locally using Ollama
-                try:
-                    local_response = ollama.chat(
-                        model='gemma2:2b',
-                        messages=[
-                            {'role': 'system', 'content': copilot_system_prompt},
-                            {'role': 'user', 'content': user_query}
-                        ]
-                    )
-                    copilot_response = f"🤖 [EDGE LOCAL FALLBACK ACTIVE] {local_response['message']['content']}"
-                except Exception as local_err:
-                    copilot_response = f"⚠️ Critical System Outage: Cloud channel down and local Ollama edge node unreachable. Verify local service handles."
-                    
-            # ──────────────────────────────────────────────────────────────────────────
-            
-            st.markdown(f"<span style='font-family: monospace;'>{copilot_response}</span>", unsafe_allow_html=True)
-            st.session_state.copilot_messages.append({"role": "assistant", "content": copilot_response})
+        except Exception as e:
+            st.warning(f"Ledger file empty or initializing: {e}")
+
+# ────────────────────────────────────────────────────────────────────────
+# TAB 7: INCIDENT REPORTS & PRESCRIPTIONS
+# ────────────────────────────────────────────────────────────────────────
+elif "Incident Reports" in nav_tab:
+    st.markdown("<h2 class='main-header'>📑 INCIDENT REPORTS & MAINTENANCE PRESCRIPTIONS</h2>", unsafe_allow_html=True)
+    st.markdown("<p class='sub-header'>Automated Actionable Engineering Protocols for Ground-Level Technicians</p>", unsafe_allow_html=True)
+
+    c_p1, c_p2 = st.columns([1, 2])
+    with c_p1:
+        st.markdown("### 🛠️ Prescription Generator")
+        reason = st.selectbox("Trigger Reason", ["Frequency_Spoofing_Attack", "Budget_Overrun_Load_Spike", "Routine_Maintenance_Sweep"])
+        val_metric = st.number_input("Observed Metric Value", value=53.1)
+        t_node = st.selectbox("Target Node", ["Node_Alpha_Residential", "Node_Beta_Industrial", "Node_Gamma_Medical"])
+
+        prescript = GroundLevelMitigation.get_prescription(reason, val_metric, t_node)
+
+        st.markdown("### 📋 Generated Protocols:")
+        for step in prescript:
+            st.write(step)
+
+    with c_p2:
+        st.markdown("### 📄 Forensic Incident Report Generator")
+        report_title = f"INCIDENT REPORT: {reason.upper()} on {t_node.upper()}"
+        report_body = f"""# {report_title}
+**Date/Time:** {time.strftime('%Y-%m-%d %H:%M:%S')}  
+**Target Sector Node:** {t_node}  
+**Observed Metric:** {val_metric}  
+**Sector Country Node:** {st.session_state.selected_country}  
+
+## 🔬 Executive Summary
+An anomaly event ({reason}) was flagged on {t_node}. The 3/3 BFT consensus core isolated the vector and logged transaction to the SHA-256 ledger.
+
+## 🛠️ Actionable Ground-Level Engineering Protocols
+""" + "\n".join([f"- {s}" for s in prescript]) + """
+
+## 🔐 Signatures
+- **Aegis Traffic Chief:** Verified
+- **EcoGrid SCADA Core:** Sealed (SHA-256 Ledger)
+"""
+
+        st.markdown(report_body)
+        st.download_button(
+            label="📥 Download Incident Report (.md)",
+            data=report_body.encode('utf-8'),
+            file_name=f"incident_report_{t_node}.md",
+            mime="text/markdown"
+        )
+
+# ────────────────────────────────────────────────────────────────────────
+# TAB 8: REST API & SYSTEM TELEMETRY
+# ────────────────────────────────────────────────────────────────────────
+elif "REST API" in nav_tab:
+    st.markdown("<h2 class='main-header'>🌐 REST API & SYSTEM DEPLOYMENT TELEMETRY</h2>", unsafe_allow_html=True)
+    st.markdown("<p class='sub-header'>OpenAPI Swagger Endpoints & Containerized Service Status</p>", unsafe_allow_html=True)
+
+    c1, c2, c3 = st.columns(3)
+    c1.metric("REST API Engine", "FastAPI v6.5.0-PROD")
+    c2.metric("API Endpoint Port", "8000")
+    c3.metric("OpenAPI Swagger UI", "http://localhost:8000/docs")
+
+    st.markdown("### 📑 Available Microservice REST Endpoints")
+    endpoints_df = pd.DataFrame([
+        {"Method": "POST", "Endpoint": "/api/v1/auth/login", "Description": "Authenticate user credentials & issue session token"},
+        {"Method": "POST", "Endpoint": "/api/v1/auth/demo-login", "Description": "1-click Quick Demo Login preset"},
+        {"Method": "POST", "Endpoint": "/api/v1/predict/traffic", "Description": "ML Traffic Congestion Index prediction"},
+        {"Method": "POST", "Endpoint": "/api/v1/traffic/optimize-signal", "Description": "Adaptive Signal Timing Phase Allocation"},
+        {"Method": "POST", "Endpoint": "/api/v1/ai/copilot", "Description": "AI Copilot Q&A with Executive Summary"},
+        {"Method": "POST", "Endpoint": "/api/v1/currency/convert", "Description": "Instant multi-country currency conversion"},
+        {"Method": "POST", "Endpoint": "/api/v1/predict/load", "Description": "Kaggle ML Grid Load prediction"},
+        {"Method": "POST", "Endpoint": "/api/v1/scada/bft-consensus", "Description": "3/3 BFT Consensus voting on state changes"},
+        {"Method": "GET", "Endpoint": "/api/v1/ledger", "Description": "Verify SHA-256 ledger block chain integrity"},
+        {"Method": "POST", "Endpoint": "/api/v1/ml/retrain", "Description": "Trigger automated model retraining"}
+    ])
+    st.dataframe(endpoints_df, use_container_width=True)

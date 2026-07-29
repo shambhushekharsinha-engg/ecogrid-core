@@ -1,33 +1,32 @@
-# Use a slim, secure production Python image base layer
-FROM python:3.11-slim
+# ────────────── AEGIS TRAFFIC & ECOGRID SCADA DOCKERFILE ──────────────
+FROM python:3.11-slim as base
 
-# Set high-performance runtime optimization flags
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    STREAMLIT_SERVER_PORT=8501 \
-    STREAMLIT_SERVER_HEADLESS=true
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
 
-# Set the internal storage workspace
 WORKDIR /app
 
-# Install system dependencies needed for compiling specific C-extensions
+# Install system build dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
+    libpq-dev \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy over package dependency lists first to leverage Docker layer caching
+# Install Python requirements
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy all decoupled folder matrices into the container workspace
+# Copy source code and Kaggle dataset assets
 COPY . .
 
-# Expose Streamlit's default SCADA network routing port
-EXPOSE 8501
+# Pre-train Kaggle Machine Learning models during build stage
+RUN python ml_engine/train_models.py
 
-# Healthcheck endpoint verification pass
-HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health || exit 1
+# Expose Streamlit Dashboard (8501) and FastAPI REST API (8000)
+EXPOSE 8501 8000
 
-# Launch the interactive web engine
-CMD ["streamlit", "run", "app.py"]
+# Default entrypoint starts both REST API and Streamlit UI
+CMD uvicorn api.server:app --host 0.0.0.0 --port 8000 & streamlit run app.py --server.port 8501 --server.address 0.0.0.0

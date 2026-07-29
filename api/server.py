@@ -1,0 +1,197 @@
+"""
+Production FastAPI REST Microservice Server for Aegis Traffic & EcoGrid Core
+Exposes RESTful endpoints for Authentication, ML Predictions, Traffic Control,
+AI Copilot Q&A, Multi-Currency Conversion, BFT Consensus, Cryptographic Ledger, and Retraining.
+"""
+
+import os
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
+from security.auth import auth_manager
+from ml_engine.predictor import predictor
+from ml_engine.train_models import train_all_models
+from core.traffic_engine import AegisTrafficEngine
+from core.consensus_engine import BFTConsensusEngine
+from core.mitigation_engine import GroundLevelMitigation
+from security.crypto_ledger import CryptographicLedger
+from cloud_auditor import auditor
+
+app = FastAPI(
+    title="Aegis Traffic & EcoGrid SCADA Enterprise API",
+    description="RESTful Microservice API powering Intelligent Traffic Signal Optimization, Microgrid SCADA, 3/3 BFT Consensus, AI Copilot, and Kaggle AI Predictors.",
+    version="6.5.0-PROD"
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+ledger = CryptographicLedger()
+
+# ────────────── REQUEST & RESPONSE SCHEMAS ──────────────
+class RegisterRequest(BaseModel):
+    username: str = Field(..., min_length=3, json_schema_extra={"example": "traffic_admin"})
+    password: str = Field(..., min_length=8, json_schema_extra={"example": "StrongPass@123"})
+    role: str = Field("Operator", json_schema_extra={"example": "Traffic Operations Chief"})
+
+class LoginRequest(BaseModel):
+    username: str = Field(..., json_schema_extra={"example": "admin"})
+    password: str = Field(..., json_schema_extra={"example": "Admin@123"})
+
+class DemoLoginRequest(BaseModel):
+    role_preset: str = Field(..., json_schema_extra={"example": "admin"})
+
+class TrafficPredictionRequest(BaseModel):
+    vehicle_count: int = Field(..., json_schema_extra={"example": 950})
+    avg_speed_kmh: float = Field(..., json_schema_extra={"example": 22.5})
+    weather: str = Field("SUNNY", json_schema_extra={"example": "SUNNY"})
+    hour: int = Field(14, json_schema_extra={"example": 17})
+
+class SignalOptimizeRequest(BaseModel):
+    intersection_id: str = Field(..., json_schema_extra={"example": "INT_ALPHA_CBD"})
+    vehicle_count: int = Field(..., json_schema_extra={"example": 950})
+    cross_street_count: int = Field(250, json_schema_extra={"example": 300})
+    emergency_flag: bool = Field(False, json_schema_extra={"example": False})
+
+class EVBalanceRequest(BaseModel):
+    grid_load_kw: float = Field(..., json_schema_extra={"example": 1650.0})
+    max_capacity_kw: float = Field(2000.0, json_schema_extra={"example": 2000.0})
+    queued_evs: int = Field(15, json_schema_extra={"example": 20})
+
+class GridLoadPredictRequest(BaseModel):
+    ambient_temp_c: float = Field(32.0, json_schema_extra={"example": 34.5})
+    humidity_pct: float = Field(50.0, json_schema_extra={"example": 45.0})
+    ev_station_kw: float = Field(600.0, json_schema_extra={"example": 750.0})
+    hour: int = Field(16, json_schema_extra={"example": 17})
+    is_peak_price: int = Field(1, json_schema_extra={"example": 1})
+
+class BFTConsensusRequest(BaseModel):
+    proposed_action: str = Field("SIGNAL_PHASE_OVERRIDE", json_schema_extra={"example": "SIGNAL_PHASE_OVERRIDE"})
+    target_node: str = Field("Node_Alpha_Residential", json_schema_extra={"example": "Node_Alpha_Residential"})
+    grid_freq_hz: float = Field(50.0, json_schema_extra={"example": 50.0})
+
+class AICopilotRequest(BaseModel):
+    user_query: str = Field(..., json_schema_extra={"example": "How does Aegis Traffic optimize signal timing during peak hours?"})
+    context_data: dict = Field({}, json_schema_extra={"example": {"active_intersection": "INT_ALPHA_CBD"}})
+
+class CurrencyConvertRequest(BaseModel):
+    price_inr: float = Field(..., json_schema_extra={"example": 3500.0})
+    target_country_code: str = Field("US", json_schema_extra={"example": "US"})
+
+# ────────────── ENDPOINTS ──────────────
+@app.get("/")
+@app.get("/health")
+def health_check():
+    return {
+        "status": "ONLINE",
+        "service": "Aegis Traffic & EcoGrid Core REST API",
+        "version": "6.5.0-PROD",
+        "loaded_ml_models": list(predictor.models.keys()),
+        "supported_countries": list(GroundLevelMitigation.COUNTRY_MATRIX.keys()),
+        "database_backend": "PostgreSQL" if os.environ.get("DATABASE_URL") else "SQLite (Local Embedded)"
+    }
+
+# ──── AUTHENTICATION ENDPOINTS ────
+@app.post("/api/v1/auth/register")
+def register_user(req: RegisterRequest):
+    success, result = auth_manager.register_user(req.username, req.password, req.role)
+    if not success:
+        raise HTTPException(status_code=400, detail=result)
+    return {"success": True, "message": result}
+
+@app.post("/api/v1/auth/login")
+def login_user(req: LoginRequest):
+    success, result = auth_manager.authenticate_user(req.username, req.password)
+    if not success:
+        raise HTTPException(status_code=401, detail=result)
+    return {"success": True, "user": result}
+
+@app.post("/api/v1/auth/demo-login")
+def demo_login(req: DemoLoginRequest):
+    preset = req.role_preset.lower()
+    if preset not in auth_manager.DEMO_USERS:
+        raise HTTPException(status_code=400, detail=f"Invalid preset. Choose from: {list(auth_manager.DEMO_USERS.keys())}")
+    meta = auth_manager.DEMO_USERS[preset]
+    success, result = auth_manager.authenticate_user(preset, meta["password"])
+    if not success:
+        raise HTTPException(status_code=500, detail="Demo login failed.")
+    return {"success": True, "user": result}
+
+# ──── AEGIS TRAFFIC ENDPOINTS ────
+@app.post("/api/v1/predict/traffic")
+def predict_traffic(req: TrafficPredictionRequest):
+    metrics = AegisTrafficEngine.calculate_intersection_metrics(
+        req.vehicle_count, req.avg_speed_kmh, req.weather, req.hour
+    )
+    return {"success": True, "data": metrics}
+
+@app.post("/api/v1/traffic/optimize-signal")
+def optimize_signal(req: SignalOptimizeRequest):
+    plan = AegisTrafficEngine.optimize_signal_timing(
+        req.intersection_id, req.vehicle_count, req.cross_street_count, req.emergency_flag
+    )
+    ledger.record_transaction("Aegis_Traffic_Orchestrator", "SIGNAL_PHASE_OPTIMIZE", plan)
+    return {"success": True, "signal_plan": plan}
+
+@app.post("/api/v1/traffic/ev-balance")
+def balance_ev_charging(req: EVBalanceRequest):
+    res = AegisTrafficEngine.balance_ev_charging_queue(
+        req.grid_load_kw, req.max_capacity_kw, req.queued_evs
+    )
+    return {"success": True, "data": res}
+
+# ──── AI COPILOT & MULTI-CURRENCY ────
+@app.post("/api/v1/ai/copilot")
+def ai_copilot_query(req: AICopilotRequest):
+    answer = auditor.answer_user_query(req.user_query, req.context_data)
+    return {"success": True, "data": answer}
+
+@app.post("/api/v1/currency/convert")
+def convert_currency(req: CurrencyConvertRequest):
+    val, formatted = GroundLevelMitigation.convert_price_from_inr(req.price_inr, req.target_country_code)
+    mitigation = GroundLevelMitigation.calculate_regional_mitigation(150.0, req.target_country_code)
+    return {
+        "success": True,
+        "input_price_inr": req.price_inr,
+        "target_country": req.target_country_code.upper(),
+        "converted_value": val,
+        "formatted_price": formatted,
+        "regional_mitigation": mitigation
+    }
+
+# ──── ML INFERENCE & GRID DISPATCH ────
+@app.post("/api/v1/predict/load")
+def predict_grid_load(req: GridLoadPredictRequest):
+    load_kw = predictor.predict_grid_load(
+        req.ambient_temp_c, req.humidity_pct, req.ev_station_kw, req.hour, req.is_peak_price
+    )
+    return {"success": True, "predicted_grid_load_kw": load_kw}
+
+@app.post("/api/v1/scada/bft-consensus")
+def evaluate_bft_consensus(req: BFTConsensusRequest):
+    res = BFTConsensusEngine.evaluate_state_proposal(
+        req.proposed_action, req.target_node, {"grid_freq_hz": req.grid_freq_hz}
+    )
+    ledger.record_transaction("BFT_Consensus_Kernel", "STATE_PROPOSAL_VOTE", res)
+    return {"success": True, "consensus": res}
+
+@app.get("/api/v1/ledger")
+def get_ledger_verification():
+    is_valid, msg = ledger.verify_chain()
+    return {"success": True, "is_valid": is_valid, "verification_summary": msg}
+
+@app.post("/api/v1/ml/retrain")
+def retrain_models():
+    results = train_all_models()
+    predictor.load_models()
+    ledger.record_transaction("ML_Pipeline_Kernel", "KAGGLE_MODELS_RETRAINED", results)
+    return {"success": True, "message": "All 4 Kaggle ML models retrained successfully!", "results": results}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("api.server:app", host="0.0.0.0", port=8000, reload=True)
