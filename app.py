@@ -54,7 +54,6 @@ st.markdown("""
     .sub-header { color: #8F9CAE; font-size: 1rem; margin-bottom: 20px; }
     .metric-card { background: #121A30; border: 1px solid #1E294B; border-radius: 8px; padding: 16px; margin: 5px 0; }
     .summary-box { background: #0E1628; border-left: 4px solid #00E5FF; padding: 15px; border-radius: 4px; margin: 10px 0; }
-    div[data-testid="stMetricValue"] { font-family: monospace; color: #00FF66 !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -88,7 +87,7 @@ if not st.session_state.authenticated:
             st.info("Select a pre-configured role to bypass manual login:")
             c_a, c_b = st.columns(2)
             with c_a:
-                if st.button("👨‍💻 Admin Operator", use_container_width=True, key="btn_admin"):
+                if st.button("👨‍💻 Admin Operator", key="btn_admin"):
                     ok, res = auth_manager.authenticate_user("admin", "Admin@123")
                     if ok:
                         st.session_state.authenticated = True
@@ -96,7 +95,7 @@ if not st.session_state.authenticated:
                         st.rerun()
                     else:
                         st.error(f"Login failed: {res}")
-                if st.button("⚡ Grid Chief Engineer", use_container_width=True, key="btn_grid"):
+                if st.button("⚡ Grid Chief Engineer", key="btn_grid"):
                     ok, res = auth_manager.authenticate_user("grid_eng", "Grid@123")
                     if ok:
                         st.session_state.authenticated = True
@@ -105,7 +104,7 @@ if not st.session_state.authenticated:
                     else:
                         st.error(f"Login failed: {res}")
             with c_b:
-                if st.button("🚦 Traffic Operations Chief", use_container_width=True, key="btn_traffic"):
+                if st.button("🚦 Traffic Operations Chief", key="btn_traffic"):
                     ok, res = auth_manager.authenticate_user("traffic_op", "Traffic@123")
                     if ok:
                         st.session_state.authenticated = True
@@ -113,7 +112,7 @@ if not st.session_state.authenticated:
                         st.rerun()
                     else:
                         st.error(f"Login failed: {res}")
-                if st.button("👁️ Guest Auditor", use_container_width=True, key="btn_guest"):
+                if st.button("👁️ Guest Auditor", key="btn_guest"):
                     ok, res = auth_manager.authenticate_user("guest", "Guest@123")
                     if ok:
                         st.session_state.authenticated = True
@@ -125,7 +124,7 @@ if not st.session_state.authenticated:
         with auth_tab2:
             login_user = st.text_input("Username", key="l_user")
             login_pwd = st.text_input("Password", type="password", key="l_pwd")
-            if st.button("Login", use_container_width=True, type="primary", key="btn_std_login"):
+            if st.button("Login", type="primary", key="btn_std_login"):
                 if not login_user.strip() or not login_pwd.strip():
                     st.warning("Please enter both username and password.")
                 else:
@@ -151,11 +150,10 @@ if not st.session_state.authenticated:
                 else:
                     st.caption(f"⚠️ {msg}")
 
-            if st.button("Register Account", use_container_width=True, key="btn_register"):
+            if st.button("Register Account", key="btn_register"):
                 ok, msg = auth_manager.register_user(reg_user, reg_pwd, reg_role)
                 if ok:
                     st.success(msg)
-                    # Automatically log in new registered user
                     auth_ok, auth_res = auth_manager.authenticate_user(reg_user, reg_pwd)
                     if auth_ok:
                         st.session_state.authenticated = True
@@ -179,7 +177,7 @@ st.sidebar.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
-if st.sidebar.button("🚪 Logout Session", use_container_width=True, key="btn_logout"):
+if st.sidebar.button("🚪 Logout Session", key="btn_logout"):
     st.session_state.authenticated = False
     st.session_state.user_info = None
     st.rerun()
@@ -385,7 +383,7 @@ elif "Multi-Country Currency" in nav_tab:
         })
 
     df_matrix = pd.DataFrame(matrix_rows)
-    st.dataframe(df_matrix, use_container_width=True)
+    st.dataframe(df_matrix)
 
     st.markdown("---")
     st.markdown("### 📊 Financial Mitigation Comparison Chart")
@@ -422,7 +420,7 @@ elif "AI Infrastructure Copilot" in nav_tab:
 
         user_q = st.text_area("Your Query", value="" if preset_q == "Custom Question" else preset_q, height=100)
 
-        if st.button("🚀 Analyze with EcoGrid AI Copilot", type="primary", use_container_width=True, key="btn_ai_analyze"):
+        if st.button("🚀 Analyze with EcoGrid AI Copilot", type="primary", key="btn_ai_analyze"):
             if not user_q.strip():
                 st.warning("Please enter a question or select a preset.")
             else:
@@ -495,7 +493,7 @@ elif "Kaggle AI" in nav_tab:
     else:
         df_ds = DatasetLoader.load_solar_dataset()
 
-    st.dataframe(df_ds, use_container_width=True)
+    st.dataframe(df_ds)
 
     csv_data = df_ds.to_csv(index=False).encode('utf-8')
     st.download_button(
@@ -546,7 +544,7 @@ elif "Cybersecurity" in nav_tab:
             with open("reports/ledger.json", "r", encoding="utf-8") as f:
                 blocks = json.load(f)
             st.markdown(f"**Total Verified Blocks:** `{len(blocks)}`")
-            st.dataframe(pd.DataFrame(blocks).tail(10), use_container_width=True)
+            st.dataframe(pd.DataFrame(blocks).tail(10))
 
             ledger_csv = pd.DataFrame(blocks).to_csv(index=False).encode('utf-8')
             st.download_button(
@@ -633,4 +631,4 @@ elif "REST API" in nav_tab:
         {"Method": "GET", "Endpoint": "/api/v1/ledger", "Description": "Verify SHA-256 ledger block chain integrity"},
         {"Method": "POST", "Endpoint": "/api/v1/ml/retrain", "Description": "Trigger automated model retraining"}
     ])
-    st.dataframe(endpoints_df, use_container_width=True)
+    st.dataframe(endpoints_df)
