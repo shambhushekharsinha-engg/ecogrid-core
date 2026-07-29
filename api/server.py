@@ -213,12 +213,17 @@ async def websocket_proxy(websocket: WebSocket, ws_path: str = ""):
         target_url += f"/{ws_path}"
 
     try:
-        async with websockets.connect(target_url) as target_ws:
+        async with websockets.connect(target_url, max_size=None) as target_ws:
             async def forward_to_streamlit():
                 try:
                     while True:
-                        msg = await websocket.receive_text()
-                        await target_ws.send(msg)
+                        data = await websocket.receive()
+                        if "bytes" in data and data["bytes"]:
+                            await target_ws.send(data["bytes"])
+                        elif "text" in data and data["text"]:
+                            await target_ws.send(data["text"])
+                        elif data.get("type") == "websocket.disconnect":
+                            break
                 except Exception:
                     pass
 
@@ -226,7 +231,10 @@ async def websocket_proxy(websocket: WebSocket, ws_path: str = ""):
                 try:
                     while True:
                         msg = await target_ws.recv()
-                        await websocket.send_text(msg)
+                        if isinstance(msg, bytes):
+                            await websocket.send_bytes(msg)
+                        elif isinstance(msg, str):
+                            await websocket.send_text(msg)
                 except Exception:
                     pass
 
@@ -241,7 +249,6 @@ async def websocket_proxy(websocket: WebSocket, ws_path: str = ""):
 
 @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"])
 async def reverse_proxy_streamlit(request: Request, path: str):
-    # Route matching protection for native FastAPI endpoints
     if path.startswith("api/") or path.startswith("docs") or path.startswith("openapi.json") or path == "health":
         raise HTTPException(status_code=404, detail="API endpoint not found")
 
@@ -251,9 +258,10 @@ async def reverse_proxy_streamlit(request: Request, path: str):
 
     headers = dict(request.headers)
     headers.pop("host", None)
+    headers.pop("accept-encoding", None)
 
     try:
-        async with httpx.AsyncClient(timeout=30.0) as client:
+        async with httpx.AsyncClient(timeout=30.0, follow_redirects=True) as client:
             content = await request.body()
             resp = await client.request(
                 method=request.method,
