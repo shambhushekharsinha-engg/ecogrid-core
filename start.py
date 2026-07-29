@@ -1,7 +1,7 @@
 """
 EcoGrid Core Production Startup Orchestrator
-Pre-trains Kaggle ML models, launches FastAPI REST service on port 8000,
-and runs Streamlit SCADA Command Cockpit directly on public $PORT.
+Pre-trains Kaggle ML models, patches Tornado for Render HEAD / health check 200 OK,
+launches FastAPI REST service on port 8000, and runs Streamlit SCADA Command Cockpit on public $PORT.
 """
 
 import os
@@ -11,6 +11,13 @@ import subprocess
 
 # Ensure project root is present in sys.path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+# Patch Tornado RequestHandler so HEAD / requests (Render health check) return 200 OK
+try:
+    import tornado.web
+    tornado.web.RequestHandler.head = lambda self, *args, **kwargs: self.set_status(200)
+except Exception:
+    pass
 
 from ml_engine.train_models import train_all_models
 
