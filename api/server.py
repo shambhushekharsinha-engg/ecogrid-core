@@ -5,6 +5,11 @@ AI Copilot Q&A, Multi-Currency Conversion, BFT Consensus, Cryptographic Ledger, 
 """
 
 import os
+import sys
+
+# Ensure project root is present in sys.path for uvicorn and container runtime
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field

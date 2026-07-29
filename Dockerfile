@@ -1,10 +1,11 @@
-# ────────────── AEGIS TRAFFIC & ECOGRID SCADA DOCKERFILE ──────────────
+# ────────────── ECOGRID CORE DOCKERFILE ──────────────
 FROM python:3.11-slim as base
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=1 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PYTHONPATH=/app
 
 WORKDIR /app
 
@@ -23,7 +24,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Pre-train Kaggle Machine Learning models during build stage
-RUN python ml_engine/train_models.py
+RUN PYTHONPATH=/app python -m ml_engine.train_models
 
 # Expose Streamlit Dashboard (8501) and FastAPI REST API (8000)
 EXPOSE 8501 8000

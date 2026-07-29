@@ -1,17 +1,21 @@
 """
-Aegis & EcoGrid ML Predictor & Live Inference Engine
+EcoGrid ML Predictor & Live Inference Engine
 Loads trained Kaggle models from models/ directory for real-time predictions.
 """
 
 import os
+import sys
 import joblib
 import pandas as pd
 import numpy as np
 
+# Ensure project root is present in sys.path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 MODEL_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "models")
 
 class MLPredictor:
-    """Provides high-performance live inference across Aegis Traffic and EcoGrid SCADA."""
+    """Provides high-performance live inference across EcoGrid Core SCADA."""
 
     def __init__(self):
         self.models = {}
@@ -48,7 +52,6 @@ class MLPredictor:
             pred = float(self.models["traffic"].predict(df)[0])
             return max(0.0, min(1.0, round(pred, 3)))
         else:
-            # Heuristic calculation
             return max(0.0, min(1.0, round(vehicle_count / 1400.0, 3)))
 
     def predict_grid_load(self, temp_c: float, humidity_pct: float, ev_kw: float, hour: int = 15, is_peak_price: int = 1) -> float:

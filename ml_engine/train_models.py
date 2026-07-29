@@ -1,5 +1,5 @@
 """
-Automated ML Model Training Pipeline for Aegis Traffic & EcoGrid Core
+Automated ML Model Training Pipeline for EcoGrid Core Infrastructure
 Trains models on Kaggle datasets using Scikit-Learn and serializes artifacts to models/
 """
 
@@ -8,6 +8,9 @@ import sys
 import joblib
 import pandas as pd
 import numpy as np
+
+# Ensure project root is present in sys.path for direct execution and Docker builds
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
