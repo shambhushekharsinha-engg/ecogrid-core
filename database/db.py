@@ -23,21 +23,23 @@ else:
 
 class DatabaseManager:
     """Unified Database Interface supporting SQLite and PostgreSQL with auto-failover."""
+    _postgres_failed = False
 
     def __init__(self, db_url=None):
         self.db_url = db_url or os.environ.get("DATABASE_URL")
-        self.use_postgres = bool(self.db_url and HAS_PSYCOPG2)
+        self.use_postgres = bool(self.db_url and HAS_PSYCOPG2 and not DatabaseManager._postgres_failed)
         self.sqlite_path = DEFAULT_SQLITE_PATH
         self.init_db()
 
     def get_connection(self):
         """Returns database connection, with automatic failover from Postgres to SQLite."""
-        if self.use_postgres:
+        if self.use_postgres and not DatabaseManager._postgres_failed:
             try:
                 cleaned_url = self.db_url.strip()
                 return psycopg2.connect(cleaned_url, connect_timeout=3)
             except Exception as e:
                 print(f"⚠️ Postgres connection failed ({e}), automatically falling back to embedded SQLite.")
+                DatabaseManager._postgres_failed = True
                 self.use_postgres = False
 
         os.makedirs(os.path.dirname(self.sqlite_path), exist_ok=True)
