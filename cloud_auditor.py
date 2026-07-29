@@ -38,19 +38,33 @@ class CloudCognitiveAuditor:
         """
 
         if self.client:
-            try:
-                response = self.client.models.generate_content(
-                    model='gemini-2.5-flash',
-                    contents=prompt,
-                )
-                full_text = response.text
-                return {
-                    "provider": "Google Gemini 2.5 Flash",
-                    "full_response": full_text,
-                    "summary": full_text.split("🔬")[0].replace("📋 EXECUTIVE SUMMARY:", "").strip() if "🔬" in full_text else full_text[:250] + "..."
-                }
-            except Exception as e:
-                print(f"⚠️ Gemini Cloud call note: {e}")
+            import concurrent.futures
+            def _call_gemini():
+                try:
+                    response = self.client.models.generate_content(
+                        model='gemini-2.5-flash',
+                        contents=prompt,
+                    )
+                    return response.text
+                except Exception as e:
+                    return f"ERROR: {e}"
+
+            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+                future = executor.submit(_call_gemini)
+                try:
+                    full_text = future.result(timeout=3.0)
+                    if full_text and not full_text.startswith("ERROR:"):
+                        return {
+                            "provider": "Google Gemini 2.5 Flash",
+                            "full_response": full_text,
+                            "summary": full_text.split("🔬")[0].replace("📋 EXECUTIVE SUMMARY:", "").strip() if "🔬" in full_text else full_text[:250] + "..."
+                        }
+                    else:
+                        print(f"⚠️ Gemini Cloud error fallback: {full_text}")
+                except concurrent.futures.TimeoutError:
+                    print("⚠️ Gemini Cloud API timed out after 3.0s, falling back to Local Cognitive Edge Engine.")
+                except Exception as e:
+                    print(f"⚠️ Gemini Cloud call note: {e}")
 
         # Intelligent Fallback Cognitive Engine (Offline / Local Edge Mode)
         query_lower = user_query.lower()
