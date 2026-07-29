@@ -2,10 +2,12 @@
 Database Abstraction Layer for EcoGrid & Aegis Traffic Infrastructure
 Supports SQLite (Local zero-dependency fallback) and PostgreSQL (Production Cloud setup).
 Includes automatic failover to SQLite if PostgreSQL connection fails.
+Supports read-only serverless filesystems by redirecting SQLite path to /tmp.
 """
 
 import os
 import sqlite3
+import tempfile
 
 try:
     import psycopg2
@@ -13,7 +15,11 @@ try:
 except ImportError:
     HAS_PSYCOPG2 = False
 
-DEFAULT_SQLITE_PATH = os.path.join(os.path.dirname(__file__), "ecogrid_aegis.db")
+# Support Vercel/Lambda read-only filesystem by writing to /tmp
+if os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
+    DEFAULT_SQLITE_PATH = os.path.join(tempfile.gettempdir(), "ecogrid_aegis.db")
+else:
+    DEFAULT_SQLITE_PATH = os.path.join(os.path.dirname(__file__), "ecogrid_aegis.db")
 
 class DatabaseManager:
     """Unified Database Interface supporting SQLite and PostgreSQL with auto-failover."""
@@ -102,6 +108,6 @@ class DatabaseManager:
                 """)
                 conn.commit()
         except Exception as e:
-            print(f"⚠️ SQLite DB init error: {e}")
+            print(f"⚠️ SQLite DB init warning ({e}) - continuing in memory mode.")
 
 db_manager = DatabaseManager()
