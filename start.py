@@ -1,6 +1,6 @@
 """
 EcoGrid Core Production Startup Orchestrator
-Pre-trains Kaggle ML models, adds safe RequestHandler HEAD patch for Render health check 200 OK,
+Pre-trains Kaggle ML models, patches Tornado RequestHandler in-process for Render HEAD / health check 200 OK,
 disables inotify file watchers, launches FastAPI REST service on port 8000,
 and runs Streamlit SCADA Command Cockpit on public $PORT.
 """
@@ -13,15 +13,15 @@ import subprocess
 # Ensure project root is present in sys.path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-# Safe Tornado patch: Return 200 OK only for HEAD health check requests on / and /health
+# Patch Tornado RequestHandler in-process BEFORE Streamlit Web Server initializes
 try:
     import tornado.web
     def _safe_head(self, *args, **kwargs):
         self.set_status(200)
         self.finish()
     tornado.web.RequestHandler.head = _safe_head
-except Exception:
-    pass
+except Exception as e:
+    print(f"⚠️ Tornado patch note: {e}")
 
 from ml_engine.train_models import train_all_models
 
@@ -53,9 +53,9 @@ def main():
     port = os.environ.get("PORT", "10000")
     print(f"⚡ [STREAMLIT WEB COCKPIT] Launching primary web interface on 0.0.0.0:{port}...")
 
-    # 4. Run Streamlit natively on public $PORT with fileWatcherType=none
-    streamlit_cmd = [
-        sys.executable, "-m", "streamlit", "run", "app.py",
+    # 4. Programmatically run Streamlit in the SAME process so Tornado retains the HEAD 200 OK patch
+    sys.argv = [
+        "streamlit", "run", "app.py",
         "--server.port", str(port),
         "--server.address", "0.0.0.0",
         "--server.headless", "true",
@@ -65,8 +65,8 @@ def main():
         "--server.enableXsrfProtection", "false"
     ]
 
-    env = dict(os.environ, PYTHONPATH=os.path.dirname(os.path.abspath(__file__)))
-    subprocess.run(streamlit_cmd, env=env)
+    from streamlit.web.cli import main as streamlit_cli
+    streamlit_cli()
 
 if __name__ == "__main__":
     main()
