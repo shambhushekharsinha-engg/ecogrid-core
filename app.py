@@ -77,7 +77,7 @@ battery = BatteryBank()
 chaos = ChaosMonkey()
 
 # ────────────────────────────────────────────────────────────────────────
-# 🔐 SCREEN 1: LOGIN PORTAL (EXCLUSIVELY WHEN NOT AUTHENTICATED)
+# 🔐 SCREEN 1: LOGIN PORTAL (NO TABS ON LOGIN SCREEN TO PREVENT CONFLICT)
 # ────────────────────────────────────────────────────────────────────────
 if not st.session_state.authenticated:
     st.markdown("<h1 style='text-align: center; color: #00E5FF; font-weight: 900;'>⚡ ECOGRID CORE AI INFRASTRUCTURE</h1>", unsafe_allow_html=True)
@@ -87,16 +87,22 @@ if not st.session_state.authenticated:
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         st.markdown("<h3 style='color: #00FF66; text-align: center;'>🔐 SECURE SYSTEM ACCESS PORTAL</h3>", unsafe_allow_html=True)
-        st.caption("Select a pre-configured 1-click role preset or authenticate with user credentials below.")
+        st.caption("Select a 1-click Quick Demo Login role preset or authenticate with credentials.")
         st.write("")
 
-        login_tab1, login_tab2, login_tab3 = st.tabs(["⚡ 1-Click Quick Demo Login", "🔑 Standard Login", "📝 Register Account"])
+        access_mode = st.radio(
+            "Access Mode",
+            ["⚡ 1-Click Quick Demo Login", "🔑 Standard Login", "📝 Register Account"],
+            horizontal=True,
+            key="login_access_mode_radio"
+        )
+        st.write("")
 
-        with login_tab1:
+        if access_mode == "⚡ 1-Click Quick Demo Login":
             st.info("🎯 Select an operational role to bypass manual login:")
             c_a, c_b = st.columns(2)
             with c_a:
-                if st.button("👨‍💻 Admin Operator", type="primary", key="login_preset_admin"):
+                if st.button("👨‍💻 Admin Operator", type="primary", key="preset_admin_btn"):
                     ok, res = auth_manager.authenticate_user("admin", "Admin@123")
                     if ok:
                         st.session_state.authenticated = True
@@ -104,7 +110,7 @@ if not st.session_state.authenticated:
                         st.rerun()
                     else:
                         st.error(f"Login failed: {res}")
-                if st.button("⚡ Grid Chief Engineer", key="login_preset_grid"):
+                if st.button("⚡ Grid Chief Engineer", key="preset_grid_btn"):
                     ok, res = auth_manager.authenticate_user("grid_eng", "Grid@123")
                     if ok:
                         st.session_state.authenticated = True
@@ -113,7 +119,7 @@ if not st.session_state.authenticated:
                     else:
                         st.error(f"Login failed: {res}")
             with c_b:
-                if st.button("🚦 Traffic Operations Chief", key="login_preset_traffic"):
+                if st.button("🚦 Traffic Operations Chief", key="preset_traffic_btn"):
                     ok, res = auth_manager.authenticate_user("traffic_op", "Traffic@123")
                     if ok:
                         st.session_state.authenticated = True
@@ -121,7 +127,7 @@ if not st.session_state.authenticated:
                         st.rerun()
                     else:
                         st.error(f"Login failed: {res}")
-                if st.button("👁️ Guest Auditor", key="login_preset_guest"):
+                if st.button("👁️ Guest Auditor", key="preset_guest_btn"):
                     ok, res = auth_manager.authenticate_user("guest", "Guest@123")
                     if ok:
                         st.session_state.authenticated = True
@@ -130,10 +136,10 @@ if not st.session_state.authenticated:
                     else:
                         st.error(f"Login failed: {res}")
 
-        with login_tab2:
-            login_user = st.text_input("Username", key="field_login_user")
-            login_pwd = st.text_input("Password", type="password", key="field_login_pwd")
-            if st.button("Authenticate Session", type="primary", key="btn_auth_submit"):
+        elif access_mode == "🔑 Standard Login":
+            login_user = st.text_input("Username", key="login_field_user")
+            login_pwd = st.text_input("Password", type="password", key="login_field_pwd")
+            if st.button("Authenticate Session", type="primary", key="login_submit_btn"):
                 if not login_user.strip() or not login_pwd.strip():
                     st.warning("Please enter both username and password.")
                 else:
@@ -147,10 +153,10 @@ if not st.session_state.authenticated:
                     else:
                         st.error(res)
 
-        with login_tab3:
-            reg_user = st.text_input("Desired Username", key="field_reg_user")
-            reg_pwd = st.text_input("Password (Min 8 chars, 1 Upper, 1 Lower, 1 Digit)", type="password", key="field_reg_pwd")
-            reg_role = st.selectbox("Assign Role", ["Microgrid Engineer", "Traffic Controller", "System Auditor"], key="field_reg_role")
+        else:
+            reg_user = st.text_input("Desired Username", key="reg_field_user")
+            reg_pwd = st.text_input("Password (Min 8 chars, 1 Upper, 1 Lower, 1 Digit)", type="password", key="reg_field_pwd")
+            reg_role = st.selectbox("Assign Role", ["Microgrid Engineer", "Traffic Controller", "System Auditor"], key="reg_field_role")
 
             if reg_pwd:
                 valid, msg = auth_manager.validate_password_strength(reg_pwd)
@@ -159,7 +165,7 @@ if not st.session_state.authenticated:
                 else:
                     st.caption(f"⚠️ {msg}")
 
-            if st.button("Register & Login", key="btn_reg_submit"):
+            if st.button("Register & Login", key="reg_submit_btn"):
                 ok, msg = auth_manager.register_user(reg_user, reg_pwd, reg_role)
                 if ok:
                     st.success(msg)
@@ -183,7 +189,7 @@ else:
     st.sidebar.markdown(f"**Operator:** `{user_data['username']}`")
     st.sidebar.markdown(f"**Role:** `{user_data['role']}`")
 
-    if st.sidebar.button("🚪 Logout Session", key="btn_dashboard_logout"):
+    if st.sidebar.button("🚪 Logout Session", key="sidebar_logout_btn"):
         st.session_state.authenticated = False
         st.session_state.user_info = None
         st.rerun()
@@ -198,7 +204,7 @@ else:
         country_options,
         index=country_options.index(st.session_state.selected_country),
         format_func=lambda c: f"{c} - {GroundLevelMitigation.COUNTRY_MATRIX[c]['name']} ({GroundLevelMitigation.COUNTRY_MATRIX[c]['symbol']})",
-        key="main_sidebar_country"
+        key="sidebar_country_select_box"
     )
     st.session_state.selected_country = selected_country_code
 
@@ -268,14 +274,14 @@ else:
         col1, col2 = st.columns([1, 2])
         with col1:
             st.subheader("🌐 Regional Tariff Savings")
-            saved_kwh = st.slider("Mitigated Energy Volume (kWh)", 10.0, 5000.0, 250.0, step=25.0, key="dash_scada_volume_slider")
+            saved_kwh = st.slider("Mitigated Energy Volume (kWh)", 10.0, 5000.0, 250.0, step=25.0, key="scada_slider_saved_kwh")
 
             mit_data = GroundLevelMitigation.calculate_regional_mitigation(saved_kwh, st.session_state.selected_country)
             st.metric(f"Mitigation Savings ({mit_data['country_name']})", mit_data['total_savings_formatted'])
 
             st.divider()
             st.subheader("🔋 Battery Storage Health")
-            if st.button("Discharge Battery Cell Reserve (50 kW Load)", key="dash_scada_discharge_btn"):
+            if st.button("Discharge Battery Cell Reserve (50 kW Load)", key="scada_btn_discharge_cell"):
                 b_state = battery.discharge_for_arbitrage(50.0)
                 ledger.record_transaction("Arbitrageur_Agent", "BATTERY_DISCHARGE", b_state)
 
@@ -323,7 +329,7 @@ else:
                 xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
                 yaxis=dict(showgrid=False, zeroline=False, showticklabels=False)
             )
-            st.plotly_chart(fig_topo, key="dash_scada_topo_plot")
+            st.plotly_chart(fig_topo, key="scada_topo_chart_plot")
 
             st.subheader("📊 Live Grid Node Frequency Streams")
             df_stream = pd.DataFrame({
@@ -336,7 +342,7 @@ else:
             fig_grid = px.line(df_stream, x="Time (s)", y=["Node_Alpha (Residential)", "Node_Beta (Industrial)", "Node_Gamma (Medical)"],
                               title="Real-Time Grid Frequency Profiles (Hz)")
             fig_grid.update_layout(paper_bgcolor="#121A30", plot_bgcolor="#121A30", font_color="#FFFFFF")
-            st.plotly_chart(fig_grid, key="dash_scada_freq_plot")
+            st.plotly_chart(fig_grid, key="scada_freq_stream_plot")
 
     # ────────────────────────────────────────────────────────────────────────
     # TAB 3: SMART CITY TRAFFIC & EV GRID
@@ -347,13 +353,13 @@ else:
 
         col1, col2, col3, col4 = st.columns(4)
         with col1:
-            int_choice = st.selectbox("Target Intersection", ["INT_ALPHA_CBD", "INT_BETA_IND", "INT_GAMMA_MED"], key="dash_traffic_int_select")
+            int_choice = st.selectbox("Target Intersection", ["INT_ALPHA_CBD", "INT_BETA_IND", "INT_GAMMA_MED"], key="traffic_intersection_choice")
         with col2:
-            v_count = st.slider("Main Street Vehicles/Hr", 50, 1500, 950, step=25, key="dash_traffic_vcount_slider")
+            v_count = st.slider("Main Street Vehicles/Hr", 50, 1500, 950, step=25, key="traffic_vcount_slider")
         with col3:
-            v_speed = st.slider("Average Traffic Speed (km/h)", 5.0, 80.0, 22.5, step=2.5, key="dash_traffic_vspeed_slider")
+            v_speed = st.slider("Average Traffic Speed (km/h)", 5.0, 80.0, 22.5, step=2.5, key="traffic_vspeed_slider")
         with col4:
-            weather_choice = st.selectbox("Weather Profile", ["SUNNY", "CLOUDY", "RAINY", "STORMY"], key="dash_traffic_weather_select")
+            weather_choice = st.selectbox("Weather Profile", ["SUNNY", "CLOUDY", "RAINY", "STORMY"], key="traffic_weather_choice")
 
         st.divider()
         metrics = EcoGridTrafficEngine.calculate_intersection_metrics(v_count, v_speed, weather_choice)
@@ -368,8 +374,8 @@ else:
         c_left, c_right = st.columns([2, 1])
 
         with c_left:
-            cross_count = st.slider("Cross Street Vehicle Load (veh/hr)", 50, 800, 300, step=25, key="dash_traffic_cross_slider")
-            emergency_trigger = st.checkbox("🚨 ACTIVATE EMERGENCY GREEN CORRIDOR OVERRIDE", value=False, key="dash_traffic_emerg_chk")
+            cross_count = st.slider("Cross Street Vehicle Load (veh/hr)", 50, 800, 300, step=25, key="traffic_cross_count_slider")
+            emergency_trigger = st.checkbox("🚨 ACTIVATE EMERGENCY GREEN CORRIDOR OVERRIDE", value=False, key="traffic_emergency_chk")
 
             opt_plan = EcoGridTrafficEngine.optimize_signal_timing(int_choice, v_count, cross_count, emergency_trigger)
 
@@ -384,12 +390,12 @@ else:
                 marker_color=['#00FF66', '#00E5FF', '#FFB300']
             ))
             fig_sig.update_layout(title="Signal Phase Duration Allocation (Seconds)", paper_bgcolor="#121A30", plot_bgcolor="#121A30", font_color="#FFFFFF")
-            st.plotly_chart(fig_sig, key="dash_traffic_signal_plot")
+            st.plotly_chart(fig_sig, key="traffic_signal_timing_plot")
 
         with c_right:
             st.subheader("🔋 EV Charging Station Queue Control")
-            grid_load_val = st.number_input("Current Grid Load (kW)", value=1650.0, step=50.0, key="dash_traffic_gridload_num")
-            ev_count_val = st.slider("Queued EV Vehicles", 1, 30, 15, key="dash_traffic_evcount_slider")
+            grid_load_val = st.number_input("Current Grid Load (kW)", value=1650.0, step=50.0, key="traffic_grid_load_num")
+            ev_count_val = st.slider("Queued EV Vehicles", 1, 30, 15, key="traffic_ev_count_slider")
 
             ev_res = EcoGridTrafficEngine.balance_ev_charging_queue(grid_load_val, 2000.0, ev_count_val)
             st.write(f"**Mode:** `{ev_res['charging_mode']}`")
@@ -408,8 +414,8 @@ else:
 
         with col_curr_a:
             st.subheader("💱 Live Tariff Calculator")
-            base_spot_inr = st.number_input("Base Spot Market Rate (INR / MWh)", value=3500.0, step=100.0, key="dash_curr_spot_inr_num")
-            eval_kwh = st.slider("Evaluation Energy Range (kWh)", 100.0, 10000.0, 1500.0, step=100.0, key="dash_curr_eval_kwh_slider")
+            base_spot_inr = st.number_input("Base Spot Market Rate (INR / MWh)", value=3500.0, step=100.0, key="currency_spot_inr_num")
+            eval_kwh = st.slider("Evaluation Energy Range (kWh)", 100.0, 10000.0, 1500.0, step=100.0, key="currency_eval_kwh_slider")
 
             active_c = st.session_state.selected_country
             active_mit = GroundLevelMitigation.calculate_regional_mitigation(eval_kwh, active_c)
@@ -444,7 +450,7 @@ else:
             labels={"value": "Local Currency Units", "Country": "Sector Country"}
         )
         fig_curr.update_layout(paper_bgcolor="#121A30", plot_bgcolor="#121A30", font_color="#FFFFFF")
-        st.plotly_chart(fig_curr, key="dash_curr_bar_plot")
+        st.plotly_chart(fig_curr, key="currency_bar_chart_plot")
 
     # ────────────────────────────────────────────────────────────────────────
     # TAB 5: AI INFRASTRUCTURE COPILOT
@@ -465,12 +471,12 @@ else:
                     "How does 3/3 BFT Consensus protect microgrid load dispatch decisions?",
                     "Explain the financial impact of dynamic solar power generation predictions."
                 ],
-                key="dash_ai_preset_select"
+                key="copilot_preset_choice"
             )
 
-            user_q = st.text_area("Your Query", value="" if preset_q == "Custom Question" else preset_q, height=100, key="dash_ai_query_text")
+            user_q = st.text_area("Your Query", value="" if preset_q == "Custom Question" else preset_q, height=100, key="copilot_user_query_text")
 
-            if st.button("🚀 Analyze with EcoGrid AI Copilot", type="primary", key="dash_ai_analyze_btn"):
+            if st.button("🚀 Analyze with EcoGrid AI Copilot", type="primary", key="copilot_analyze_btn"):
                 if not user_q.strip():
                     st.warning("Please enter a question or select a preset.")
                 else:
@@ -504,7 +510,7 @@ else:
         st.caption("Machine Learning Predictors & Dataset Data Explorer")
 
         st.subheader("🚀 Retrain Pipeline Trigger")
-        if st.button("🔄 Train / Retrain All 4 Kaggle Models Now", type="primary", key="dash_kaggle_retrain_btn"):
+        if st.button("🔄 Train / Retrain All 4 Kaggle Models Now", type="primary", key="kaggle_pipeline_retrain_btn"):
             with st.spinner("Training Kaggle models on dataset matrices..."):
                 retrain_res = train_all_models()
                 predictor.load_models()
@@ -517,23 +523,23 @@ else:
         c1, c2 = st.columns(2)
         with c1:
             st.markdown("#### 1. Grid Load Predictor")
-            p_temp = st.slider("Ambient Temp (°C)", 10.0, 45.0, 32.0, key="dash_kaggle_ptemp_slider")
-            p_hum = st.slider("Humidity (%)", 20.0, 95.0, 50.0, key="dash_kaggle_phum_slider")
-            p_ev = st.slider("EV Station kW", 50.0, 1200.0, 600.0, key="dash_kaggle_pev_slider")
+            p_temp = st.slider("Ambient Temp (°C)", 10.0, 45.0, 32.0, key="kaggle_ptemp_slider")
+            p_hum = st.slider("Humidity (%)", 20.0, 95.0, 50.0, key="kaggle_phum_slider")
+            p_ev = st.slider("EV Station kW", 50.0, 1200.0, 600.0, key="kaggle_pev_slider")
             pred_load = predictor.predict_grid_load(p_temp, p_hum, p_ev)
             st.metric("Predicted Total Grid Load", f"{pred_load:.2f} kW")
 
         with c2:
             st.markdown("#### 2. Solar Output Predictor")
-            p_irr = st.slider("Irradiance (W/m²)", 0.0, 1200.0, 850.0, key="dash_kaggle_pirr_slider")
-            p_cloud = st.slider("Cloud Cover (%)", 0.0, 100.0, 15.0, key="dash_kaggle_pcloud_slider")
+            p_irr = st.slider("Irradiance (W/m²)", 0.0, 1200.0, 850.0, key="kaggle_pirr_slider")
+            p_cloud = st.slider("Cloud Cover (%)", 0.0, 100.0, 15.0, key="kaggle_pcloud_slider")
             pred_solar = predictor.predict_solar_generation(p_irr, 35.0, p_cloud)
             st.metric("Predicted Solar Generation", f"{pred_solar:.2f} kW")
 
         st.divider()
         st.subheader("📊 Kaggle Dataset Data Explorer & CSV Export")
 
-        ds_choice = st.selectbox("Select Kaggle Dataset to Inspect", ["Traffic Flow Dataset", "Grid Load Dataset", "Solar Generation Dataset"], key="dash_kaggle_ds_select")
+        ds_choice = st.selectbox("Select Kaggle Dataset to Inspect", ["Traffic Flow Dataset", "Grid Load Dataset", "Solar Generation Dataset"], key="kaggle_ds_choice")
         if ds_choice == "Traffic Flow Dataset":
             df_ds = DatasetLoader.load_traffic_dataset()
         elif ds_choice == "Grid Load Dataset":
@@ -553,10 +559,10 @@ else:
         col1, col2 = st.columns(2)
         with col1:
             st.subheader("💥 Chaos Monkey Threat Injector")
-            target_n = st.selectbox("Target Injection Node", ["Node_Alpha_Residential", "Node_Beta_Industrial", "Node_Gamma_Medical"], key="dash_cyber_target_select")
-            freq_inject = st.slider("Spoofed Frequency Value (Hz)", 48.0, 54.0, 53.1, key="dash_cyber_freq_slider")
+            target_n = st.selectbox("Target Injection Node", ["Node_Alpha_Residential", "Node_Beta_Industrial", "Node_Gamma_Medical"], key="cyber_target_node_choice")
+            freq_inject = st.slider("Spoofed Frequency Value (Hz)", 48.0, 54.0, 53.1, key="cyber_spoofed_freq_slider")
 
-            if st.button("Inject Spoofed Telemetry Attack", key="dash_cyber_inject_btn"):
+            if st.button("Inject Spoofed Telemetry Attack", key="cyber_inject_attack_btn"):
                 anom_res = predictor.detect_cyber_anomaly(freq_inject, 1200.0)
                 if anom_res["is_attack_detected"]:
                     st.error(f"🚨 CYBER THREAT CONTAINED! Anomaly: {anom_res['anomaly_type']}")
@@ -566,7 +572,7 @@ else:
 
             st.divider()
             st.subheader("⚖️ 3/3 BFT Consensus Evaluator")
-            eval_bft = st.button("Evaluate 3/3 Unanimous Consensus Vote", key="dash_cyber_bft_eval_btn")
+            eval_bft = st.button("Evaluate 3/3 Unanimous Consensus Vote", key="cyber_bft_eval_btn")
             if eval_bft:
                 bft_res = BFTConsensusEngine.evaluate_state_proposal("GRID_LOAD_TRANSFER", target_n, {"grid_freq_hz": freq_inject})
                 st.json(bft_res)
@@ -597,9 +603,9 @@ else:
         c_p1, c_p2 = st.columns([1, 2])
         with c_p1:
             st.subheader("🛠️ Prescription Generator")
-            reason = st.selectbox("Trigger Reason", ["Frequency_Spoofing_Attack", "Budget_Overrun_Load_Spike", "Routine_Maintenance_Sweep"], key="dash_inc_reason_select")
-            val_metric = st.number_input("Observed Metric Value", value=53.1, key="dash_inc_metric_num")
-            t_node = st.selectbox("Target Node", ["Node_Alpha_Residential", "Node_Beta_Industrial", "Node_Gamma_Medical"], key="dash_inc_tnode_select")
+            reason = st.selectbox("Trigger Reason", ["Frequency_Spoofing_Attack", "Budget_Overrun_Load_Spike", "Routine_Maintenance_Sweep"], key="incident_reason_choice")
+            val_metric = st.number_input("Observed Metric Value", value=53.1, key="incident_metric_val_num")
+            t_node = st.selectbox("Target Node", ["Node_Alpha_Residential", "Node_Beta_Industrial", "Node_Gamma_Medical"], key="incident_tnode_choice")
 
             prescript = GroundLevelMitigation.get_prescription(reason, val_metric, t_node)
 
