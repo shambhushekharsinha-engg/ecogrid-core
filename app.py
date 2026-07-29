@@ -5,17 +5,6 @@ Multi-Country Currency Switcher, AI SCADA Infrastructure Copilot with Summaries,
 Digital Twin Topology Visualizer, Kaggle ML Hub, 3/3 BFT Ledger, and REST API Telemetry.
 """
 
-# Patch Tornado RequestHandler so HEAD / requests (Render health check) return 200 OK
-try:
-    import tornado.web
-    def _ok_head(self, *args, **kwargs):
-        self.set_status(200)
-        self.finish()
-    tornado.web.RequestHandler.head = _ok_head
-    tornado.web.StaticFileHandler.head = _ok_head
-except Exception:
-    pass
-
 import streamlit as st
 import pandas as pd
 import numpy as np
