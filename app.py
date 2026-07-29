@@ -2,7 +2,7 @@
 EcoGrid Core: Multi-Agent SCADA Infrastructure Command Cockpit UI
 Integrated User Authentication, Smart City Traffic & EV Grid Control, Multi-Agent SCADA,
 Multi-Country Currency Switcher, AI SCADA Infrastructure Copilot with Summaries,
-Kaggle ML Hub, 3/3 BFT Ledger, Incident Reports, and REST API Telemetry.
+Digital Twin Topology Visualizer, Kaggle ML Hub, 3/3 BFT Ledger, and REST API Telemetry.
 """
 
 import streamlit as st
@@ -35,15 +35,17 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+RENDER_DEPLOYMENT_URL = "https://ecogrid-ai-cockpit.onrender.com/"
+
 # Custom Cyberpunk Industrial CSS Theme
 st.markdown("""
 <style>
     .stApp { background-color: #0A0F1D; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     .main-header { font-size: 2.2rem; color: #00E5FF; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; }
     .sub-header { color: #8F9CAE; font-size: 1rem; margin-bottom: 20px; }
+    .deploy-badge { background: #00E5FF22; border: 1px solid #00E5FF; color: #00E5FF; border-radius: 20px; padding: 6px 14px; font-weight: bold; display: inline-block; }
     .metric-card { background: #121A30; border: 1px solid #1E294B; border-radius: 8px; padding: 16px; margin: 5px 0; }
     .summary-box { background: #0E1628; border-left: 4px solid #00E5FF; padding: 15px; border-radius: 4px; margin: 10px 0; }
-    .status-badge { font-weight: bold; padding: 4px 10px; border-radius: 4px; display: inline-block; }
     div[data-testid="stMetricValue"] { font-family: monospace; color: #00FF66 !important; }
 </style>
 """, unsafe_allow_html=True)
@@ -65,7 +67,7 @@ chaos = ChaosMonkey()
 # ────────────────────────────────────────────────────────────────────────
 if not st.session_state.authenticated:
     st.markdown("<h1 class='main-header' style='text-align: center;'>⚡ ECOGRID CORE AI INFRASTRUCTURE</h1>", unsafe_allow_html=True)
-    st.markdown("<p class='sub-header' style='text-align: center;'>Enterprise Multi-Agent SCADA & Smart Grid Infrastructure Platform</p>", unsafe_allow_html=True)
+    st.markdown(f"<p class='sub-header' style='text-align: center;'>Enterprise Multi-Agent SCADA & Smart Grid Infrastructure Platform<br><a href='{RENDER_DEPLOYMENT_URL}' target='_blank' style='color:#00E5FF;'>🌐 Live Production Deployment: ecogrid-ai-cockpit.onrender.com</a></p>", unsafe_allow_html=True)
     st.markdown("---")
 
     col1, col2, col3 = st.columns([1, 2, 1])
@@ -148,6 +150,7 @@ st.sidebar.markdown(f"""
     <div style='color:#00E5FF; font-weight:bold; font-size:12px;'>🟢 SESSION ACTIVE</div>
     <div style='color:#FFFFFF; font-size:14px; font-weight:bold;'>👤 {user_data['username']}</div>
     <div style='color:#8F9CAE; font-size:11px;'>{user_data['role']}</div>
+    <a href='{RENDER_DEPLOYMENT_URL}' target='_blank' style='color:#00FF66; font-size:10px; text-decoration:none;'>🌐 Render Live Production</a>
 </div>
 """, unsafe_allow_html=True)
 
@@ -194,7 +197,7 @@ nav_tab = st.sidebar.radio(
 # ────────────────────────────────────────────────────────────────────────
 if "EcoGrid SCADA" in nav_tab:
     st.markdown("<h2 class='main-header'>⚡ ECOGRID MULTI-AGENT SCADA CONTROL</h2>", unsafe_allow_html=True)
-    st.markdown("<p class='sub-header'>Byzantine Fault Tolerant Microgrid Telemetry & Real-Time Sine Wave Simulation</p>", unsafe_allow_html=True)
+    st.markdown(f"<p class='sub-header'>Byzantine Fault Tolerant Microgrid Telemetry & Real-Time Sine Wave Simulation | <a href='{RENDER_DEPLOYMENT_URL}' target='_blank' style='color:#00E5FF;'>🌐 Live Render Production Node</a></p>", unsafe_allow_html=True)
 
     col1, col2 = st.columns([1, 2])
     with col1:
@@ -215,6 +218,55 @@ if "EcoGrid SCADA" in nav_tab:
         st.metric("Battery Chemical Health", f"{battery.battery_health}%")
 
     with col2:
+        st.markdown("### 🕸️ Digital Twin Real-Time Grid Node Topology")
+        
+        # Interactive Node Network Diagram using Plotly
+        edge_x = [0, 1, 1, 2, 0, 2]
+        edge_y = [0, 1, 1, 0, 0, 0]
+        
+        fig_topo = go.Figure()
+        
+        # Add Connections
+        fig_topo.add_trace(go.Scatter(
+            x=[0, 1, 1, 2, 0, 2], y=[0, 1, 1, 0, 0, 0],
+            line=dict(width=2, color='#00E5FF'),
+            hoverinfo='none',
+            mode='lines'
+        ))
+        
+        # Add Nodes
+        node_x = [0, 1, 2]
+        node_y = [0, 1, 0]
+        node_text = ["Node Alpha (Residential)<br>Load: 240 kW | Freq: 50.01 Hz", 
+                     "Node Beta (Industrial)<br>Load: 680 kW | Freq: 49.95 Hz", 
+                     "Node Gamma (Medical)<br>Load: 310 kW | Freq: 50.02 Hz"]
+        node_colors = ['#00FF66', '#FFB300', '#00E5FF']
+        
+        fig_topo.add_trace(go.Scatter(
+            x=node_x, y=node_y,
+            mode='markers+text',
+            text=["Node Alpha", "Node Beta", "Node Gamma"],
+            textposition="top center",
+            hovertext=node_text,
+            hoverinfo='text',
+            marker=dict(
+                size=[30, 45, 35],
+                color=node_colors,
+                line_width=2
+            )
+        ))
+        
+        fig_topo.update_layout(
+            title="Interactive Grid Node Topology & Power Flow Vector",
+            showlegend=False,
+            paper_bgcolor="#121A30",
+            plot_bgcolor="#121A30",
+            font_color="#FFFFFF",
+            xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+            yaxis=dict(showgrid=False, zeroline=False, showticklabels=False)
+        )
+        st.plotly_chart(fig_topo, use_container_width=True)
+
         st.markdown("### 📊 Live Grid Node Frequency Streams")
         df_stream = pd.DataFrame({
             "Time (s)": np.arange(1, 21),
@@ -376,7 +428,7 @@ elif "AI Infrastructure Copilot" in nav_tab:
         st.markdown("### ⚡ AI System Diagnostic Status")
         st.info("📡 Cloud Channel: Gemini 2.5 Flash Ready")
         st.success("🤖 Local Edge AI Engine: Active")
-        st.caption("EcoGrid AI Copilot synthesizes grid telemetry, BFT consensus votes, and Kaggle ML model predictions.")
+        st.markdown(f"[🌐 Live Render Node]({RENDER_DEPLOYMENT_URL})")
 
 # ────────────────────────────────────────────────────────────────────────
 # TAB 5: KAGGLE AI & ML HUB
@@ -513,6 +565,7 @@ elif "Incident Reports" in nav_tab:
 **Target Sector Node:** {t_node}  
 **Observed Metric:** {val_metric}  
 **Sector Country Node:** {st.session_state.selected_country}  
+**Production Node:** {RENDER_DEPLOYMENT_URL}  
 
 ## 🔬 Executive Summary
 An anomaly event ({reason}) was flagged on {t_node}. The 3/3 BFT consensus core isolated the vector and logged transaction to the SHA-256 ledger.
@@ -538,7 +591,7 @@ An anomaly event ({reason}) was flagged on {t_node}. The 3/3 BFT consensus core 
 # ────────────────────────────────────────────────────────────────────────
 elif "REST API" in nav_tab:
     st.markdown("<h2 class='main-header'>🌐 REST API & SYSTEM DEPLOYMENT TELEMETRY</h2>", unsafe_allow_html=True)
-    st.markdown("<p class='sub-header'>OpenAPI Swagger Endpoints & Containerized Service Status</p>", unsafe_allow_html=True)
+    st.markdown(f"<p class='sub-header'>OpenAPI Swagger Endpoints & Containerized Service Status | <a href='{RENDER_DEPLOYMENT_URL}' target='_blank' style='color:#00E5FF;'>🌐 Live Render Production Deployment</a></p>", unsafe_allow_html=True)
 
     c1, c2, c3 = st.columns(3)
     c1.metric("REST API Engine", "FastAPI v6.5.0-PROD")
