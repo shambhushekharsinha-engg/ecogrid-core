@@ -88,7 +88,7 @@ if not st.session_state.authenticated:
             st.info("Select a pre-configured role to bypass manual login:")
             c_a, c_b = st.columns(2)
             with c_a:
-                if st.button("👨‍💻 Admin Operator", use_container_width=True):
+                if st.button("👨‍💻 Admin Operator", use_container_width=True, key="btn_admin"):
                     ok, res = auth_manager.authenticate_user("admin", "Admin@123")
                     if ok:
                         st.session_state.authenticated = True
@@ -96,7 +96,7 @@ if not st.session_state.authenticated:
                         st.rerun()
                     else:
                         st.error(f"Login failed: {res}")
-                if st.button("⚡ Grid Chief Engineer", use_container_width=True):
+                if st.button("⚡ Grid Chief Engineer", use_container_width=True, key="btn_grid"):
                     ok, res = auth_manager.authenticate_user("grid_eng", "Grid@123")
                     if ok:
                         st.session_state.authenticated = True
@@ -105,7 +105,7 @@ if not st.session_state.authenticated:
                     else:
                         st.error(f"Login failed: {res}")
             with c_b:
-                if st.button("🚦 Traffic Operations Chief", use_container_width=True):
+                if st.button("🚦 Traffic Operations Chief", use_container_width=True, key="btn_traffic"):
                     ok, res = auth_manager.authenticate_user("traffic_op", "Traffic@123")
                     if ok:
                         st.session_state.authenticated = True
@@ -113,7 +113,7 @@ if not st.session_state.authenticated:
                         st.rerun()
                     else:
                         st.error(f"Login failed: {res}")
-                if st.button("👁️ Guest Auditor", use_container_width=True):
+                if st.button("👁️ Guest Auditor", use_container_width=True, key="btn_guest"):
                     ok, res = auth_manager.authenticate_user("guest", "Guest@123")
                     if ok:
                         st.session_state.authenticated = True
@@ -125,7 +125,7 @@ if not st.session_state.authenticated:
         with auth_tab2:
             login_user = st.text_input("Username", key="l_user")
             login_pwd = st.text_input("Password", type="password", key="l_pwd")
-            if st.button("Login", use_container_width=True, type="primary"):
+            if st.button("Login", use_container_width=True, type="primary", key="btn_std_login"):
                 if not login_user.strip() or not login_pwd.strip():
                     st.warning("Please enter both username and password.")
                 else:
@@ -151,7 +151,7 @@ if not st.session_state.authenticated:
                 else:
                     st.caption(f"⚠️ {msg}")
 
-            if st.button("Register Account", use_container_width=True):
+            if st.button("Register Account", use_container_width=True, key="btn_register"):
                 ok, msg = auth_manager.register_user(reg_user, reg_pwd, reg_role)
                 if ok:
                     st.success(msg)
@@ -179,7 +179,7 @@ st.sidebar.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
-if st.sidebar.button("🚪 Logout Session", use_container_width=True):
+if st.sidebar.button("🚪 Logout Session", use_container_width=True, key="btn_logout"):
     st.session_state.authenticated = False
     st.session_state.user_info = None
     st.rerun()
@@ -234,7 +234,7 @@ if "EcoGrid SCADA" in nav_tab:
 
         st.markdown("---")
         st.markdown("### 🔋 Battery Storage Health")
-        b_discharge = st.button("Discharge Battery Cell Reserve (50 kW Load)")
+        b_discharge = st.button("Discharge Battery Cell Reserve (50 kW Load)", key="btn_discharge")
         if b_discharge:
             b_state = battery.discharge_for_arbitrage(50.0)
             ledger.record_transaction("Arbitrageur_Agent", "BATTERY_DISCHARGE", b_state)
@@ -272,7 +272,7 @@ if "EcoGrid SCADA" in nav_tab:
             marker=dict(
                 size=[30, 45, 35],
                 color=node_colors,
-                line_width=2
+                line=dict(width=2, color='#FFFFFF')
             )
         ))
         
@@ -285,7 +285,7 @@ if "EcoGrid SCADA" in nav_tab:
             xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
             yaxis=dict(showgrid=False, zeroline=False, showticklabels=False)
         )
-        st.plotly_chart(fig_topo, use_container_width=True)
+        st.plotly_chart(fig_topo, key="topo_chart_key")
 
         st.markdown("### 📊 Live Grid Node Frequency Streams")
         df_stream = pd.DataFrame({
@@ -298,7 +298,7 @@ if "EcoGrid SCADA" in nav_tab:
         fig_grid = px.line(df_stream, x="Time (s)", y=["Node_Alpha (Residential)", "Node_Beta (Industrial)", "Node_Gamma (Medical)"],
                           title="Real-Time Grid Frequency Profiles (Hz)")
         fig_grid.update_layout(paper_bgcolor="#121A30", plot_bgcolor="#121A30", font_color="#FFFFFF")
-        st.plotly_chart(fig_grid, use_container_width=True)
+        st.plotly_chart(fig_grid, key="grid_chart_key")
 
 # ────────────────────────────────────────────────────────────────────────
 # TAB 2: SMART CITY TRAFFIC & EV GRID
@@ -346,7 +346,7 @@ elif "Smart City Traffic" in nav_tab:
             marker_color=['#00FF66', '#00E5FF', '#FFB300']
         ))
         fig_sig.update_layout(title="Signal Phase Duration Allocation (Seconds)", paper_bgcolor="#121A30", plot_bgcolor="#121A30", font_color="#FFFFFF")
-        st.plotly_chart(fig_sig, use_container_width=True)
+        st.plotly_chart(fig_sig, key="sig_chart_key")
 
     with c_right:
         st.markdown("### 🔋 EV Charging Station Queue Control")
@@ -397,7 +397,7 @@ elif "Multi-Country Currency" in nav_tab:
         labels={"value": "Local Currency Units", "Country Name": "Sector Country"}
     )
     fig_curr.update_layout(paper_bgcolor="#121A30", plot_bgcolor="#121A30", font_color="#FFFFFF")
-    st.plotly_chart(fig_curr, use_container_width=True)
+    st.plotly_chart(fig_curr, key="curr_chart_key")
 
 # ────────────────────────────────────────────────────────────────────────
 # TAB 4: AI INFRASTRUCTURE COPILOT
@@ -422,7 +422,7 @@ elif "AI Infrastructure Copilot" in nav_tab:
 
         user_q = st.text_area("Your Query", value="" if preset_q == "Custom Question" else preset_q, height=100)
 
-        if st.button("🚀 Analyze with EcoGrid AI Copilot", type="primary", use_container_width=True):
+        if st.button("🚀 Analyze with EcoGrid AI Copilot", type="primary", use_container_width=True, key="btn_ai_analyze"):
             if not user_q.strip():
                 st.warning("Please enter a question or select a preset.")
             else:
@@ -458,7 +458,7 @@ elif "Kaggle AI" in nav_tab:
     st.markdown("<p class='sub-header'>Machine Learning Predictors & Dataset Data Explorer</p>", unsafe_allow_html=True)
 
     st.markdown("### 🚀 Retrain Pipeline Trigger")
-    if st.button("🔄 Train / Retrain All 4 Kaggle Models Now", type="primary"):
+    if st.button("🔄 Train / Retrain All 4 Kaggle Models Now", type="primary", key="btn_retrain_ml"):
         with st.spinner("Training Kaggle models on dataset matrices..."):
             retrain_res = train_all_models()
             predictor.load_models()
@@ -502,7 +502,8 @@ elif "Kaggle AI" in nav_tab:
         label=f"📥 Download {ds_choice} as CSV",
         data=csv_data,
         file_name=f"{ds_choice.lower().replace(' ', '_')}.csv",
-        mime="text/csv"
+        mime="text/csv",
+        key="btn_dl_dataset"
     )
 
 # ────────────────────────────────────────────────────────────────────────
@@ -518,7 +519,7 @@ elif "Cybersecurity" in nav_tab:
         target_n = st.selectbox("Target Injection Node", ["Node_Alpha_Residential", "Node_Beta_Industrial", "Node_Gamma_Medical"])
         freq_inject = st.slider("Spoofed Frequency Value (Hz)", 48.0, 54.0, 53.1)
 
-        if st.button("Inject Spoofed Telemetry Attack"):
+        if st.button("Inject Spoofed Telemetry Attack", key="btn_chaos"):
             anom_res = predictor.detect_cyber_anomaly(freq_inject, 1200.0)
             if anom_res["is_attack_detected"]:
                 st.error(f"🚨 CYBER THREAT CONTAINED! Anomaly: {anom_res['anomaly_type']}")
@@ -528,7 +529,7 @@ elif "Cybersecurity" in nav_tab:
 
         st.markdown("---")
         st.markdown("### ⚖️ 3/3 BFT Consensus Evaluator")
-        eval_bft = st.button("Evaluate 3/3 Unanimous Consensus Vote")
+        eval_bft = st.button("Evaluate 3/3 Unanimous Consensus Vote", key="btn_bft")
         if eval_bft:
             bft_res = BFTConsensusEngine.evaluate_state_proposal("GRID_LOAD_TRANSFER", target_n, {"grid_freq_hz": freq_inject})
             st.json(bft_res)
@@ -552,7 +553,8 @@ elif "Cybersecurity" in nav_tab:
                 label="📥 Download Audit Ledger as CSV",
                 data=ledger_csv,
                 file_name="grid_audit_ledger.csv",
-                mime="text/csv"
+                mime="text/csv",
+                key="btn_dl_ledger"
             )
         except Exception as e:
             st.warning(f"Ledger file empty or initializing: {e}")
@@ -602,7 +604,8 @@ An anomaly event ({reason}) was flagged on {t_node}. The 3/3 BFT consensus core 
             label="📥 Download Incident Report (.md)",
             data=report_body.encode('utf-8'),
             file_name=f"incident_report_{t_node}.md",
-            mime="text/markdown"
+            mime="text/markdown",
+            key="btn_dl_report"
         )
 
 # ────────────────────────────────────────────────────────────────────────
