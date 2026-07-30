@@ -240,22 +240,10 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ────────────────────────────────────────────────────────────────────────
-# 🔐 PERSISTENT SESSION AUTH LOCK & HELPER FUNCTIONS
+# 🔐 SECURE SESSION STATE & HELPER FUNCTIONS
 # ────────────────────────────────────────────────────────────────────────
 if "authenticated" not in st.session_state:
     st.session_state["authenticated"] = False
-
-# Restore session state from URL query parameters (Protects against WebSocket disconnects!)
-qp_user = st.query_params.get("auth_user")
-qp_role = st.query_params.get("auth_role")
-
-if qp_user and not st.session_state.get("authenticated", False):
-    st.session_state["authenticated"] = True
-    st.session_state["user_info"] = {
-        "username": qp_user,
-        "role": qp_role or "System Administrator",
-        "token": "persisted_session"
-    }
 
 if "user_info" not in st.session_state or st.session_state["user_info"] is None:
     st.session_state["user_info"] = {"username": "Operator", "role": "Administrator"}
@@ -325,32 +313,40 @@ if not st.session_state.get("authenticated", False):
                     res = {"username": "admin", "role": "System Administrator", "token": "sec_demo_admin"}
                     st.session_state["authenticated"] = True
                     st.session_state["user_info"] = res
-                    st.query_params["auth_user"] = res["username"]
-                    st.query_params["auth_role"] = res["role"]
+                    try:
+                        st.query_params.clear()
+                    except Exception:
+                        pass
                     st.rerun()
                 st.write("")
                 if st.button("⚡ Grid Chief Engineer", use_container_width=True, key="quick_grid_btn"):
                     res = {"username": "grid_eng", "role": "Microgrid Chief Engineer", "token": "sec_demo_grid"}
                     st.session_state["authenticated"] = True
                     st.session_state["user_info"] = res
-                    st.query_params["auth_user"] = res["username"]
-                    st.query_params["auth_role"] = res["role"]
+                    try:
+                        st.query_params.clear()
+                    except Exception:
+                        pass
                     st.rerun()
             with c_b:
                 if st.button("🚦 Traffic Operations Chief", use_container_width=True, key="quick_traffic_btn"):
                     res = {"username": "traffic_op", "role": "Traffic Operations Chief", "token": "sec_demo_traffic"}
                     st.session_state["authenticated"] = True
                     st.session_state["user_info"] = res
-                    st.query_params["auth_user"] = res["username"]
-                    st.query_params["auth_role"] = res["role"]
+                    try:
+                        st.query_params.clear()
+                    except Exception:
+                        pass
                     st.rerun()
                 st.write("")
                 if st.button("👁️ Guest Auditor", use_container_width=True, key="quick_guest_btn"):
                     res = {"username": "guest", "role": "Guest Auditor", "token": "sec_demo_guest"}
                     st.session_state["authenticated"] = True
                     st.session_state["user_info"] = res
-                    st.query_params["auth_user"] = res["username"]
-                    st.query_params["auth_role"] = res["role"]
+                    try:
+                        st.query_params.clear()
+                    except Exception:
+                        pass
                     st.rerun()
 
         elif access_choice == "🔑 Standard Login":
@@ -367,8 +363,10 @@ if not st.session_state.get("authenticated", False):
                         if ok:
                             st.session_state["authenticated"] = True
                             st.session_state["user_info"] = res
-                            st.query_params["auth_user"] = res["username"]
-                            st.query_params["auth_role"] = res["role"]
+                            try:
+                                st.query_params.clear()
+                            except Exception:
+                                pass
                             st.rerun()
                         else:
                             st.error(res)
@@ -386,8 +384,10 @@ if not st.session_state.get("authenticated", False):
                         res = {"username": reg_user, "role": reg_role, "token": "new_reg_user"}
                         st.session_state["authenticated"] = True
                         st.session_state["user_info"] = res
-                        st.query_params["auth_user"] = res["username"]
-                        st.query_params["auth_role"] = res["role"]
+                        try:
+                            st.query_params.clear()
+                        except Exception:
+                            pass
                         st.rerun()
                     else:
                         st.error(msg)
