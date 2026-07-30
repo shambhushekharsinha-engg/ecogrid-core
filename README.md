@@ -202,32 +202,72 @@ python -m pytest
 
 ---
 
-## 👤 Developer Profile & Academic Background
+## 👨‍💻 Developer Profile
 
-Developed by **Shambhu Shekhar Sinha**
+<div align="center">
 
-<p align="center">
-  <a href="https://github.com/shambhushekharsinha">
-    <img src="https://img.shields.io/badge/GitHub-shambhushekharsinha-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Profile">
-  </a>
-  <a href="https://linkedin.com">
-    <img src="https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn Profile">
-  </a>
-</p>
+<br/>
 
-### 🎓 Academic Credentials:
-- **Course & Degree:** B.Tech (Bachelor of Technology)
-- **Branch & Specialization:** Computer Science & Engineering (AI & ML)
-- **College & University:** College of Engineering & Technology / University
+<img src="https://img.shields.io/badge/Developer-Shambhu%20Shekhar%20Sinha-00f0ff?style=for-the-badge&labelColor=010308" />
 
-### 🛠️ Technical Skill Matrix:
-- **Programming Languages:** Python, SQL, JavaScript, HTML/CSS, Bash
-- **Frameworks & Engines:** Streamlit, FastAPI, Uvicorn, Tornado, Pandas, Scikit-Learn
-- **Artificial Intelligence:** Google GenAI SDK (Gemini 2.5 Flash), Edge Cognitive AI, Time-Series Regressors
-- **Distributed Security:** 3/3 Byzantine Fault Tolerance (BFT), SHA-256 Cryptographic Chaining, Chaos Threat Injection
-- **Cloud & DevOps:** Docker, Render, Vercel Serverless, Git, Pytest
+<br/><br/>
+
+<table>
+  <tr>
+    <td align="center" width="100%">
+      <table>
+        <tr>
+          <td>👤 <b>Name</b></td>
+          <td>Shambhu Shekhar Sinha</td>
+        </tr>
+        <tr>
+          <td>🎓 <b>Degree</b></td>
+          <td>B.Tech — Computer Science & Engineering (AI & ML)</td>
+        </tr>
+        <tr>
+          <td>🏫 <b>College</b></td>
+          <td>Greater Noida Institute of Technology <b>(GNIOT)</b></td>
+        </tr>
+        <tr>
+          <td>🏛️ <b>University</b></td>
+          <td>Dr. APJ Abdul Kalam Technical University, Lucknow (AKTU)</td>
+        </tr>
+        <tr>
+          <td>📍 <b>Location</b></td>
+          <td>Greater Noida, Uttar Pradesh, India</td>
+        </tr>
+        <tr>
+          <td>🐙 <b>GitHub</b></td>
+          <td><a href="https://github.com/shambhushekharsinha-engg">@shambhushekharsinha-engg</a></td>
+        </tr>
+        <tr>
+          <td>🖥️ <b>Streamlit Cockpit</b></td>
+          <td><a href="https://ecogrid-ai-cockpit.onrender.com/">ecogrid-ai-cockpit.onrender.com</a></td>
+        </tr>
+        <tr>
+          <td>⚙️ <b>Backend API</b></td>
+          <td><a href="https://ecogrid-core-api.vercel.app">ecogrid-core-api.vercel.app</a></td>
+        </tr>
+        <tr>
+          <td>📖 <b>API Docs</b></td>
+          <td><a href="https://ecogrid-core-api.vercel.app/docs">ecogrid-core-api.vercel.app/docs</a></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<br/>
+
+<img src="https://img.shields.io/badge/B.Tech-CSE%20%7C%20AI%20%26%20ML-00f0ff?style=flat-square&labelColor=010308"/>
+<img src="https://img.shields.io/badge/GNIOT-Greater%20Noida%20Institute%20of%20Technology-10b981?style=flat-square"/>
+<img src="https://img.shields.io/badge/AKTU-Lucknow-FF4B4B?style=flat-square"/>
+<img src="https://img.shields.io/badge/GitHub-shambhushekharsinha--engg-181717?style=flat-square&logo=github"/>
+
+</div>
 
 ---
 
 ### 📄 License
 This project is open-source and distributed under the **[MIT License](LICENSE)**.
+
