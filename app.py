@@ -232,12 +232,6 @@ st.markdown("""
         box-shadow: 0 0 15px rgba(0, 245, 212, 0.3) !important;
     }
 </style>
-        background: linear-gradient(135deg, rgba(0, 245, 212, 0.25) 0%, rgba(0, 187, 249, 0.25) 100%) !important;
-        color: #00F5D4 !important;
-        border: 1px solid #00F5D4 !important;
-        box-shadow: 0 0 15px rgba(0, 245, 212, 0.3) !important;
-    }
-</style>
 """, unsafe_allow_html=True)
 
 # ────────────────────────────────────────────────────────────────────────
