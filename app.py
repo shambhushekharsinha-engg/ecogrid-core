@@ -193,32 +193,48 @@ st.markdown("""
         border-color: rgba(0, 245, 212, 0.2) !important;
     }
 
-    /* Native Streamlit Tab Bar Styling (100% React Safe & Visible across all browsers) */
+    /* High-Contrast 3D Metallic Cockpit Tab Bar */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 8px !important;
-        background-color: rgba(13, 21, 39, 0.85) !important;
-        padding: 8px 12px !important;
-        border-radius: 14px !important;
-        border: 1.5px solid rgba(0, 245, 212, 0.3) !important;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5) !important;
+        gap: 10px !important;
+        background: linear-gradient(180deg, #0D1527 0%, #060913 100%) !important;
+        padding: 12px 14px !important;
+        border-radius: 16px !important;
+        border: 1.5px solid rgba(0, 245, 212, 0.4) !important;
+        box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.8), 0 8px 25px rgba(0, 0, 0, 0.6) !important;
+        margin-bottom: 25px !important;
     }
 
     .stTabs [data-baseweb="tab"] {
-        border-radius: 8px !important;
-        color: #94A3B8 !important;
+        height: 46px !important;
+        border-radius: 10px !important;
+        color: #F8FAFC !important;
         font-family: 'Rajdhani', sans-serif !important;
-        font-weight: 700 !important;
-        font-size: 1.05rem !important;
-        padding: 8px 16px !important;
-        background-color: transparent !important;
-        border: 1px solid transparent !important;
+        font-weight: 800 !important;
+        font-size: 1.1rem !important;
+        letter-spacing: 0.5px !important;
+        padding: 0px 20px !important;
+        background: linear-gradient(180deg, #1A2847 0%, #0F1930 100%) !important;
+        border: 1.5px solid rgba(0, 245, 212, 0.3) !important;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 4px 10px rgba(0, 0, 0, 0.5) !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    .stTabs [data-baseweb="tab"]:hover {
+        color: #00F5D4 !important;
+        background: linear-gradient(180deg, #22355E 0%, #152242 100%) !important;
+        border-color: #00F5D4 !important;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 6px 15px rgba(0, 245, 212, 0.35) !important;
+        transform: translateY(-2px) !important;
     }
 
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, rgba(0, 245, 212, 0.25) 0%, rgba(0, 187, 249, 0.25) 100%) !important;
-        color: #00F5D4 !important;
-        border: 1px solid #00F5D4 !important;
-        box-shadow: 0 0 15px rgba(0, 245, 212, 0.3) !important;
+        background: linear-gradient(180deg, #00F5D4 0%, #00BBF9 100%) !important;
+        color: #040711 !important;
+        font-family: 'Orbitron', sans-serif !important;
+        font-weight: 900 !important;
+        border: 1.5px solid #00F5D4 !important;
+        box-shadow: 0 0 20px rgba(0, 245, 212, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.6) !important;
+        transform: translateY(1px) !important;
     }
 </style>
 """, unsafe_allow_html=True)
