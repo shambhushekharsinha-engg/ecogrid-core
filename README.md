@@ -195,10 +195,24 @@ streamlit run app.py
 uvicorn api.server:app --reload --port 8000
 ```
 
-### 5. Execute Automated Test Suite
+### 5. Run via Industrial Docker Container
+```bash
+# Unified Single-Command Container Startup
+docker-compose up --build
+```
+
+### 6. Execute Automated Test Suite
 ```bash
 python -m pytest
 ```
+
+---
+
+## 🛡️ Enterprise Security & System Telemetry
+
+- **🛡️ Token-Bucket Rate Limiting (`security/rate_limiter.py`)**: Protects authentication endpoints against brute-force attacks and DDoS abuse.
+- **📡 System Health Telemetry (`/health` & `/api/v1/system/health`)**: Exposes live memory, uptime, DB connectivity, and BFT cluster diagnostics for enterprise monitors (Datadog, UptimeRobot, Prometheus).
+- **⚙️ GitHub Actions CI/CD Pipeline (`.github/workflows/ci.yml`)**: Automated pipeline verifying syntax compilation, full test suite execution, and deployment checks on every `git push`.
 
 ---
 

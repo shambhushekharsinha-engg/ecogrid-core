@@ -1,7 +1,7 @@
 """
 Automated Test Suite for EcoGrid Core Platform
-Tests Authentication, Smart City Traffic & EV Engine, Kaggle ML Models, BFT Consensus,
-Multi-Currency Switcher, AI Copilot Q&A, Crypto Ledger Chaining, and REST Endpoints.
+Tests Authentication, Rate Limiting, Smart City Traffic & EV Engine, Kaggle ML Models,
+BFT Consensus, Multi-Currency Switcher, AI Copilot Q&A, Crypto Ledger Chaining, and REST Endpoints.
 """
 
 import os
@@ -9,6 +9,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from security.auth import auth_manager
+from security.rate_limiter import rate_limiter
 from core.traffic_engine import EcoGridTrafficEngine
 from core.consensus_engine import BFTConsensusEngine
 from core.mitigation_engine import GroundLevelMitigation
@@ -20,7 +21,7 @@ from api.server import app
 
 client = TestClient(app)
 
-# ────────────── 1. SECURITY & AUTHENTICATION TESTS ──────────────
+# ────────────── 1. SECURITY, RATE LIMITING & AUTHENTICATION TESTS ──────────────
 def test_password_validation():
     valid, msg = auth_manager.validate_password_strength("Weak")
     assert not valid
@@ -43,6 +44,11 @@ def test_demo_login_presets():
         ok, res = auth_manager.authenticate_user(role_key, meta["password"])
         assert ok
         assert "username" in res
+
+def test_rate_limiter_token_bucket():
+    ip = "192.168.1.100"
+    for _ in range(5):
+        assert rate_limiter.is_allowed(ip)
 
 # ────────────── 2. ECOGRID TRAFFIC & EV GRID TESTS ──────────────
 def test_intersection_congestion_index():
@@ -113,12 +119,13 @@ def test_crypto_ledger_verifiable_chain():
     valid, msg = ledger.verify_chain()
     assert valid
 
-# ────────────── 6. FASTAPI REST ENDPOINTS TESTS ──────────────
+# ────────────── 6. FASTAPI REST ENDPOINTS & HEALTH TESTS ──────────────
 def test_health_endpoint():
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json()["status"] == "ONLINE"
     assert "EcoGrid Core" in response.json()["service"]
+    assert "bft_consensus_status" in response.json()
 
 def test_api_traffic_prediction_endpoint():
     response = client.post("/api/v1/predict/traffic", json={

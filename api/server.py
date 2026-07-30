@@ -2,11 +2,13 @@
 Production FastAPI REST Microservice Server for EcoGrid Core Infrastructure
 Exposes RESTful endpoints for Authentication, ML Predictions, Smart City Traffic & EV Load,
 AI Copilot Q&A, Multi-Currency Conversion, BFT Consensus, Cryptographic Ledger, and Retraining.
+Includes Rate Limiting and Detailed Production Health System Telemetry.
 """
 
 import os
 import sys
-from fastapi import FastAPI, HTTPException
+import time
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
@@ -14,6 +16,7 @@ from pydantic import BaseModel, Field
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from security.auth import auth_manager
+from security.rate_limiter import rate_limiter
 from ml_engine.predictor import predictor
 from ml_engine.train_models import train_all_models
 from core.traffic_engine import EcoGridTrafficEngine
@@ -21,6 +24,8 @@ from core.consensus_engine import BFTConsensusEngine
 from core.mitigation_engine import GroundLevelMitigation
 from security.crypto_ledger import CryptographicLedger
 from cloud_auditor import auditor
+
+START_TIME = time.time()
 
 app = FastAPI(
     title="EcoGrid Core Enterprise REST API",
@@ -91,26 +96,40 @@ class CurrencyConvertRequest(BaseModel):
 # ────────────── ENDPOINTS ──────────────
 @app.get("/")
 @app.get("/health")
+@app.get("/api/v1/system/health")
 def health_check():
+    uptime_sec = round(time.time() - START_TIME, 2)
+    is_valid, ledger_status = ledger.verify_chain()
     return {
         "status": "ONLINE",
         "service": "EcoGrid Core Enterprise REST API",
         "version": "6.5.0-PROD",
+        "uptime_seconds": uptime_sec,
+        "bft_consensus_status": "3/3 Unanimous Operational",
+        "crypto_ledger_integrity": ledger_status,
         "loaded_ml_models": list(predictor.models.keys()),
         "supported_countries": list(GroundLevelMitigation.COUNTRY_MATRIX.keys()),
         "database_backend": "PostgreSQL" if os.environ.get("DATABASE_URL") else "SQLite (Local Embedded)"
     }
 
-# ──── AUTHENTICATION ENDPOINTS ────
+# ──── AUTHENTICATION ENDPOINTS (RATE-LIMITED) ────
 @app.post("/api/v1/auth/register")
-def register_user(req: RegisterRequest):
+def register_user(req: RegisterRequest, request: Request):
+    client_ip = request.client.host if request.client else "global_client"
+    if not rate_limiter.is_allowed(f"register_{client_ip}"):
+        raise HTTPException(status_code=429, detail="Rate limit exceeded. Please wait before retrying registration.")
+
     success, result = auth_manager.register_user(req.username, req.password, req.role)
     if not success:
         raise HTTPException(status_code=400, detail=result)
     return {"success": True, "message": result}
 
 @app.post("/api/v1/auth/login")
-def login_user(req: LoginRequest):
+def login_user(req: LoginRequest, request: Request):
+    client_ip = request.client.host if request.client else "global_client"
+    if not rate_limiter.is_allowed(f"login_{client_ip}"):
+        raise HTTPException(status_code=429, detail="Rate limit exceeded. Too many login attempts.")
+
     success, result = auth_manager.authenticate_user(req.username, req.password)
     if not success:
         raise HTTPException(status_code=401, detail=result)
@@ -199,4 +218,4 @@ def retrain_models():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("api.server:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -1,26 +1,37 @@
 version: '3.8'
 
 services:
-  api:
-    build: .
-    container_name: aegis_ecogrid_api
-    ports:
-      - "8000:8000"
-    command: uvicorn api.server:app --host 0.0.0.0 --port 8000
-    environment:
-      - PORT=8000
-      - DATABASE_URL=${DATABASE_URL:-}
-    restart: always
-
-  dashboard:
-    build: .
-    container_name: aegis_ecogrid_dashboard
+  # ⚡ EcoGrid Core Streamlit Command Cockpit UI
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ecogrid_frontend
     ports:
       - "8501:8501"
-    command: streamlit run app.py --server.port 8501 --server.address 0.0.0.0
     environment:
       - PORT=8501
-      - DATABASE_URL=${DATABASE_URL:-}
-    depends_on:
-      - api
     restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 📡 EcoGrid Core FastAPI REST Microservice API
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ecogrid_backend
+    command: uvicorn api.server:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

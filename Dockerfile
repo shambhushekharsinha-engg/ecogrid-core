@@ -1,33 +1,33 @@
-# ────────────── ECOGRID CORE DOCKERFILE ──────────────
+# ⚡ EcoGrid Core: Multi-Stage Production Industrial Docker Container
 FROM python:3.11-slim as base
 
+# Set environment variables
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    PIP_NO_CACHE_DIR=1 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1 \
-    PYTHONPATH=/app
+    DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /app
 
-# Install system build dependencies
+# Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
-    libpq-dev \
     curl \
+    git \
+    libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python requirements
+# Copy dependencies manifest
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy source code and Kaggle dataset assets
+# Install Python requirements
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Copy complete project codebase
 COPY . .
 
-# Pre-train Kaggle Machine Learning models during build stage
-RUN PYTHONPATH=/app python -m ml_engine.train_models
-
 # Expose Streamlit Dashboard (8501) and FastAPI REST API (8000)
-EXPOSE 8501 8000 10000
+EXPOSE 8501 8000
 
-# Default entrypoint launches master production orchestrator start.py
-CMD ["python", "start.py"]
+# Default command: Start Streamlit Command Cockpit
+CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
