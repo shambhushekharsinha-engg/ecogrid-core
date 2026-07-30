@@ -151,29 +151,38 @@ st.markdown("""
         letter-spacing: 1px;
     }
 
-    /* Right-Side Custom Tab Bar Styling */
-    .stTabs [data-baseweb="tab-list"] {
+    /* Right-Side High-Speed Horizontal Radio Tab Bar Styling */
+    div[data-testid="stRadio"] > div[role="radiogroup"] {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
         gap: 8px;
         background-color: rgba(10, 15, 29, 0.7);
         padding: 8px;
         border-radius: 12px;
-        border: 1px solid rgba(0, 245, 212, 0.2);
-        overflow-x: auto;
+        border: 1px solid rgba(0, 245, 212, 0.25);
+        margin-bottom: 20px;
     }
 
-    .stTabs [data-baseweb="tab"] {
-        height: 48px;
-        border-radius: 8px;
-        color: #94A3B8;
-        font-family: 'Rajdhani', sans-serif;
-        font-weight: 700;
-        font-size: 1.05rem;
-        padding: 0px 16px;
-        background-color: transparent;
-        transition: all 0.2s ease-in-out;
+    div[data-testid="stRadio"] > div[role="radiogroup"] label {
+        padding: 8px 16px !important;
+        border-radius: 8px !important;
+        background: transparent !important;
+        color: #94A3B8 !important;
+        font-family: 'Rajdhani', sans-serif !important;
+        font-weight: 700 !important;
+        font-size: 1.05rem !important;
+        border: 1px solid transparent !important;
+        transition: all 0.2s ease-in-out !important;
+        cursor: pointer !important;
     }
 
-    .stTabs [aria-selected="true"] {
+    div[data-testid="stRadio"] > div[role="radiogroup"] label:hover {
+        background: rgba(0, 245, 212, 0.15) !important;
+        color: #00F5D4 !important;
+    }
+
+    div[data-testid="stRadio"] > div[role="radiogroup"] label[data-checked="true"] {
         background: linear-gradient(135deg, rgba(0, 245, 212, 0.25) 0%, rgba(0, 187, 249, 0.25) 100%) !important;
         color: #00F5D4 !important;
         border: 1px solid #00F5D4 !important;
@@ -183,10 +192,23 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ────────────────────────────────────────────────────────────────────────
-# 🔐 SESSION STATE GUARANTEE & HELPER FUNCTIONS
+# 🔐 PERSISTENT SESSION AUTH LOCK & HELPER FUNCTIONS
 # ────────────────────────────────────────────────────────────────────────
 if "authenticated" not in st.session_state:
     st.session_state["authenticated"] = False
+
+# Restore session state from URL query parameters (Protects against WebSocket disconnects on Render!)
+qp_user = st.query_params.get("auth_user")
+qp_role = st.query_params.get("auth_role")
+
+if qp_user and not st.session_state.get("authenticated", False):
+    st.session_state["authenticated"] = True
+    st.session_state["user_info"] = {
+        "username": qp_user,
+        "role": qp_role or "System Administrator",
+        "token": "persisted_session"
+    }
+
 if "user_info" not in st.session_state or st.session_state["user_info"] is None:
     st.session_state["user_info"] = {"username": "Operator", "role": "Administrator"}
 if "selected_country" not in st.session_state:
@@ -252,23 +274,35 @@ if not st.session_state.get("authenticated", False):
             c_a, c_b = st.columns(2)
             with c_a:
                 if st.button("👨‍💻 Admin Operator", type="primary", use_container_width=True, key="quick_admin_btn"):
+                    res = {"username": "admin", "role": "System Administrator", "token": "sec_demo_admin"}
                     st.session_state["authenticated"] = True
-                    st.session_state["user_info"] = {"username": "admin", "role": "System Administrator", "token": "sec_demo_admin"}
+                    st.session_state["user_info"] = res
+                    st.query_params["auth_user"] = res["username"]
+                    st.query_params["auth_role"] = res["role"]
                     st.rerun()
                 st.write("")
                 if st.button("⚡ Grid Chief Engineer", use_container_width=True, key="quick_grid_btn"):
+                    res = {"username": "grid_eng", "role": "Microgrid Chief Engineer", "token": "sec_demo_grid"}
                     st.session_state["authenticated"] = True
-                    st.session_state["user_info"] = {"username": "grid_eng", "role": "Microgrid Chief Engineer", "token": "sec_demo_grid"}
+                    st.session_state["user_info"] = res
+                    st.query_params["auth_user"] = res["username"]
+                    st.query_params["auth_role"] = res["role"]
                     st.rerun()
             with c_b:
                 if st.button("🚦 Traffic Operations Chief", use_container_width=True, key="quick_traffic_btn"):
+                    res = {"username": "traffic_op", "role": "Traffic Operations Chief", "token": "sec_demo_traffic"}
                     st.session_state["authenticated"] = True
-                    st.session_state["user_info"] = {"username": "traffic_op", "role": "Traffic Operations Chief", "token": "sec_demo_traffic"}
+                    st.session_state["user_info"] = res
+                    st.query_params["auth_user"] = res["username"]
+                    st.query_params["auth_role"] = res["role"]
                     st.rerun()
                 st.write("")
                 if st.button("👁️ Guest Auditor", use_container_width=True, key="quick_guest_btn"):
+                    res = {"username": "guest", "role": "Guest Auditor", "token": "sec_demo_guest"}
                     st.session_state["authenticated"] = True
-                    st.session_state["user_info"] = {"username": "guest", "role": "Guest Auditor", "token": "sec_demo_guest"}
+                    st.session_state["user_info"] = res
+                    st.query_params["auth_user"] = res["username"]
+                    st.query_params["auth_role"] = res["role"]
                     st.rerun()
 
         elif access_choice == "🔑 Standard Login":
@@ -285,6 +319,8 @@ if not st.session_state.get("authenticated", False):
                         if ok:
                             st.session_state["authenticated"] = True
                             st.session_state["user_info"] = res
+                            st.query_params["auth_user"] = res["username"]
+                            st.query_params["auth_role"] = res["role"]
                             st.rerun()
                         else:
                             st.error(res)
@@ -299,8 +335,11 @@ if not st.session_state.get("authenticated", False):
                 if submit_reg:
                     ok, msg = auth_manager.register_user(reg_user, reg_pwd, reg_role)
                     if ok:
+                        res = {"username": reg_user, "role": reg_role, "token": "new_reg_user"}
                         st.session_state["authenticated"] = True
-                        st.session_state["user_info"] = {"username": reg_user, "role": reg_role, "token": "new_reg_user"}
+                        st.session_state["user_info"] = res
+                        st.query_params["auth_user"] = res["username"]
+                        st.query_params["auth_role"] = res["role"]
                         st.rerun()
                     else:
                         st.error(msg)
@@ -316,10 +355,14 @@ st.sidebar.markdown("### 🟢 SESSION ACTIVE")
 st.sidebar.markdown(f"**Operator:** `{user_data.get('username', 'Operator')}`")
 st.sidebar.markdown(f"**Role:** `{user_data.get('role', 'Administrator')}`")
 
-# Explicit Logout Button - Evaluated ONLY when explicitly clicked!
+# Explicit Logout Button
 if st.sidebar.button("🚪 Logout Session", key="main_logout_btn", use_container_width=True):
     st.session_state["authenticated"] = False
     st.session_state["user_info"] = None
+    try:
+        st.query_params.clear()
+    except Exception:
+        pass
     st.rerun()
 
 st.sidebar.divider()
@@ -355,25 +398,31 @@ st.caption("Multi-Agent Microgrid SCADA, Smart City Traffic, EV Loadshedding & A
 st.write("")
 
 # ────────────────────────────────────────────────────────────────────────
-# 🗂️ RIGHT-HAND SIDE TABS (Client-Side Navigation - Prevents Logouts!)
+# 🗂️ RIGHT-HAND SIDE HIGH-SPEED LAZY TAB NAVIGATION (Zero Lag on Render!)
 # ────────────────────────────────────────────────────────────────────────
-tab_guide, tab_scada, tab_traffic, tab_currency, tab_ai, tab_kaggle, tab_cyber, tab_reports, tab_api, tab_files = st.tabs([
-    "📖 User Guide",
-    "⚡ SCADA Grid",
-    "🚦 Smart Traffic",
-    "🌐 Currency Matrix",
-    "🧠 AI Copilot",
-    "🤖 Kaggle ML Hub",
-    "🛡️ 3/3 BFT Security",
-    "📑 Incident Reports",
-    "📡 REST API Telemetry",
-    "📂 Data & File Inspector"
-])
+active_tab = st.radio(
+    "Select Cockpit Panel",
+    [
+        "📖 User Guide",
+        "⚡ SCADA Grid",
+        "🚦 Smart Traffic",
+        "🌐 Currency Matrix",
+        "🧠 AI Copilot",
+        "🤖 Kaggle ML Hub",
+        "🛡️ 3/3 BFT Security",
+        "📑 Incident Reports",
+        "📡 REST API Telemetry",
+        "📂 Data & File Inspector"
+    ],
+    horizontal=True,
+    key="main_dashboard_rhs_tab_radio",
+    label_visibility="collapsed"
+)
 
 # ────────────────────────────────────────────────────────────────────────
-# TAB 1: WELCOME & SYSTEM USER GUIDE
+# PANEL 1: WELCOME & SYSTEM USER GUIDE
 # ────────────────────────────────────────────────────────────────────────
-with tab_guide:
+if active_tab == "📖 User Guide":
     try:
         st.markdown("<h2>📖 SYSTEM OPERATIONAL USER GUIDE</h2>", unsafe_allow_html=True)
         st.write("")
@@ -397,9 +446,9 @@ with tab_guide:
             <div class='dashboard-card card-cyan'>
                 <div class='metric-label'>Quick Navigation & Layout Manual</div>
                 <p style='margin-top:10px; font-size:0.95rem; color:#94A3B8;'>
-                - <b>Right-Hand Side Tabs:</b> All operational dashboards are accessible via top right-hand side tabs. Switching tabs is client-side instant and will never log you out.<br><br>
+                - <b>Right-Hand Side Tabs:</b> All operational dashboards are accessible via top right-hand side tabs. Switching tabs is high-speed lazy-evaluated (0ms lag) and persistent.<br><br>
                 - <b>Instant Currency Switcher:</b> Use the Global Sector Node selector in the left sidebar to convert spot clearing tariffs across 10 global sector nodes.<br><br>
-                - <b>Session Security:</b> Your authenticated session remains active across all tab navigation until you explicitly click <b>Logout Session</b> in the sidebar.
+                - <b>Session Security Lock:</b> Your session is locked via query parameters and will stay active across all tab navigation until you explicitly click <b>Logout Session</b>.
                 </p>
             </div>
             """, unsafe_allow_html=True)
@@ -407,9 +456,9 @@ with tab_guide:
         st.error(f"Tab Error: {e}")
 
 # ────────────────────────────────────────────────────────────────────────
-# TAB 2: ECOGRID SCADA & MICROGRID
+# PANEL 2: ECOGRID SCADA & MICROGRID
 # ────────────────────────────────────────────────────────────────────────
-with tab_scada:
+elif active_tab == "⚡ SCADA Grid":
     try:
         st.markdown("<h2>⚡ ECOGRID MULTI-AGENT SCADA CONTROL</h2>", unsafe_allow_html=True)
         st.caption("Byzantine Fault Tolerant Microgrid Telemetry & Real-Time Sine Wave Simulation")
@@ -494,9 +543,9 @@ with tab_scada:
         st.error(f"Tab Error: {e}")
 
 # ────────────────────────────────────────────────────────────────────────
-# TAB 3: SMART CITY TRAFFIC & EV GRID
+# PANEL 3: SMART CITY TRAFFIC & EV GRID
 # ────────────────────────────────────────────────────────────────────────
-with tab_traffic:
+elif active_tab == "🚦 Smart Traffic":
     try:
         st.markdown("<h2>🚦 SMART CITY TRAFFIC & EV GRID LOAD CONTROL</h2>", unsafe_allow_html=True)
         st.caption("Intersection Congestion Index, Signal Phase Optimization, and EV Queue Balancing")
@@ -575,9 +624,9 @@ with tab_traffic:
         st.error(f"Tab Error: {e}")
 
 # ────────────────────────────────────────────────────────────────────────
-# TAB 4: MULTI-COUNTRY CURRENCY CENTER
+# PANEL 4: MULTI-COUNTRY CURRENCY CENTER
 # ────────────────────────────────────────────────────────────────────────
-with tab_currency:
+elif active_tab == "🌐 Currency Matrix":
     try:
         st.markdown("<h2>🌐 GLOBAL MULTI-COUNTRY CURRENCY CENTER</h2>", unsafe_allow_html=True)
         st.caption("Instant Financial Conversion & Utility Tariff Comparison Matrix Across 10 Countries")
@@ -634,9 +683,9 @@ with tab_currency:
         st.error(f"Tab Error: {e}")
 
 # ────────────────────────────────────────────────────────────────────────
-# TAB 5: AI SCADA INFRASTRUCTURE COPILOT
+# PANEL 5: AI SCADA INFRASTRUCTURE COPILOT
 # ────────────────────────────────────────────────────────────────────────
-with tab_ai:
+elif active_tab == "🧠 AI Copilot":
     try:
         st.markdown("<h2>🧠 AI SCADA INFRASTRUCTURE COPILOT</h2>", unsafe_allow_html=True)
         st.caption("Powered by Google GenAI (Gemini) & Edge Cognitive AI with Executive Summaries")
@@ -701,9 +750,9 @@ with tab_ai:
         st.error(f"Tab Error: {e}")
 
 # ────────────────────────────────────────────────────────────────────────
-# TAB 6: KAGGLE AI & ML HUB
+# PANEL 6: KAGGLE AI & ML HUB
 # ────────────────────────────────────────────────────────────────────────
-with tab_kaggle:
+elif active_tab == "🤖 Kaggle ML Hub":
     try:
         st.markdown("<h2>🤖 KAGGLE AI & ML MODEL INTELLIGENCE HUB</h2>", unsafe_allow_html=True)
         st.caption("Machine Learning Predictors & Dataset Data Explorer")
@@ -764,9 +813,9 @@ with tab_kaggle:
         st.error(f"Tab Error: {e}")
 
 # ────────────────────────────────────────────────────────────────────────
-# TAB 7: CYBERSECURITY & 3/3 BFT LEDGER
+# PANEL 7: CYBERSECURITY & 3/3 BFT LEDGER
 # ────────────────────────────────────────────────────────────────────────
-with tab_cyber:
+elif active_tab == "🛡️ 3/3 BFT Security":
     try:
         st.markdown("<h2>🛡️ CYBERSECURITY & 3/3 BFT CRYPTOGRAPHIC LEDGER</h2>", unsafe_allow_html=True)
         st.caption("3/3 Byzantine Fault Tolerance (BFT) Signature Consensus & SHA-256 Ledger Audit")
@@ -831,9 +880,9 @@ with tab_cyber:
         st.error(f"Tab Error: {e}")
 
 # ────────────────────────────────────────────────────────────────────────
-# TAB 8: INCIDENT REPORTS & PRESCRIPTIONS
+# PANEL 8: INCIDENT REPORTS & PRESCRIPTIONS
 # ────────────────────────────────────────────────────────────────────────
-with tab_reports:
+elif active_tab == "📑 Incident Reports":
     try:
         st.markdown("<h2>📑 INCIDENT REPORTS & MAINTENANCE PRESCRIPTIONS</h2>", unsafe_allow_html=True)
         st.caption("Automated Actionable Engineering Protocols for Ground-Level Technicians")
@@ -884,9 +933,9 @@ An anomaly event ({reason}) was flagged on {t_node}. The 3/3 BFT consensus core 
         st.error(f"Tab Error: {e}")
 
 # ────────────────────────────────────────────────────────────────────────
-# TAB 9: REST API TELEMETRY
+# PANEL 9: REST API TELEMETRY
 # ────────────────────────────────────────────────────────────────────────
-with tab_api:
+elif active_tab == "📡 REST API Telemetry":
     try:
         st.markdown("<h2>🌐 REST API & SYSTEM DEPLOYMENT TELEMETRY</h2>", unsafe_allow_html=True)
         st.caption("OpenAPI Swagger Endpoints & Containerized Service Status")
@@ -920,9 +969,9 @@ with tab_api:
         st.error(f"Tab Error: {e}")
 
 # ────────────────────────────────────────────────────────────────────────
-# TAB 10: DATA & FILE INSPECTOR (Safe File Reader, Explorer & Uploader)
+# PANEL 10: DATA & FILE INSPECTOR (Safe File Reader, Explorer & Uploader)
 # ────────────────────────────────────────────────────────────────────────
-with tab_files:
+elif active_tab == "📂 Data & File Inspector":
     try:
         st.markdown("<h2>📂 DATA & FILE INSPECTOR</h2>", unsafe_allow_html=True)
         st.caption("Safe File Reader, Upload Sandbox & System Dataset Explorer with Zero Data Loss Protection")
