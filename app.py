@@ -458,8 +458,7 @@ active_tab = st.radio(
         "📂 Data & File Inspector"
     ],
     horizontal=True,
-    key="main_dashboard_rhs_tab_radio",
-    label_visibility="collapsed"
+    key="main_dashboard_rhs_tab_radio"
 )
 
 # ────────────────────────────────────────────────────────────────────────
