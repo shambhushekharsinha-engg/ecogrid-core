@@ -54,23 +54,37 @@ st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
     
+    /* Remove white dash / header decoration at top */
+    header[data-testid="stHeader"], [data-testid="stHeader"] {
+        background-color: transparent !important;
+        background: transparent !important;
+        border-bottom: none !important;
+        box-shadow: none !important;
+    }
+    
+    [data-testid="stDecoration"] {
+        background-image: linear-gradient(90deg, #00F5D4, #00BBF9, #F15BB5, #9B5DE5) !important;
+        height: 3px !important;
+    }
+    
+    /* Dark Enterprise Production-Grade Background */
     .stApp {
-        background: radial-gradient(circle at top right, #121A30 0%, #060913 70%);
+        background: radial-gradient(circle at top right, #0D1527 0%, #060913 85%) !important;
         color: #E2E8F0;
         font-family: 'Inter', sans-serif;
     }
 
     /* Left Sidebar Styling */
     [data-testid="stSidebar"] {
-        background: radial-gradient(circle at top left, #121A30 0%, #060913 90%) !important;
-        border-right: 2px solid rgba(0, 245, 212, 0.3) !important;
-        box-shadow: 5px 0 25px rgba(0, 0, 0, 0.5) !important;
+        background: radial-gradient(circle at top left, #0D1527 0%, #060913 95%) !important;
+        border-right: 1.5px solid rgba(0, 245, 212, 0.3) !important;
+        box-shadow: 5px 0 25px rgba(0, 0, 0, 0.7) !important;
     }
     
     [data-testid="stSidebar"] h3 {
         font-family: 'Orbitron', sans-serif !important;
         color: #00F5D4 !important;
-        text-shadow: 0 0 10px rgba(0, 245, 212, 0.4) !important;
+        text-shadow: 0 0 12px rgba(0, 245, 212, 0.5) !important;
         font-weight: 800 !important;
     }
 
@@ -93,46 +107,69 @@ st.markdown("""
         font-weight: 900 !important;
     }
     
-    /* Button Styling */
+    /* Rare & Dense Color Button Styling */
     .stButton>button {
-        border-radius: 8px;
-        font-weight: bold;
-        background: linear-gradient(135deg, #00BBF9 0%, #9B5DE5 100%) !important;
-        color: white !important;
-        border: none !important;
-        box-shadow: 0 4px 15px rgba(0, 187, 249, 0.3) !important;
-        transition: all 0.3s ease;
+        border-radius: 8px !important;
+        font-family: 'Rajdhani', sans-serif !important;
+        font-weight: 700 !important;
+        font-size: 1.05rem !important;
+        letter-spacing: 0.5px !important;
+        background: linear-gradient(135deg, #0F1B33 0%, #1A0D2E 100%) !important;
+        color: #00F5D4 !important;
+        border: 1.5px solid rgba(0, 245, 212, 0.35) !important;
+        box-shadow: inset 0 0 12px rgba(0, 245, 212, 0.1), 0 4px 18px rgba(0, 0, 0, 0.6) !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
     
     .stButton>button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0, 187, 249, 0.5) !important;
+        background: linear-gradient(135deg, rgba(0, 245, 212, 0.2) 0%, rgba(155, 93, 229, 0.25) 100%) !important;
+        border-color: #00F5D4 !important;
+        color: #FFFFFF !important;
+        box-shadow: inset 0 0 20px rgba(0, 245, 212, 0.25), 0 0 25px rgba(0, 245, 212, 0.4) !important;
+        transform: translateY(-2px) !important;
+    }
+
+    .stButton>button[kind="primary"] {
+        background: linear-gradient(135deg, #00F5D4 0%, #00BBF9 50%, #9B5DE5 100%) !important;
+        color: #040711 !important;
+        font-family: 'Orbitron', sans-serif !important;
+        font-weight: 800 !important;
+        border: none !important;
+        box-shadow: 0 0 20px rgba(0, 245, 212, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.2) !important;
+    }
+
+    .stButton>button[kind="primary"]:hover {
+        background: linear-gradient(135deg, #00BBF9 0%, #F15BB5 100%) !important;
+        color: #FFFFFF !important;
+        box-shadow: 0 0 30px rgba(241, 91, 181, 0.6) !important;
+        transform: translateY(-2px) !important;
     }
     
-    /* Custom Cards */
+    /* Designer Glassmorphism Cards */
     .login-box {
-        background: rgba(10, 15, 29, 0.85);
-        border: 2px solid #00F5D4;
-        border-radius: 16px;
-        padding: 30px;
-        box-shadow: 0 8px 32px 0 rgba(0, 245, 212, 0.2);
-        backdrop-filter: blur(12px);
-        margin-top: 20px;
+        background: rgba(13, 21, 39, 0.85) !important;
+        border: 1.5px solid rgba(0, 245, 212, 0.4) !important;
+        border-radius: 16px !important;
+        padding: 32px !important;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 245, 212, 0.15) !important;
+        backdrop-filter: blur(16px) !important;
+        margin-top: 20px !important;
     }
     
     .dashboard-card {
-        background: rgba(18, 26, 48, 0.6);
-        border: 1px solid rgba(0, 245, 212, 0.2);
-        border-radius: 12px;
-        padding: 20px;
-        margin-bottom: 20px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        background: rgba(13, 21, 39, 0.65) !important;
+        border: 1px solid rgba(0, 245, 212, 0.25) !important;
+        border-radius: 14px !important;
+        padding: 22px !important;
+        margin-bottom: 20px !important;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4) !important;
+        backdrop-filter: blur(12px) !important;
     }
     
-    .card-cyan { border-left: 5px solid #00BBF9; }
-    .card-green { border-left: 5px solid #00F5D4; }
-    .card-magenta { border-left: 5px solid #F15BB5; }
-    .card-purple { border-left: 5px solid #9B5DE5; }
+    .card-cyan { border-left: 5px solid #00BBF9 !important; }
+    .card-green { border-left: 5px solid #00F5D4 !important; }
+    .card-magenta { border-left: 5px solid #F15BB5 !important; }
+    .card-purple { border-left: 5px solid #9B5DE5 !important; }
     
     .metric-value {
         font-family: 'Orbitron', sans-serif;
@@ -151,17 +188,23 @@ st.markdown("""
         letter-spacing: 1px;
     }
 
+    /* Custom Dividers */
+    hr {
+        border-color: rgba(0, 245, 212, 0.2) !important;
+    }
+
     /* Right-Side High-Speed Horizontal Radio Tab Bar Styling */
     div[data-testid="stRadio"] > div[role="radiogroup"] {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         gap: 8px;
-        background-color: rgba(10, 15, 29, 0.7);
-        padding: 8px;
-        border-radius: 12px;
-        border: 1px solid rgba(0, 245, 212, 0.25);
+        background-color: rgba(13, 21, 39, 0.8);
+        padding: 10px;
+        border-radius: 14px;
+        border: 1.5px solid rgba(0, 245, 212, 0.3);
         margin-bottom: 20px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
     }
 
     div[data-testid="stRadio"] > div[role="radiogroup"] label {
@@ -183,6 +226,12 @@ st.markdown("""
     }
 
     div[data-testid="stRadio"] > div[role="radiogroup"] label[data-checked="true"] {
+        background: linear-gradient(135deg, rgba(0, 245, 212, 0.25) 0%, rgba(0, 187, 249, 0.25) 100%) !important;
+        color: #00F5D4 !important;
+        border: 1px solid #00F5D4 !important;
+        box-shadow: 0 0 15px rgba(0, 245, 212, 0.3) !important;
+    }
+</style>
         background: linear-gradient(135deg, rgba(0, 245, 212, 0.25) 0%, rgba(0, 187, 249, 0.25) 100%) !important;
         color: #00F5D4 !important;
         border: 1px solid #00F5D4 !important;
