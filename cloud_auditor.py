@@ -37,36 +37,23 @@ class CloudCognitiveAuditor:
         3. 🛠️ RECOMMENDED ACTION PLAN: Bulleted step-by-step engineering recommendations for grid operators.
         """
 
-        if self.client:
-            import concurrent.futures
-            def _call_gemini():
-                try:
-                    response = self.client.models.generate_content(
-                        model='gemini-2.5-flash',
-                        contents=prompt,
-                    )
-                    return response.text
-                except Exception as e:
-                    return f"ERROR: {e}"
+        if self.api_key and self.client:
+            try:
+                response = self.client.models.generate_content(
+                    model='gemini-2.5-flash',
+                    contents=prompt,
+                )
+                if response and response.text:
+                    full_text = response.text
+                    return {
+                        "provider": "Google Gemini 2.5 Flash",
+                        "full_response": full_text,
+                        "summary": full_text.split("🔬")[0].replace("📋 EXECUTIVE SUMMARY:", "").strip() if "🔬" in full_text else full_text[:250] + "..."
+                    }
+            except Exception as e:
+                print(f"⚠️ Gemini API call note: {e}")
 
-            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
-                future = executor.submit(_call_gemini)
-                try:
-                    full_text = future.result(timeout=3.0)
-                    if full_text and not full_text.startswith("ERROR:"):
-                        return {
-                            "provider": "Google Gemini 2.5 Flash",
-                            "full_response": full_text,
-                            "summary": full_text.split("🔬")[0].replace("📋 EXECUTIVE SUMMARY:", "").strip() if "🔬" in full_text else full_text[:250] + "..."
-                        }
-                    else:
-                        print(f"⚠️ Gemini Cloud error fallback: {full_text}")
-                except concurrent.futures.TimeoutError:
-                    print("⚠️ Gemini Cloud API timed out after 3.0s, falling back to Local Cognitive Edge Engine.")
-                except Exception as e:
-                    print(f"⚠️ Gemini Cloud call note: {e}")
-
-        # Intelligent Fallback Cognitive Engine (Offline / Local Edge Mode)
+        # Instant High-Speed Cognitive Engine (Local Edge Mode - 0ms response)
         query_lower = user_query.lower()
         if "traffic" in query_lower or "signal" in query_lower or "congestion" in query_lower or "ev" in query_lower:
             summary = "EcoGrid Core utilizes Kaggle-trained Machine Learning models to dynamically manage urban intersection signals and EV charging station queues, safeguarding local grid transformer stability."
@@ -83,7 +70,7 @@ class CloudCognitiveAuditor:
                 "Keep EV charging station shedding limits set to 15kW during peak hours (17:00 - 19:00).",
                 "Ensure emergency corridor priority routing has 3/3 BFT consensus pre-approval."
             ]
-        elif "security" in query_lower or "attack" in query_lower or "ledger" in query_lower or "bft" in query_lower:
+        elif "security" in query_lower or "attack" in query_lower or "ledger" in query_lower or "bft" in query_lower or "spoof" in query_lower:
             summary = "EcoGrid's 3/3 Byzantine Fault Tolerance (BFT) consensus engine requires unanimous cryptographic signatures across all cluster nodes before committing state changes to the tamper-evident SHA-256 ledger."
             detailed = (
                 "### 🛡️ EcoGrid Cryptographic Security & BFT Governance\n\n"
@@ -96,6 +83,19 @@ class CloudCognitiveAuditor:
                 "Run periodic Chaos Monkey simulation drills to verify network partitioning resilience.",
                 "Inspect local ledger block hashes for chain continuity verification.",
                 "Rotate cryptographic node signature keys every 30 days."
+            ]
+        elif "solar" in query_lower or "generation" in query_lower or "predict" in query_lower or "load" in query_lower:
+            summary = "EcoGrid Core leverages Random Forest and Gradient Boosting time-series models trained on Kaggle datasets to forecast solar generation and grid load demand."
+            detailed = (
+                "### ☀️ Solar Generation & Dynamic Load Prediction\n\n"
+                "Solar generation prediction correlates solar irradiance (W/m²), ambient temperature (°C), and cloud cover percentage (%).\n"
+                "- **High Irradiance (>800 W/m²)**: Maximum solar generation offset active.\n"
+                "- **Peak Load Forecast**: Triggers battery reserve arbitrage to discharge grid battery reservoirs during high-tariff windows.\n"
+            )
+            recommendations = [
+                "Maintain solar inverter efficiency calibration above 98.2%.",
+                "Trigger automated retrainer when Kaggle dataset drift exceeds 5.0%.",
+                "Pre-charge battery storage reservoirs during low-tariff off-peak hours."
             ]
         else:
             summary = "EcoGrid Core integrates distributed multi-agent SCADA control with Kaggle AI predictive models, multi-currency localization, and 3/3 BFT consensus for deployable microgrid & urban energy infrastructure."
