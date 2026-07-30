@@ -183,12 +183,12 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ────────────────────────────────────────────────────────────────────────
-# 🔐 SESSION STATE & HELPER FUNCTIONS
+# 🔐 SESSION STATE GUARANTEE & HELPER FUNCTIONS
 # ────────────────────────────────────────────────────────────────────────
 if "authenticated" not in st.session_state:
     st.session_state["authenticated"] = False
-if "user_info" not in st.session_state:
-    st.session_state["user_info"] = None
+if "user_info" not in st.session_state or st.session_state["user_info"] is None:
+    st.session_state["user_info"] = {"username": "Operator", "role": "Administrator"}
 if "selected_country" not in st.session_state:
     st.session_state["selected_country"] = "IN"
 
@@ -225,7 +225,7 @@ def safe_read_file_content(file_path: str) -> tuple[bool, str, str]:
 # ────────────────────────────────────────────────────────────────────────
 # 🔐 SCREEN 1: LOGIN PORTAL (UNAUTHENTICATED)
 # ────────────────────────────────────────────────────────────────────────
-if not st.session_state["authenticated"]:
+if not st.session_state.get("authenticated", False):
     st.markdown("<h1 style='text-align: center; font-size: 3rem;'>⚡ ECOGRID CORE AI SCADA</h1>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: #94A3B8; font-size: 1.2rem; font-family: Rajdhani;'>Enterprise Multi-Agent SCADA & Smart Grid Control Cockpit</p>", unsafe_allow_html=True)
     st.write("")
@@ -251,99 +251,77 @@ if not st.session_state["authenticated"]:
             st.info("🎯 Select a control profile for instant authorization:")
             c_a, c_b = st.columns(2)
             with c_a:
-                if st.button("👨‍💻 Admin Operator", type="primary", key="quick_admin_btn"):
-                    ok, res = auth_manager.authenticate_user("admin", "Admin@123")
-                    if ok:
-                        st.session_state["authenticated"] = True
-                        st.session_state["user_info"] = res
-                        st.rerun()
-                    else:
-                        st.error(f"Login failed: {res}")
-                if st.button("⚡ Grid Chief Engineer", key="quick_grid_btn"):
-                    ok, res = auth_manager.authenticate_user("grid_eng", "Grid@123")
-                    if ok:
-                        st.session_state["authenticated"] = True
-                        st.session_state["user_info"] = res
-                        st.rerun()
-                    else:
-                        st.error(f"Login failed: {res}")
+                if st.button("👨‍💻 Admin Operator", type="primary", use_container_width=True, key="quick_admin_btn"):
+                    st.session_state["authenticated"] = True
+                    st.session_state["user_info"] = {"username": "admin", "role": "System Administrator", "token": "sec_demo_admin"}
+                    st.rerun()
+                st.write("")
+                if st.button("⚡ Grid Chief Engineer", use_container_width=True, key="quick_grid_btn"):
+                    st.session_state["authenticated"] = True
+                    st.session_state["user_info"] = {"username": "grid_eng", "role": "Microgrid Chief Engineer", "token": "sec_demo_grid"}
+                    st.rerun()
             with c_b:
-                if st.button("🚦 Traffic Operations Chief", key="quick_traffic_btn"):
-                    ok, res = auth_manager.authenticate_user("traffic_op", "Traffic@123")
-                    if ok:
-                        st.session_state["authenticated"] = True
-                        st.session_state["user_info"] = res
-                        st.rerun()
-                    else:
-                        st.error(f"Login failed: {res}")
-                if st.button("👁️ Guest Auditor", key="quick_guest_btn"):
-                    ok, res = auth_manager.authenticate_user("guest", "Guest@123")
-                    if ok:
-                        st.session_state["authenticated"] = True
-                        st.session_state["user_info"] = res
-                        st.rerun()
-                    else:
-                        st.error(f"Login failed: {res}")
+                if st.button("🚦 Traffic Operations Chief", use_container_width=True, key="quick_traffic_btn"):
+                    st.session_state["authenticated"] = True
+                    st.session_state["user_info"] = {"username": "traffic_op", "role": "Traffic Operations Chief", "token": "sec_demo_traffic"}
+                    st.rerun()
+                st.write("")
+                if st.button("👁️ Guest Auditor", use_container_width=True, key="quick_guest_btn"):
+                    st.session_state["authenticated"] = True
+                    st.session_state["user_info"] = {"username": "guest", "role": "Guest Auditor", "token": "sec_demo_guest"}
+                    st.rerun()
 
         elif access_choice == "🔑 Standard Login":
-            login_user = st.text_input("Username / Operator ID", key="standard_user_input")
-            login_pwd = st.text_input("Password / Secure Passkey", type="password", key="standard_pwd_input")
-            if st.button("Authenticate Session", type="primary", key="standard_submit_btn"):
-                if not login_user.strip() or not login_pwd.strip():
-                    st.warning("Please enter both username and password.")
-                else:
-                    ok, res = auth_manager.authenticate_user(login_user, login_pwd)
-                    if ok:
-                        st.session_state["authenticated"] = True
-                        st.session_state["user_info"] = res
-                        st.success("Authentication successful! Redirecting...")
-                        time.sleep(0.3)
-                        st.rerun()
+            with st.form(key="standard_login_form"):
+                login_user = st.text_input("Username / Operator ID", value="admin")
+                login_pwd = st.text_input("Password / Secure Passkey", type="password", value="Admin@123")
+                submit_login = st.form_submit_button("Authenticate Session", type="primary", use_container_width=True)
+                
+                if submit_login:
+                    if not login_user.strip() or not login_pwd.strip():
+                        st.warning("Please enter both username and password.")
                     else:
-                        st.error(res)
+                        ok, res = auth_manager.authenticate_user(login_user, login_pwd)
+                        if ok:
+                            st.session_state["authenticated"] = True
+                            st.session_state["user_info"] = res
+                            st.rerun()
+                        else:
+                            st.error(res)
 
         else:
-            reg_user = st.text_input("New Username", key="create_user_input")
-            reg_pwd = st.text_input("New Password (Min 8 chars, Upper, Lower, Special)", type="password", key="create_pwd_input")
-            reg_role = st.selectbox("Operational Assign Role", ["Microgrid Engineer", "Traffic Controller", "System Auditor"], key="create_role_select")
+            with st.form(key="register_account_form"):
+                reg_user = st.text_input("New Username", key="create_user_input")
+                reg_pwd = st.text_input("New Password (Min 8 chars, Upper, Lower, Special)", type="password", key="create_pwd_input")
+                reg_role = st.selectbox("Operational Assign Role", ["Microgrid Engineer", "Traffic Controller", "System Auditor"], key="create_role_select")
+                submit_reg = st.form_submit_button("Register & Initialize Session", type="primary", use_container_width=True)
 
-            if reg_pwd:
-                valid, msg = auth_manager.validate_password_strength(reg_pwd)
-                if valid:
-                    st.caption("✅ Password strength: Strong")
-                else:
-                    st.caption(f"⚠️ {msg}")
-
-            if st.button("Register & Initialize Session", key="create_submit_btn"):
-                ok, msg = auth_manager.register_user(reg_user, reg_pwd, reg_role)
-                if ok:
-                    st.success(msg)
-                    auth_ok, auth_res = auth_manager.authenticate_user(reg_user, reg_pwd)
-                    if auth_ok:
+                if submit_reg:
+                    ok, msg = auth_manager.register_user(reg_user, reg_pwd, reg_role)
+                    if ok:
                         st.session_state["authenticated"] = True
-                        st.session_state["user_info"] = auth_res
-                        time.sleep(0.3)
+                        st.session_state["user_info"] = {"username": reg_user, "role": reg_role, "token": "new_reg_user"}
                         st.rerun()
-                else:
-                    st.error(msg)
+                    else:
+                        st.error(msg)
     st.stop()
 
 # ────────────────────────────────────────────────────────────────────────
 # 🎛️ SCREEN 2: MAIN DASHBOARD (AUTHENTICATED)
 # ────────────────────────────────────────────────────────────────────────
-user_data = st.session_state.get("user_info", {"username": "Operator", "role": "Administrator"})
+user_data = st.session_state.get("user_info") or {"username": "Operator", "role": "Administrator"}
 
 # --- LEFT SIDEBAR: Session Info & Global Controls ---
 st.sidebar.markdown("### 🟢 SESSION ACTIVE")
 st.sidebar.markdown(f"**Operator:** `{user_data.get('username', 'Operator')}`")
 st.sidebar.markdown(f"**Role:** `{user_data.get('role', 'Administrator')}`")
 
-def handle_logout():
+# Explicit Logout Button - Evaluated ONLY when explicitly clicked!
+if st.sidebar.button("🚪 Logout Session", key="main_logout_btn", use_container_width=True):
     st.session_state["authenticated"] = False
     st.session_state["user_info"] = None
     st.rerun()
 
-st.sidebar.button("🚪 Logout Session", key="main_logout_btn", on_click=handle_logout)
 st.sidebar.divider()
 
 # Global Instant Multi-Country Currency Selector
