@@ -127,7 +127,7 @@ EcoGrid Core supports instant **0ms O(1)** financial conversion and utility tari
 - Pinned `streamlit==1.32.0` in `requirements.txt` to eliminate dynamic chunk loading failures (`TypeError: Failed to fetch dynamically imported module`).
 
 ### 4. Memory Footprint Optimization (~210MB RAM)
-- Reduced operational RAM consumption from 550MB to **~210MB RAM**, ensuring high performance within Render's free tier.
+- Reduced operational RAM consumption from 550MB to **~210MB RAM**, ensuring efficient high-throughput execution across cloud deployments.
 
 ### 5. 0ms Fast Auth & Postgres Fail-Fast Routing
 - Bypasses expensive PBKDF2 hashing when demo accounts exist, avoiding CPU lag on re-renders.
@@ -202,9 +202,9 @@ python -m pytest
 
 ---
 
-## 👤 Developer Profile & Portfolio
+## 👤 Developer Profile & Academic Background
 
-Developed by **Shambhu Shekhar Sinha**, Computer Science & Engineering student specializing in **Artificial Intelligence**, **Distributed SCADA Systems**, **Cybersecurity**, and **Smart Infrastructure Automation**.
+Developed by **Shambhu Shekhar Sinha**
 
 <p align="center">
   <a href="https://github.com/shambhushekharsinha">
@@ -215,10 +215,10 @@ Developed by **Shambhu Shekhar Sinha**, Computer Science & Engineering student s
   </a>
 </p>
 
-### 📁 Featured Flagship Projects:
-1. **⚡ EcoGrid Core (Current):** Enterprise Multi-Agent SCADA Infrastructure Command Cockpit featuring 3/3 BFT consensus, Kaggle ML models, Google Gemini AI Copilot, and 10-country currency localization.
-2. **🚦 Aegis Traffic:** Adaptive Smart City Traffic Optimization & Emergency Green Corridor Routing Engine with real-time Intersection Congestion Index (ICI) modeling.
-3. **🛡️ Aegis Security:** Automated SCADA network intrusion detection pipeline utilizing unsupervised anomaly clustering to neutralize cyber-threat vectors.
+### 🎓 Academic Credentials:
+- **Course & Degree:** B.Tech (Bachelor of Technology)
+- **Branch & Specialization:** Computer Science & Engineering (AI & ML)
+- **College & University:** College of Engineering & Technology / University
 
 ### 🛠️ Technical Skill Matrix:
 - **Programming Languages:** Python, SQL, JavaScript, HTML/CSS, Bash
