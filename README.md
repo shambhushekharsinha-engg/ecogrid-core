@@ -5,8 +5,8 @@
 ```
 
 <p align="center">
-  <a href="https://ecogrid-ai-cockpit.onrender.com/">
-    <img src="https://img.shields.io/badge/Render-LIVE_PRODUCTION-46E3B7?style=for-the-badge&logo=render&logoColor=black" alt="Render Live Cockpit">
+  <a href="https://ecogrid-ai-agent.streamlit.app/">
+    <img src="https://img.shields.io/badge/Streamlit-LIVE_PRODUCTION-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white" alt="Streamlit Live Cockpit">
   </a>
   <a href="https://ecogrid-core-api.vercel.app/docs">
     <img src="https://img.shields.io/badge/Vercel-API_SERVERLESS-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel Serverless API">
@@ -25,8 +25,8 @@
 
 ## 🌐 Live Production Systems & API Endpoints
 
-- 🚀 **Interactive Streamlit Command Cockpit (Render Cloud):**  
-  👉 [https://ecogrid-ai-cockpit.onrender.com/](https://ecogrid-ai-cockpit.onrender.com/)
+- 🚀 **Interactive Streamlit Command Cockpit (Streamlit Cloud):**  
+  👉 [https://ecogrid-ai-agent.streamlit.app/](https://ecogrid-ai-agent.streamlit.app/)
 
 - 📡 **Serverless OpenAPI Swagger Documentation (Vercel Backend):**  
   👉 [https://ecogrid-core-api.vercel.app/docs](https://ecogrid-core-api.vercel.app/docs)
@@ -242,7 +242,7 @@ python -m pytest
         </tr>
         <tr>
           <td>🖥️ <b>Streamlit Cockpit</b></td>
-          <td><a href="https://ecogrid-ai-cockpit.onrender.com/">ecogrid-ai-cockpit.onrender.com</a></td>
+          <td><a href="https://ecogrid-ai-agent.streamlit.app/">ecogrid-ai-agent.streamlit.app</a></td>
         </tr>
         <tr>
           <td>⚙️ <b>Backend API</b></td>
