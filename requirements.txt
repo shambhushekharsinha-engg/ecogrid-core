@@ -1,5 +1,6 @@
 # ────────────── CORE WEB UI & DATA VISUALIZATION (MONOLITHIC BUNDLE) ──────────────
-streamlit==1.32.0
+streamlit>=1.32.0
+pillow>=10.4.0
 pandas>=2.2.0
 numpy>=1.26.0
 plotly>=5.18.0
