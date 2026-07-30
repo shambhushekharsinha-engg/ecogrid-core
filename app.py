@@ -193,27 +193,24 @@ st.markdown("""
         border-color: rgba(0, 245, 212, 0.2) !important;
     }
 
-    /* Native Streamlit Tab Bar Styling (100% React Safe - Prevents Error #306) */
+    /* Native Streamlit Tab Bar Styling (100% React Safe & Visible across all browsers) */
     .stTabs [data-baseweb="tab-list"] {
         gap: 8px !important;
         background-color: rgba(13, 21, 39, 0.85) !important;
-        padding: 10px !important;
+        padding: 8px 12px !important;
         border-radius: 14px !important;
         border: 1.5px solid rgba(0, 245, 212, 0.3) !important;
-        overflow-x: auto !important;
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5) !important;
     }
 
     .stTabs [data-baseweb="tab"] {
-        height: 48px !important;
         border-radius: 8px !important;
         color: #94A3B8 !important;
         font-family: 'Rajdhani', sans-serif !important;
         font-weight: 700 !important;
         font-size: 1.05rem !important;
-        padding: 0px 16px !important;
+        padding: 8px 16px !important;
         background-color: transparent !important;
-        transition: all 0.2s ease-in-out !important;
         border: 1px solid transparent !important;
     }
 
