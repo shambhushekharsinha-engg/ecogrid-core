@@ -12,7 +12,11 @@ from security.crypto_ledger import CryptographicLedger
 from security.chaos_monkey import ChaosMonkey
 
 def load_json_file(filepath):
-    with open(filepath, 'r') as file:
+    if not os.path.exists(filepath):
+        config_alt = os.path.join("config", filepath)
+        if os.path.exists(config_alt):
+            filepath = config_alt
+    with open(filepath, 'r', encoding='utf-8') as file:
         return json.load(file)
 
 def get_interactive_scenario():

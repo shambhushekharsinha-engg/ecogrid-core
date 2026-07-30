@@ -9,5 +9,49 @@
     },
     "previous_hash": "00000000000000000000000000000000",
     "current_hash": "0e6514959ada428f79d618f0e7edae28cfeab0a547798da151c879284bb1c51d"
+  },
+  {
+    "index": 2,
+    "timestamp": "2026-07-30 18:50:50",
+    "agent": "TEST_AGENT",
+    "action": "UNIT_TEST_ACTION",
+    "details": {
+      "status": "SUCCESS"
+    },
+    "previous_hash": "0e6514959ada428f79d618f0e7edae28cfeab0a547798da151c879284bb1c51d",
+    "current_hash": "54df316e92c2f17a298bd63f442f42bb83b069e167f7f9ef04d8215d4ed2305b"
+  },
+  {
+    "index": 3,
+    "timestamp": "2026-07-30 18:52:54",
+    "agent": "TEST_AGENT",
+    "action": "UNIT_TEST_ACTION",
+    "details": {
+      "status": "SUCCESS"
+    },
+    "previous_hash": "54df316e92c2f17a298bd63f442f42bb83b069e167f7f9ef04d8215d4ed2305b",
+    "current_hash": "0ecff960b0fd501f8637a4cac3a80616ec63ec5f5f515e0b60ab29a00c228bb9"
+  },
+  {
+    "index": 4,
+    "timestamp": "2026-07-30 18:57:05",
+    "agent": "TEST_AGENT",
+    "action": "UNIT_TEST_ACTION",
+    "details": {
+      "status": "SUCCESS"
+    },
+    "previous_hash": "0ecff960b0fd501f8637a4cac3a80616ec63ec5f5f515e0b60ab29a00c228bb9",
+    "current_hash": "a9fb34da58b31a56c19a6f1d59a36fd668121285398916436d82351d260fcf8d"
+  },
+  {
+    "index": 5,
+    "timestamp": "2026-07-30 18:58:36",
+    "agent": "TEST_AGENT",
+    "action": "UNIT_TEST_ACTION",
+    "details": {
+      "status": "SUCCESS"
+    },
+    "previous_hash": "a9fb34da58b31a56c19a6f1d59a36fd668121285398916436d82351d260fcf8d",
+    "current_hash": "61b1115b77c7c024e2ff6c8757397f792d7ee1faf00aea839c6846ac897212f2"
   }
 ]
